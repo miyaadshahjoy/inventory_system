@@ -1,10 +1,76 @@
 <?php
+require_once __DIR__ . '/../core/Database.php';
 
-require_once __DIR__ . "/../core/Database.php";
-
-class CategoryController
+class CategoriesController
 {
+    public function index()
+    {
+        $categories = $this->getAllCategories();
+        $data = [
+            'categories' => $categories
+        ];
+        require_once __DIR__ . '/../views/categories.php';
+    }
 
+    public function createCategory()
+    {
+        try {
+            # 1) Check if request method is POST
+            if (!$_SERVER['REQUEST_METHOD'] === 'POST') {
+                throw new Exception("Request method must be POST");
+            }
+
+            # 2) Validate input fields
+            if (!isset($_POST['name'])) {
+                throw new Exception('Category name is required');
+            }
+            $name = $_POST['name'];
+
+            # 3) Create slug from category name
+            $slug = $this->createSlug($name);
+
+            # 4) Insert new database record into categories table
+            $conn = Database::connect();
+            $statement = $conn->prepare("
+            INSERT INTO categories(name, slug) VALUES( ?, ?)
+            ");
+
+            $statement->bind_param('ss', $name, $slug);
+            if (!$statement->execute()) {
+                throw new Exception('Error creating new category.');
+            } else {
+                header('Location: /categories');
+            }
+
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+
+
+    }
+    public function getAllCategories()
+    {
+        try {
+            $conn = Database::connect();
+            $statement = $conn->prepare("
+            SELECT name,categories_status,created_at FROM categories 
+            ORDER BY created_at DESC
+            ");
+            if (!$statement->execute()) {
+                throw new Exception('Error fetching categories');
+            } else {
+
+                $result = $statement->get_result();
+                $categories = $result->fetch_all(MYSQLI_ASSOC);
+                return $categories;
+            }
+
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
+
+    /*
     public function createCategory($data)
     {
         $category_name = $data["name"];
@@ -35,6 +101,7 @@ class CategoryController
             return $categories;
         }
     }
+    */
     public function getCategoryById($id)
     {
         $conn = Database::connect();
@@ -86,4 +153,12 @@ class CategoryController
             echo "Category removed successfully.";
         }
     }
+
+    public function createSlug($string)
+    {
+        $words = explode(' ', $string);
+        $slug = implode('-', $words);
+        return strtolower($slug);
+    }
 }
+

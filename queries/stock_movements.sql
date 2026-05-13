@@ -7,7 +7,8 @@ CREATE TABLE stock_movements(
         'STOCK_OUT',
         'TRANSFER_IN',
         'TRANSFER_OUT',
-        'ADJUSTMENT',
+        'ADJUSTMENT_IN',
+        'ADJUSTMENT_OUT',
         'RETURN',
         'DAMAGE',
         'EXPIRE'
