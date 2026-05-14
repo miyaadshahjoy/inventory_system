@@ -16,7 +16,7 @@ class ProductController
             'products' => $products,
             'categories' => $categories
         ];
-        require __DIR__ . '/../views/products.php';
+        require __DIR__ . '/../views/products/index.php';
     }
     public function createProduct()
     {

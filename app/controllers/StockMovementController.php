@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../core/Database.php';
 require_once __DIR__ . '/../services/InventoryService.php';
+require_once __DIR__ . '/../controllers/ProductController.php';
 
 class StockMovementController
 {
@@ -10,12 +11,17 @@ class StockMovementController
 
         $movements = InventoryService::getAllMovements();
         $data = ['movements' => $movements];
-        require_once __DIR__ . '/../views/movementHistory.php';
+        require_once __DIR__ . '/../views/movements/movementHistory.php';
     }
 
     public function createMovement()
     {
-        require_once __DIR__ . '/../views/createMovement.php';
+        $controller = new ProductController();
+        $products = $controller->getAllProducts();
+        $data = [
+            'products' => $products
+        ];
+        require_once __DIR__ . '/../views/movements/createMovement.php';
     }
 
     public function store()

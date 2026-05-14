@@ -7,6 +7,7 @@ require_once __DIR__ . '/../app/core/Database.php';
 require_once __DIR__ . '/../app/core/Auth.php';
 
 # Basic Routing
+echo $_SERVER['REQUEST_URI'];
 $url = $_GET['url'] ?? '';
 $url = trim($url, '/');
 echo "$url <br>";
@@ -48,13 +49,13 @@ switch ($url) {
         $controller->store();
         break;
     case 'categories':
-        require_once __DIR__ . '/../app/controllers/CategoriesController.php';
+        require_once __DIR__ . '/../app/controllers/CategoryController.php';
         $controller = new CategoriesController();
         $controller->index();
         break;
 
     case 'categories/submit':
-        require_once __DIR__ . '/../app/controllers/CategoriesController.php';
+        require_once __DIR__ . '/../app/controllers/CategoryController.php';
         $controller = new CategoriesController();
         $controller->createCategory();
         break;

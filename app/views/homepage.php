@@ -1,14 +1,11 @@
-<!doctype html>
-<html lang="en">
+<?php
+ob_start();
+?>
 
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Homepage</title>
-  </head>
+<h2>HOMEPAGE</h2>
 
-  <body>
-    <h1>HOMEPAGE</h1>
-  </body>
+<?php
+$content = ob_get_clean();
 
-</html>
+require_once __DIR__ . '/layouts/layout.php';
+?>

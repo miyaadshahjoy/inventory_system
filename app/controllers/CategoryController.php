@@ -9,7 +9,7 @@ class CategoriesController
         $data = [
             'categories' => $categories
         ];
-        require_once __DIR__ . '/../views/categories.php';
+        require_once __DIR__ . '/../views/categories/index.php';
     }
 
     public function createCategory()
