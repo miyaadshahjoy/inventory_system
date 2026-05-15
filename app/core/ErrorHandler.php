@@ -1,0 +1,76 @@
+<?php
+require_once __DIR__ . '/Logger.php';
+
+/*
+# Error handler manages:
+- Handle uncaught exceptions
+- Handle fatal errors
+- Handle php notices and warnings
+- Log errors to a file
+- User-friendly error pages
+- Production safety: prevent sensitive info leakage
+
+# Architecture:
+- Error happens -> ErrorHandler captures it -> Logger writes it -> User sees user-friendly error pages
+
+# Handlers needed:
+- Exception handler: set_exception_handler([class, methodname]) -> sets a user-defined function to handle uncaught exceptions
+- Error handler: set_error_handler([class, methodname]) -> sets a user-defined function to handle PHP errors (not exceptions)
+- Shutdown handler (for fatal errors): register_shutdown_function([class, methodname]) -> registers a function to be executed on script shutdown, useful for catching fatal errors
+
+? bootstraping: Creating a self sustaining process that initializes, builds or runs itself without external help
+
+? [self::class, 'methodName'] 
+? self::class -> classname 
+*/
+
+class ErrorHandler
+{
+    public static function register()
+    {
+        set_exception_handler([self::class, 'exceptionHandler']);
+        set_error_handler([self::class, 'errorHandler']);
+        register_shutdown_function([self::class, 'shutdownHandler']);
+
+    }
+
+    # Handle uncaught exceptions
+    public static function exceptionHandler(Throwable $exception)
+    {
+        $error_message = $exception->getMessage() . ' in: ' . $exception->getFile() . ' on line: ' . $exception->getLine();
+
+        Logger::critical($error_message);
+        self::renderErrorPage();
+    }
+
+
+    # Conver PHP errors (not exceptions) to ErrorException, so they can be handled by the exception handler
+    public static function errorHandler(int $errno, string $errstr, string $errfile, int $errline)
+    {
+        $error_message = "[$errno] $errstr in $errfile on line $errline";
+        # $errno -> error level (E_ERROR, E_WARNING, etc.) / error severity
+        throw new ErrorException($error_message, 0, $errno, $errfile, $errline);
+    }
+
+    # Handle fatal shutdown errors
+    public static function shutdownHandler()
+    {
+        $error = error_get_last(); # Get the last error that occurred (if any)
+        if ($error !== null) {
+            $error_message = $error['message'] . ' in: ' . $error['file'] . ' on line: ' . $error['line'];
+            Logger::critical($error_message);
+
+            self::renderErrorPage();
+        }
+    }
+
+    # Render generic 500 error page for users 
+    public static function renderErrorPage()
+    {
+        http_response_code(500);
+        require __DIR__ . '/../views/errors/500.php';
+        exit;
+    }
+}
+
+

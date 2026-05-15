@@ -1,12 +1,13 @@
 <?php
 
-require_once __DIR__ . "/../core/Database.php";
+require_once __DIR__ . '/../core/Database.php';
 require_once __DIR__ . '/../core/Session.php';
+require_once __DIR__ . '/../core/Logger.php';
 
 
 class AuthController
 {
-    public function showLogin()
+    public function index()
     {
         require_once __DIR__ . '/../views/auth/login.php';
     }
@@ -59,12 +60,24 @@ class AuthController
             ];
 
             Session::flashSet('success', 'Login successful');
+            Logger::info("User logged in: {$user['email']} (ID: {$user['id']})");
             header("Location: /");
             exit;
         } catch (Exception $e) {
+            Logger::error("Login failed for email: {$email}");
             Session::flashSet('error', $e->getMessage());
             header("Location: /login");
             exit;
         }
+    }
+
+    # Make users logout by destroying session
+    public function logout()
+    {
+        unset($_SESSION['user']);
+        session_destroy();
+        Session::flashSet('success', 'Logged out successfully');
+        header("Location: /login");
+        exit;
     }
 }

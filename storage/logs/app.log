@@ -1,0 +1,44 @@
+[2026-05-15 07:16:37] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-15 07:17:33] [ERROR] Login failed for email: admin@example
+[2026-05-15 07:18:41] [ERROR] Login failed for email: admin@example.com
+[2026-05-15 07:18:53] [ERROR] Login failed for email: admin@example.com
+[2026-05-15 07:19:38] [ERROR] Login failed for email: admin@example.com
+[2026-05-15 07:20:05] [ERROR] Login failed for email: admin@example
+[2026-05-15 07:20:36] [ERROR] Login failed for email: admin@example.com
+[2026-05-15 08:34:35] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-15 12:26:02] [ERROR] Login failed for email: admin@example.com
+[2026-05-15 12:26:10] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-15 12:37:19] [CRITICAL] syntax error, unexpected token "--" in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\header.php on line: 3
+[2026-05-15 12:37:49] [CRITICAL] Too few arguments to function ErrorHandler::errorHandler(), 4 passed and exactly 5 expected in: D:\XAMPP\htdocs\inventory-system\app\core\ErrorHandler.php on line: 48
+[2026-05-15 12:38:08] [CRITICAL] Too few arguments to function ErrorHandler::errorHandler(), 4 passed and exactly 5 expected in: D:\XAMPP\htdocs\inventory-system\app\core\ErrorHandler.php on line: 48
+[2026-05-15 12:38:12] [CRITICAL] Too few arguments to function ErrorHandler::errorHandler(), 4 passed and exactly 5 expected in: D:\XAMPP\htdocs\inventory-system\app\core\ErrorHandler.php on line: 48
+[2026-05-15 12:38:17] [CRITICAL] Too few arguments to function ErrorHandler::errorHandler(), 4 passed and exactly 5 expected in: D:\XAMPP\htdocs\inventory-system\app\core\ErrorHandler.php on line: 48
+[2026-05-15 12:38:52] [CRITICAL] Too few arguments to function ErrorHandler::errorHandler(), 4 passed and exactly 5 expected in: D:\XAMPP\htdocs\inventory-system\app\core\ErrorHandler.php on line: 48
+[2026-05-15 12:38:57] [CRITICAL] Class "StockMovementController" not found in: D:\XAMPP\htdocs\inventory-system\public\index.php on line: 45
+[2026-05-15 12:40:10] [CRITICAL] Too few arguments to function ErrorHandler::errorHandler(), 4 passed and exactly 5 expected in: D:\XAMPP\htdocs\inventory-system\app\core\ErrorHandler.php on line: 48
+[2026-05-15 12:40:51] [CRITICAL] [8192] str_contains(): Passing null to parameter #1 ($haystack) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line 8 in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 8
+[2026-05-15 12:41:59] [CRITICAL] [8192] str_contains(): Passing null to parameter #1 ($haystack) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line 8 in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 8
+[2026-05-15 12:42:05] [CRITICAL] [8192] str_contains(): Passing null to parameter #1 ($haystack) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line 8 in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 8
+[2026-05-15 12:42:43] [CRITICAL] [8192] str_contains(): Passing null to parameter #1 ($haystack) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line 8 in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 8
+[2026-05-15 12:44:00] [CRITICAL] [8192] str_contains(): Passing null to parameter #1 ($haystack) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line 8 in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 8
+[2026-05-15 12:45:15] [CRITICAL] [8192] str_contains(): Passing null to parameter #1 ($haystack) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line 9 in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 9
+[2026-05-15 12:45:19] [CRITICAL] [8192] str_contains(): Passing null to parameter #1 ($haystack) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line 9 in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 9
+[2026-05-15 12:45:25] [CRITICAL] [8192] str_contains(): Passing null to parameter #1 ($haystack) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line 9 in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 9
+[2026-05-15 12:46:59] [CRITICAL] [8192] str_contains(): Passing null to parameter #1 ($haystack) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line 8 in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 8
+[2026-05-15 12:50:26] [CRITICAL] [8192] str_contains(): Passing null to parameter #1 ($haystack) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line 8 in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 8
+[2026-05-15 12:50:43] [CRITICAL] [8192] str_contains(): Passing null to parameter #1 ($haystack) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line 9 in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 9
+[2026-05-15 12:53:37] [CRITICAL] Call to undefined function isActive() in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 12
+[2026-05-15 12:54:00] [CRITICAL] [8192] str_contains(): Passing null to parameter #1 ($haystack) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line 9 in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 9
+[2026-05-15 12:54:36] [CRITICAL] [8192] str_contains(): Passing null to parameter #1 ($haystack) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line 9 in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 9
+[2026-05-15 12:58:01] [CRITICAL] [8192] str_contains(): Passing null to parameter #1 ($haystack) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line 9 in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 9
+[2026-05-15 12:59:28] [CRITICAL] [8192] parse_url(): Passing null to parameter #1 ($url) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line 14 in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 14
+[2026-05-15 14:14:29] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-15 14:16:44] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-15 14:22:50] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-15 14:24:49] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-15 14:26:28] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-15 14:45:04] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-15 15:00:23] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-15 15:55:52] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-15 16:00:19] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-15 18:13:32] [INFO] User logged in: admin@example.com (ID: 6)

@@ -4,75 +4,80 @@ session_start();
 
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../app/core/Database.php';
-require_once __DIR__ . '/../app/core/Auth.php';
+require_once __DIR__ . '/../app/core/Session.php';
+require_once __DIR__ . '/../app/core/Logger.php';
+require_once __DIR__ . '/../app/controllers/AuthController.php';
+require_once __DIR__ . '/../app/controllers/StockMovementController.php';
+require_once __DIR__ . '/../app/controllers/CategoryController.php';
+require_once __DIR__ . '/../app/controllers/ProductController.php';
+require_once __DIR__ . '/../app/middlewares/AuthMiddleware.php';
+require_once __DIR__ . '/../app/core/ErrorHandler.php';
+
+/*
+# Bootstrapping the error handler to catch all errors and exceptions in a centralized way
+
+? bootstraping: Creating a self sustaining process that initializes, builds or runs itself without external help
+
+*/
+ErrorHandler::register();
+
 
 # Basic Routing
-echo $_SERVER['REQUEST_URI'];
 $url = $_GET['url'] ?? '';
 $url = trim($url, '/');
 echo "$url <br>";
 
 switch ($url) {
     case '':
-        require_once __DIR__ . '/../app/controllers/HomeController.php';
-        $controller = new HomeController();
-        $controller->showHompage();
-        break;
     case 'login':
-        require_once __DIR__ . '/../app/controllers/AuthController.php';
         $controller = new AuthController();
-        $controller->showLogin();
+        $controller->index();
         break;
-    case 'login-submit':
-        require_once __DIR__ . '/../app/controllers/AuthController.php';
+
+    case 'logout':
+        $controller = new AuthController();
+        $controller->logout();
+        break;
+    case 'login/form-submit':
         $controller = new AuthController();
         $controller->login();
         break;
 
     case 'stock-movements':
-        require_once __DIR__ . '/../app/controllers/StockMovementController.php';
+        AuthMiddleware::check();
         $controller = new StockMovementController();
         $controller->index();
         break;
-    case 'stock-movements/create':
-        require_once __DIR__ . '/../app/controllers/StockMovementController.php';
-        require_once __DIR__ . '/../app/middlewares/AuthMiddleware.php';
-        AuthMiddleware::check();
-        $controller = new StockMovementController();
-        $controller->createMovement();
-        break;
-    case 'stock-movements/submit-movement':
-        require_once __DIR__ . '/../app/controllers/StockMovementController.php';
-        require_once __DIR__ . '/../app/middlewares/AuthMiddleware.php';
+    case 'stock-movements/form-submit':
         AuthMiddleware::check();
         $controller = new StockMovementController();
         $controller->store();
         break;
     case 'categories':
-        require_once __DIR__ . '/../app/controllers/CategoryController.php';
+        AuthMiddleware::check();
         $controller = new CategoriesController();
         $controller->index();
         break;
 
-    case 'categories/submit':
-        require_once __DIR__ . '/../app/controllers/CategoryController.php';
+    case 'categories/form-submit':
+        AuthMiddleware::check();
         $controller = new CategoriesController();
         $controller->createCategory();
         break;
 
     case 'products':
-        require_once __DIR__ . '/../app/controllers/ProductController.php';
+        AuthMiddleware::check();
         $controller = new ProductController();
         $controller->index();
         break;
 
-    case 'products/submit':
-        require_once __DIR__ . '/../app/controllers/ProductController.php';
+    case 'products/form-submit':
+        AuthMiddleware::check();
         $controller = new ProductController();
         $controller->createProduct();
         break;
     default:
         http_response_code(404);
-        echo '404 - Page not found';
+        require_once __DIR__ . '/../app/views/errors/404.php';
         break;
 }

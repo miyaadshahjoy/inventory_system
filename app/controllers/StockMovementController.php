@@ -8,21 +8,17 @@ class StockMovementController
 
     public function index()
     {
-
+        $controller = new ProductController();
+        $products = $controller->getAllProducts();
         $movements = InventoryService::getAllMovements();
-        $data = ['movements' => $movements];
+        $data = [
+            'movements' => $movements,
+            'products' => $products
+        ];
+
         require_once __DIR__ . '/../views/movements/movementHistory.php';
     }
 
-    public function createMovement()
-    {
-        $controller = new ProductController();
-        $products = $controller->getAllProducts();
-        $data = [
-            'products' => $products
-        ];
-        require_once __DIR__ . '/../views/movements/createMovement.php';
-    }
 
     public function store()
     {

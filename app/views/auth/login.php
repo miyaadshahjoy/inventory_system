@@ -1,20 +1,14 @@
-<!doctype html>
-<html lang="en">
+<?php
+$title = 'Login';
+require_once __DIR__ . '/../layouts/header.php'; ?>
 
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LOGIN</title>
-  </head>
+<div class="login-container">
+  <h2>Login</h2>
+  <form class="form-login" action="/login/form-submit" method="post">
+    <input type="email" name="email" id="email" placeholder="Enter your email" />
+    <input type="password" name="password" id="password" placeholder="Enter your password" />
+    <button type="submit">Login</button>
+  </form>
+</div>
 
-  <body>
-    <h2>LOGIN</h2>
-
-    <form action="/login-submit" method="post">
-      <input type="email" name="email" id="email" />
-      <input type="password" name="password" id="password" />
-      <button type="submit">Login</button>
-    </form>
-  </body>
-
-</html>
+<?php require_once __DIR__ . '/../layouts/footer.php'; ?>

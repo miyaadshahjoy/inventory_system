@@ -2,35 +2,72 @@
 $categories = $data['categories'] ?? [];
 ob_start();
 ?>
+<div class="container">
 
-<h2>Product Categories</h2>
-<button>add new category</button>
+  <div class="container-header">
 
-<table>
-  <thead>
-    <tr>
-      <th>Category Name</th>
-      <th>Status</th>
-      <th>Created At</th>
-    </tr>
-  </thead>
-  <tbody>
-    <?php foreach ($categories as $category): ?>
+    <h2>Product Categories</h2>
+    <button onclick="openModal()">+ Add new category</button>
+  </div>
+
+  <table>
+    <thead>
       <tr>
-        <td><?= $category['name'] ?></td>
-        <td><?= $category['categories_status'] ?></td>
-        <td><?= $category['created_at'] ?></td>
+        <th>Category Name</th>
+        <th>Status</th>
+        <th>Created At</th>
+        <th>Actions</th>
       </tr>
-    <?php endforeach; ?>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <?php foreach ($categories as $category): ?>
+        <tr>
+          <td><?= $category['name'] ?></td>
+          <td><?= $category['categories_status'] ?></td>
+          <td><?php $created_at = new DateTime($category['created_at']);
+          echo $created_at->format('Y-m-d H:i'); ?></td>
+          <td>
+            <button onclick="openCategoryUpdateModal(<?= $category['id'] ?>)">Update</button>
+            <button onclick="openCategoryDeleteModal(<?= $category['id'] ?>)">Delete</button>
+          </td>
+        </tr>
+      <?php endforeach; ?>
+    </tbody>
+  </table>
+
+</div>
 
 <!-- Modal for adding a new category -->
-<form action="/categories/submit" method="post">
-  <label for="name">Category Name:</label>
-  <input type="text" id="categoryName" name="name" required />
-  <button type="submit">Add Category</button>
-</form>
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Create Category</h3>
+      <span class="close" onclick="closeModal()">×</span>
+    </div>
+    <form action="/categories/form-submit" method="post">
+      <!-- <label for="name">Category Name</label> -->
+      <input type="text" id="categoryName" name="name" placeholder="Enter category name" required />
+      <button type="submit">Add Category</button>
+    </form>
+  </div>
+</div>
+
+
+<!-- Modal for updating a category -->
+<div id="categoryUpdateModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Update Category</h3>
+      <span class="close" onclick="closeCategoryUpdateModal()">×</span>
+    </div>
+    <form action="/categories/update/form-submit" method="post">
+      <!-- <label for="name">Category Name</label> -->
+      <input type="text" id="categoryName" name="name" placeholder="Enter category name" required />
+      <button type="submit">Update Category</button>
+    </form>
+  </div>
+</div>
+
 
 
 <?php
