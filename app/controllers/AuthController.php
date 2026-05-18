@@ -17,11 +17,11 @@ class AuthController
 
             # 1) Validate request method
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-                throw new Exception('Invalid request method');
+                throw new SystemException('Invalid request method');
             }
             # 2) Validate input
             if (!isset($_POST['email']) || !isset($_POST['password'])) {
-                throw new Exception('Email and password are required');
+                throw new ValidationException('Email and password are required');
             }
 
             # 3) Sanitize input
@@ -32,7 +32,7 @@ class AuthController
 
             # 4) Validate email format
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                throw new Exception('Invalid email format');
+                throw new ValidationException('Invalid email format');
             }
 
             # 5) Authenticate user
@@ -40,16 +40,16 @@ class AuthController
             $statement = $conn->prepare('SELECT * FROM users WHERE email = ?');
             $statement->bind_param('s', $email);
             if (!$statement->execute()) {
-                throw new Exception("Database error: $statement->error");
+                throw new SystemException("Database error: Error fetching user. $statement->error");
             }
 
             $result = $statement->get_result();
-            $user = $result->fetch_assoc();
-            if (!$user) {
-                throw new Exception('Invalid credentials');
+            if ($result->num_rows === 0) {
+                throw new ValidationException('Incorrect email');
             }
+            $user = $result->fetch_assoc();
             if (!password_verify($password, $user['password_hash'])) {
-                throw new Exception('Invalid credentials');
+                throw new ValidationException('Incorrect password');
             }
 
             $_SESSION['user'] = [
@@ -61,13 +61,10 @@ class AuthController
 
             Session::flashSet('success', 'Login successful');
             Logger::info("User logged in: {$user['email']} (ID: {$user['id']})");
-            header("Location: /");
+            header("Location: /stock-movements");
             exit;
         } catch (Exception $e) {
-            Logger::error("Login failed for email: {$email}");
-            Session::flashSet('error', $e->getMessage());
-            header("Location: /login");
-            exit;
+            throw $e;
         }
     }
 

@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/Logger.php';
+require_once __DIR__ . '/Session.php';
 
 /*
 # Error handler manages:
@@ -37,9 +38,25 @@ class ErrorHandler
     # Handle uncaught exceptions
     public static function exceptionHandler(Throwable $exception)
     {
-        $error_message = $exception->getMessage() . ' in: ' . $exception->getFile() . ' on line: ' . $exception->getLine();
 
-        Logger::critical($error_message);
+        if ($exception instanceof ValidationException) {
+            http_response_code(400);
+            Session::flashSet('error', $exception->getMessage());
+            $redirect = $_SERVER['HTTP_REFERER'] ?? '/';
+            header("Location: $redirect");
+            exit;
+        }
+        if ($exception instanceof SystemException) {
+
+            $error_message = $exception->getMessage() . ' in: ' . $exception->getFile() . ' on line: ' . $exception->getLine();
+            Logger::critical($error_message);
+            self::renderErrorPage();
+            exit;
+        }
+
+        # Fallback:
+        Logger::critical($exception->getMessage() . ' in: ' . $exception->getFile() . ' on line: ' . $exception->getLine());
+
         self::renderErrorPage();
     }
 

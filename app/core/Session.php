@@ -24,7 +24,7 @@
 
 class Session
 {
-    public static function flashSet($type, $message)
+    public static function flashSet(string $type, string $message)
     {
 
         if (!isset($_SESSION['flash'])) {
@@ -35,7 +35,7 @@ class Session
         ];
     }
 
-    public static function flashGet($type)
+    public static function flashGet(string $type)
     {
         if (!isset($_SESSION['flash'][$type])) {
             return null;
@@ -45,7 +45,7 @@ class Session
         self::flashClear($type);
         return $message;
     }
-    public static function flashClear($type)
+    public static function flashClear(string $type)
     {
         if (isset($_SESSION['flash'][$type])) {
             unset($_SESSION['flash'][$type]);
@@ -55,7 +55,7 @@ class Session
         }
     }
 
-    public static function hasFlash($type)
+    public static function hasFlash(string $type)
     {
         return isset($_SESSION['flash'][$type]);
     }

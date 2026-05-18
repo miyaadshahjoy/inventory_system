@@ -1,16 +1,13 @@
-<?php
-http_response_code(500);
-?>
-
 <!doctype html>
 <html lang="en">
+
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>500 - Server Error</title>
 
-    <link rel="stylesheet" href="/assets/css/app.css" />
+    <link rel="stylesheet" href="/assets/css/style.css">
   </head>
 
   <body>
@@ -21,9 +18,12 @@ http_response_code(500);
         <h2 class="error-title">Internal Server Error</h2>
 
         <p class="error-message">Something went wrong on our side.</p>
+        <button class="error-button">
 
-        <a href="/dashboard" class="error-button"> Return Dashboard </a>
+          <a href="/dashboard"> Return Dashboard </a>
+        </button>
       </div>
     </div>
   </body>
+
 </html>

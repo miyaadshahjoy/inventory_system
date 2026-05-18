@@ -42,3 +42,87 @@
 [2026-05-15 15:55:52] [INFO] User logged in: admin@example.com (ID: 6)
 [2026-05-15 16:00:19] [INFO] User logged in: admin@example.com (ID: 6)
 [2026-05-15 18:13:32] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-16 08:12:01] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-16 08:13:03] [CRITICAL] [2] Undefined array key "id" in D:\XAMPP\htdocs\inventory-system\app\views\categories\index.php on line 30 in: D:\XAMPP\htdocs\inventory-system\app\views\categories\index.php on line: 30
+[2026-05-16 08:31:59] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-16 08:44:35] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-16 08:46:58] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-16 08:52:02] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-16 09:56:40] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-16 11:20:52] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-16 11:21:14] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-16 13:42:13] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-16 13:47:41] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-16 13:48:43] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-16 16:11:49] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-16 17:02:58] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-16 17:16:57] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-16 17:17:01] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-16 19:10:52] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-17 07:46:34] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-17 07:48:08] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-17 08:21:26] [CRITICAL] Class "SystemException" not found in: D:\XAMPP\htdocs\inventory-system\app\controllers\StockMovementController.php on line: 79
+[2026-05-17 08:23:56] [CRITICAL] Class "SystemException" not found in: D:\XAMPP\htdocs\inventory-system\app\controllers\StockMovementController.php on line: 80
+[2026-05-17 08:24:21] [CRITICAL] All fields except notes are required in: D:\XAMPP\htdocs\inventory-system\app\controllers\StockMovementController.php on line: 80
+[2026-05-17 08:32:46] [CRITICAL] Duplicate entry '1' for key 'product_id' in: D:\XAMPP\htdocs\inventory-system\app\services\TransferService.php on line: 177
+[2026-05-17 10:05:10] [CRITICAL] The number of elements in the type definition string must match the number of bind variables in: D:\XAMPP\htdocs\inventory-system\app\services\TransferService.php on line: 170
+[2026-05-17 10:06:41] [CRITICAL] Duplicate entry '1' for key 'product_id' in: D:\XAMPP\htdocs\inventory-system\app\services\TransferService.php on line: 172
+[2026-05-17 10:10:31] [CRITICAL] Duplicate entry '1' for key 'product_id' in: D:\XAMPP\htdocs\inventory-system\app\services\TransferService.php on line: 172
+[2026-05-17 11:52:33] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-17 13:41:27] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-17 14:12:08] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-17 14:38:36] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-17 15:16:49] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-17 15:17:22] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-17 15:17:46] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-17 15:24:21] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-17 15:24:40] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-17 16:06:21] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-17 16:26:47] [CRITICAL] [2] Undefined array key "id" in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 45 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 45
+[2026-05-17 16:27:35] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-17 16:27:43] [CRITICAL] [2] Undefined array key "id" in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 45 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 45
+[2026-05-17 16:29:40] [CRITICAL] [2] Undefined array key "name" in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 46 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 46
+[2026-05-17 16:29:45] [CRITICAL] [2] Undefined array key "name" in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 46 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 46
+[2026-05-17 16:41:12] [CRITICAL] You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'WHERE id = ?
+            )' at line 7 in: D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php on line: 147
+[2026-05-17 16:41:34] [CRITICAL] You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'WHERE id = ?
+            )' at line 7 in: D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php on line: 147
+[2026-05-17 16:43:32] [CRITICAL] You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'WHERE id = ?' at line 7 in: D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php on line: 147
+[2026-05-17 16:44:39] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-17 17:18:11] [CRITICAL] Unknown column 'deleted_at' in 'field list' in: D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php on line: 212
+[2026-05-17 20:35:10] [CRITICAL] [2] Undefined array key "location" in D:\XAMPP\htdocs\inventory-system\app\views\warehouses\index.php on line 28 in: D:\XAMPP\htdocs\inventory-system\app\views\warehouses\index.php on line: 28
+[2026-05-17 20:36:29] [CRITICAL] [2] Undefined array key "location" in D:\XAMPP\htdocs\inventory-system\app\views\warehouses\index.php on line 28 in: D:\XAMPP\htdocs\inventory-system\app\views\warehouses\index.php on line: 28
+[2026-05-17 20:38:10] [CRITICAL] [2] Undefined array key "status" in D:\XAMPP\htdocs\inventory-system\app\views\warehouses\index.php on line 31 in: D:\XAMPP\htdocs\inventory-system\app\views\warehouses\index.php on line: 31
+[2026-05-17 20:38:41] [CRITICAL] Unknown column 'status' in 'field list' in: D:\XAMPP\htdocs\inventory-system\app\controllers\WarehouseController.php on line: 22
+[2026-05-17 20:39:03] [CRITICAL] [2] Undefined array key "status" in D:\XAMPP\htdocs\inventory-system\app\views\warehouses\index.php on line 31 in: D:\XAMPP\htdocs\inventory-system\app\views\warehouses\index.php on line: 31
+[2026-05-17 21:06:56] [CRITICAL] [2] require_once(D:\XAMPP\htdocs\inventory-system\app\controllers/../views/warehouses/index.php): Failed to open stream: No such file or directory in D:\XAMPP\htdocs\inventory-system\app\controllers\WarehouseController.php on line 13 in: D:\XAMPP\htdocs\inventory-system\app\controllers\WarehouseController.php on line: 13
+[2026-05-18 06:36:44] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-18 06:39:35] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-18 07:24:58] [CRITICAL] Duplicate entry 'A' for key 'name' in: D:\XAMPP\htdocs\inventory-system\app\controllers\WarehouseController.php on line: 48
+[2026-05-18 07:46:03] [CRITICAL] Duplicate entry 'A' for key 'name' in: D:\XAMPP\htdocs\inventory-system\app\controllers\WarehouseController.php on line: 48
+[2026-05-18 07:46:17] [CRITICAL] Duplicate entry 'A' for key 'name' in: D:\XAMPP\htdocs\inventory-system\app\controllers\WarehouseController.php on line: 48
+[2026-05-18 07:47:36] [CRITICAL] Duplicate entry 'A' for key 'name' in: D:\XAMPP\htdocs\inventory-system\app\controllers\WarehouseController.php on line: 48
+[2026-05-18 08:03:14] [CRITICAL] Invalid warehouse id in: D:\XAMPP\htdocs\inventory-system\app\controllers\WarehouseController.php on line: 109
+[2026-05-18 08:04:25] [CRITICAL] Invalid warehouse id in: D:\XAMPP\htdocs\inventory-system\app\controllers\WarehouseController.php on line: 109
+[2026-05-18 08:05:04] [CRITICAL] Duplicate entry 'B' for key 'name' in: D:\XAMPP\htdocs\inventory-system\app\controllers\WarehouseController.php on line: 141
+[2026-05-18 08:31:27] [CRITICAL] Invalid credentials in: D:\XAMPP\htdocs\inventory-system\app\controllers\AuthController.php on line: 48
+[2026-05-18 08:33:17] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-18 08:37:09] [CRITICAL] Incorrect email in: D:\XAMPP\htdocs\inventory-system\app\controllers\AuthController.php on line: 48
+[2026-05-18 08:37:46] [CRITICAL] Incorrect email in: D:\XAMPP\htdocs\inventory-system\app\controllers\AuthController.php on line: 48
+[2026-05-18 08:37:50] [CRITICAL] Incorrect email in: D:\XAMPP\htdocs\inventory-system\app\controllers\AuthController.php on line: 48
+[2026-05-18 08:37:53] [CRITICAL] Incorrect email in: D:\XAMPP\htdocs\inventory-system\app\controllers\AuthController.php on line: 48
+[2026-05-18 08:39:15] [CRITICAL] No connection could be made because the target machine actively refused it in: D:\XAMPP\htdocs\inventory-system\app\core\Database.php on line: 14
+[2026-05-18 08:39:45] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-18 09:52:18] [CRITICAL] Duplicate entry 'EL-12345-HILM' for key 'sku' in: D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php on line: 53
+[2026-05-18 11:07:53] [CRITICAL] Duplicate entry 'CL-12345-HELM' for key 'sku' in: D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php on line: 53
+[2026-05-18 16:15:06] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-18 16:15:17] [CRITICAL] [2] require_once(D:\XAMPP\htdocs\inventory-system\app\controllers/../app/views/inventory/index.php): Failed to open stream: No such file or directory in D:\XAMPP\htdocs\inventory-system\app\controllers\InventoryController.php on line 19 in: D:\XAMPP\htdocs\inventory-system\app\controllers\InventoryController.php on line: 19
+[2026-05-18 16:17:24] [CRITICAL] [2] require_once(D:\XAMPP\htdocs\inventory-system\app\views\inventory/layouts/layout.php): Failed to open stream: No such file or directory in D:\XAMPP\htdocs\inventory-system\app\views\inventory\index.php on line 14 in: D:\XAMPP\htdocs\inventory-system\app\views\inventory\index.php on line: 14
+[2026-05-18 16:17:28] [CRITICAL] [2] require_once(D:\XAMPP\htdocs\inventory-system\app\views\inventory/layouts/layout.php): Failed to open stream: No such file or directory in D:\XAMPP\htdocs\inventory-system\app\views\inventory\index.php on line 14 in: D:\XAMPP\htdocs\inventory-system\app\views\inventory\index.php on line: 14
+[2026-05-18 16:43:38] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-18 16:43:55] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-18 17:20:53] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-18 17:21:17] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-18 17:50:35] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-18 17:50:50] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-18 18:01:17] [INFO] User logged in: admin@example.com (ID: 6)

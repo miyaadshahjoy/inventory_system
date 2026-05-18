@@ -27,6 +27,10 @@ function isActive(string $path, string $current_uri): string
       Stock Movements
     </a>
 
+    <a href="/inventory-overview" class="sidebar-link <?= isActive('/inventory-overview', $current_uri) ?>">
+      Inventory Overview
+    </a>
+
 
     <div class="sidebar-section-title">CATALOG</div>
 
@@ -36,6 +40,10 @@ function isActive(string $path, string $current_uri): string
 
     <a href="/categories" class="sidebar-link <?= isActive('/categories', $current_uri) ?>">
       Categories
+    </a>
+
+    <a href="/warehouses" class="sidebar-link <?= isActive('/warehouses', $current_uri) ?>">
+      Warehouses
     </a>
 
     <div class="sidebar-section-title">USERS</div>

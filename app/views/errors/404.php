@@ -8,7 +8,7 @@ http_response_code(404);
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+    <link rel="stylesheet" href="/assets/css/style.css">
     <title>404 - Page Not Found</title>
 
   </head>
@@ -23,8 +23,10 @@ http_response_code(404);
         <p class="error-message">
           The page you are looking for does not exist.
         </p>
+        <button class="error-button">
 
-        <a href="/" class="error-button"> Return Dashboard </a>
+          <a href="/"> Return Dashboard </a>
+        </button>
       </div>
     </div>
   </body>

@@ -5,6 +5,7 @@ CREATE TABLE products(
     sku VARCHAR(255) UNIQUE NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
     unit ENUM('PCS', 'KG', 'BOX') NOT NULL,
+    reorder_level INT DEFAULT 0,
     product_status ENUM('ACTIVE', 'INACTIVE') DEFAULT 'ACTIVE',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

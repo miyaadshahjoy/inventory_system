@@ -4,6 +4,7 @@ http_response_code(403);
 
 <!doctype html>
 <html lang="en">
+
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -24,8 +25,11 @@ http_response_code(403);
           You do not have permission to access this page.
         </p>
 
-        <a href="/dashboard" class="error-button"> Return Dashboard </a>
+        <button class="error-button">
+          <a href="/dashboard"> Return Dashboard </a>
+        </button>
       </div>
     </div>
   </body>
+
 </html>

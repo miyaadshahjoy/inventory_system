@@ -10,12 +10,18 @@ class Database
 {
     public static function connect()
     {
-        global $db_host, $db_user, $db_pass, $db_name;
-        $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
+        try {
 
-        if ($conn->connect_error) {
-            die("DB connection Failed: " . $conn->connect_error);
+            global $db_host, $db_user, $db_pass, $db_name;
+            $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
+
+            if ($conn->connect_error) {
+
+                throw new SystemException("Database connection failed: . $conn->connect_error");
+            }
+            return $conn;
+        } catch (Exception $e) {
+            throw $e;
         }
-        return $conn;
     }
 }

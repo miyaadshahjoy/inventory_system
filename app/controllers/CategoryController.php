@@ -16,15 +16,15 @@ class CategoriesController
     {
         try {
             # 1) Check if request method is POST
-            if (!$_SERVER['REQUEST_METHOD'] === 'POST') {
-                throw new Exception("Request method must be POST");
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                throw new SystemException("Request method must be POST");
             }
 
             # 2) Validate input fields
             if (!isset($_POST['name'])) {
-                throw new Exception('Category name is required');
+                throw new ValidationException('Category name is required');
             }
-            $name = $_POST['name'];
+            $name = trim($_POST['name']);
 
             # 3) Create slug from category name
             $slug = $this->createSlug($name);
@@ -36,14 +36,22 @@ class CategoriesController
             ");
 
             $statement->bind_param('ss', $name, $slug);
-            if (!$statement->execute()) {
-                throw new Exception('Error creating new category.');
-            } else {
-                header('Location: /categories');
+            try {
+                $statement->execute();
+            } catch (mysqli_sql_exception $e) {
+                if ($e->getCode() === 1062) {
+                    throw new ValidationException("Category with the same name already exists");
+                }
+                throw new SystemException("Database error: Error creating category. $statement->error");
             }
 
+            Session::flashSet('success', 'Category created successfully');
+            header('Location: /categories');
+            exit;
+
+
         } catch (Exception $e) {
-            echo "Error: " . $e->getMessage();
+            throw $e;
         }
 
 
@@ -53,7 +61,8 @@ class CategoriesController
         try {
             $conn = Database::connect();
             $statement = $conn->prepare("
-            SELECT name,categories_status,created_at FROM categories 
+            SELECT * 
+            FROM categories 
             ORDER BY created_at DESC
             ");
             if (!$statement->execute()) {
@@ -66,95 +75,201 @@ class CategoriesController
             }
 
         } catch (Exception $e) {
-            echo "Error: " . $e->getMessage();
+            throw $e;
         }
     }
 
-    /*
-    public function createCategory($data)
+
+
+    public static function getAllActiveCategories()
     {
-        $category_name = $data["name"];
-        $slug = $data["slug"];
+        try {
+            $conn = Database::connect();
+            $statement = $conn->prepare("
+            SELECT * 
+            FROM categories 
+            WHERE categories_status = 'ACTIVE'
+            ORDER BY created_at DESC
+            ");
+            if (!$statement->execute()) {
+                throw new Exception('Error fetching categories');
+            } else {
 
-        $conn = Database::connect();
-        $statement = $conn->prepare("INSERT INTO categories(name, slug) INTO VALUES ('$category_name', '$slug)");
+                $result = $statement->get_result();
+                $categories = $result->fetch_all(MYSQLI_ASSOC);
+                return $categories;
+            }
 
-        $resutlt = $statement->execute();
-        if (!$resutlt) {
-            die("Category creation failed");
-        } else {
-            echo "Category created successfully.";
-        }
-
-    }
-
-    public function getAllCategories()
-    {
-        $conn = Database::connect();
-        $statement = $conn->prepare("SELECT * FROM categories");
-        $statement->execute();
-        $result = $statement->get_result();
-        if (!$result) {
-            die("⭕ Error fetching categories.");
-        } else {
-            $categories = $result->fetch_all(MYSQLI_ASSOC);
-            return $categories;
+        } catch (Exception $e) {
+            throw $e;
         }
     }
-    */
-    public function getCategoryById($id)
+    public function getCategoryById(int $id)
     {
-        $conn = Database::connect();
-        $statement = $conn->prepare("SELECT * FROM categories WHERE id = ?");
-        $statement->bind_param("i", $id);
-        $statement->execute();
-        $result = $statement->get_result();
-        if (!$result) {
-            die("⭕ Error fetching category.");
-        } else {
+
+        try {
+
+            $conn = Database::connect();
+            $statement = $conn->prepare("
+                SELECT * 
+                FROM categories 
+                WHERE id = ?
+                AND categories_status = 'ACTIVE'
+                FOR UPDATE
+            ");
+            $statement->bind_param("i", $id);
+            if (!$statement->execute()) {
+                throw new SystemException("Database error: Error fetching category. $statement->error");
+            }
+            $result = $statement->get_result();
+            if ($result->num_rows === 0) {
+                throw new ValidationException("Category does not exist");
+            }
             $category = $result->fetch_assoc();
             return $category;
+        } catch (Exception $e) {
+            throw $e;
         }
 
     }
-    public function updateCategory($id, $data)
+    public function updateCategory()
     {
-        $category_name = $data["name"];
-        $slug = $data["slug"];
+        try {
+            # 1) Check if request method is POST
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                throw new SystemException("Request method must be POST");
+            }
 
-        $conn = Database::connect();
-        $statement = $conn->prepare("UPDATE categories SET name = '$category_name',
-        slug = '$slug'
-        WHERE id = ?
-        ");
-        $statement->bind_param("i", $id);
-        $resutlt = $statement->execute();
-        if (!$resutlt) {
-            die("Category update failed");
-        } else {
-            echo "Category updated successfully.";
+            # 2) Validate input fields
+            if (!isset($_POST['id'])) {
+                throw new SystemException('Category id is required');
+            }
+            if (!isset($_POST['name'])) {
+                throw new ValidationException('Category name is required');
+            }
+
+
+            # 3) sanitize input fields
+            $id = htmlspecialchars($_POST['id']);
+            $name = htmlspecialchars($_POST['name']);
+            $id = (int) $id;
+            $name = trim($name);
+
+            # 4) Create slug from category name
+            $slug = $this->createSlug($name);
+
+            # 5) Update category in DB
+            $conn = Database::connect();
+
+            # 5.A) Check if category exists
+            $category = $this->getCategoryById($id);
+            if (!$category) {
+                throw new ValidationException("Category does not exist.");
+            }
+
+            # 5.B) Update category
+            $statement = $conn->prepare("
+                UPDATE categories 
+                SET name = ?, slug = ?
+                WHERE id = ?
+            ");
+
+            $statement->bind_param('ssi', $name, $slug, $id);
+
+            try {
+                $statement->execute();
+            } catch (mysqli_sql_exception $e) {
+                if ($e->getCode() === 1062) {
+                    throw new ValidationException("Category with the same name already exists");
+                }
+                throw new SystemException("Database error: Error updating category. $statement->error");
+            }
+            Session::flashSet('success', 'Category updated successfully.');
+            header('Location: /categories');
+            exit;
+
+
+        } catch (Exception $e) {
+            throw $e;
         }
 
     }
 
-    public function deleteCategory($id)
+    public function deleteCategory()
     {
+        /*
+        # How to retrieve data from the request body (json data)
+        - php://input -> a stream resource that is used to read the raw data from the request body.
+        - file_get_contents('php://input') -> reads the raw data from the request body and returns it as a string.
+        - json_decode(file_get_contents('php://input')) -> decodes the JSON data from the request body and returns it as an associative array.
+        */
+
+        header('Content-Type: application/json');
+
+        $json_data = file_get_contents("php://input");
+        $data = json_decode($json_data, true); # convert json to associative array
+
+        if (!$data) {
+            http_response_code(400);
+            echo json_encode([
+                "status" => "failed",
+                "message" => "Invalid request",
+            ]);
+            exit;
+        }
+
+        if (!isset($data["id"])) {
+            http_response_code(400);
+            echo json_encode([
+                "status" => "failed",
+                "message" => "Category id is required"
+            ]);
+            exit;
+        }
+
+        $id = $data["id"];
+        $id = (int) $id;
+
+        # Check if category exists
+        $category = $this->getCategoryById($id);
+        if (!$category) {
+            http_response_code(404);
+            echo json_encode([
+                "status" => "failed",
+                "message" => "Category not found"
+            ]);
+            exit;
+        }
         $conn = Database::connect();
-        $statement = $conn->prepare("UPDATE categories 
-        SET categories_status = 'INACTIVE'
-        WHERE id = ?
-        )");
+        $statement = $conn->prepare("
+            UPDATE categories 
+            SET categories_status = 'INACTIVE'
+            WHERE id = ?
+            ");
         $statement->bind_param("i", $id);
 
-        $resutlt = $statement->execute();
-        if (!$resutlt) {
-            die("⭕ Error removing category.");
+        if (!$statement->execute()) {
+            http_response_code(500);
+            echo json_encode([
+                "status" => "error",
+                "message" => "Database error: Error deleting category. $statement->error"
+            ]);
+            exit;
         } else {
-            echo "Category removed successfully.";
+            http_response_code(200);
+            echo json_encode([
+                "status" => "success",
+                "message" => "Category deleted successfully.",
+                "data" => [
+                    "category_status" => "INACTIVE"
+                ]
+            ]);
+            exit;
         }
+
     }
 
-    public function createSlug($string)
+    public function createSlug(string $string)
     {
         $words = explode(' ', $string);
         $slug = implode('-', $words);

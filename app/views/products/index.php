@@ -3,10 +3,13 @@ $products = $data['products'] ?? [];
 $categories = $data['categories'] ?? [];
 ob_start(); # Start the output buffer
 ?>
-<div class="container">
 
+<!-- Showing product list -->
+<div class="container">
   <div class="container-header">
     <h2>Products</h2>
+
+    <!-- Add new product button -->
     <button onclick="openModal()">+ Add Product</button>
   </div>
 
@@ -35,12 +38,19 @@ ob_start(); # Start the output buffer
             <td><?= $product['current_stock'] ?></td>
             <td><?= $product['price'] ?></td>
             <td><?= $product['unit'] ?></td>
-            <td><?= $product['status'] ?></td>
+            <td class="productStatus" data-productId="<?= $product['id'] ?>"><?= $product['status'] ?></td>
             <td><?php $created_at = new DateTime($product['created_at']);
             echo $created_at->format('Y-m-d H:i'); ?></td>
             <td>
-              <button>Edit</button>
-              <button>Delete</button>
+              <div class="productActions <?= $product['status'] === 'INACTIVE' ? 'hide' : '' ?>"
+                data-productId="<?= $product['id'] ?>">
+                <button data-productId="<?= htmlspecialchars($product['id']) ?>"
+                  data-productName="<?= htmlspecialchars($product['product_name']) ?>"
+                  data-categoryID="<?= $product['category_id'] ?>" data-productSKU="<?= $product['sku'] ?>"
+                  data-productPrice="<?= $product['price'] ?>" data-productUnit="<?= $product['unit'] ?>"
+                  onclick=" openProductUpdateModal(this)">Edit</button>
+                <button data-productId="<?= $product['id'] ?>" onclick="deleteProduct(this)">Delete</button>
+              </div>
             </td>
           </tr>
         <?php endforeach; ?>
@@ -50,7 +60,10 @@ ob_start(); # Start the output buffer
 
 </div>
 
-<!-- Modal Window -->
+<!-- 
+# ADD NEW PRODUCT
+ -->
+<!-- Modal Window for adding new product -->
 <div id="modal" class="modal product-modal">
   <div class="modal-content">
     <div class="modal-header">
@@ -59,6 +72,7 @@ ob_start(); # Start the output buffer
     </div>
 
     <form class="product-form" action="products/form-submit" method="post">
+
       <div class="form-group">
         <div>
           <label>Product Name</label>
@@ -85,9 +99,8 @@ ob_start(); # Start the output buffer
           <input type="text" name="sku" placeholder="Enter SKU" required />
         </div>
         <div>
-
           <label>Price</label>
-          <input type="number" name="price" step="0.01" placeholder="Enter price" required />
+          <input type="number" name="price" step="0.5" placeholder="Enter price" required />
         </div>
       </div>
 
@@ -95,7 +108,6 @@ ob_start(); # Start the output buffer
         <div>
 
           <label>Unit</label>
-
           <select name="unit" required>
             <option value="">Select product unit</option>
             <option value="KG">KG</option>
@@ -106,6 +118,68 @@ ob_start(); # Start the output buffer
 
       </div>
       <button type="submit">Add new product</button>
+    </form>
+  </div>
+</div>
+
+<!-- 
+# UPDATE PRODUCT
+-->
+<!-- Modal for updating a product -->
+<div id="productUpdateModal" class="modal product-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Update Product</h3>
+      <span class="close" onclick="closeProductUpdateModal()">×</span>
+    </div>
+    <form class="product-form" action="/products/update/form-submit" method="post">
+      <input type="text" name="id" id="productId" hidden>
+      <div class="form-group">
+        <div>
+          <label>Product Name</label>
+          <input type="text" name="name" id="productName" placeholder="Enter product name" required />
+        </div>
+        <div>
+
+          <label>Category</label>
+          <select name="category_id" id="productCategory" required>
+            <option value="">Select product category</option>
+            <?php foreach ($categories as $category): ?>
+              <option value="<?= $category['id'] ?>">
+                <?= htmlspecialchars($category['name']) ?>
+              </option>
+            <?php endforeach; ?>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div>
+
+          <label>SKU</label>
+          <input type="text" name="sku" id="productSKU" placeholder="Enter SKU" required />
+        </div>
+        <div>
+          <label>Price</label>
+          <input type="number" name="price" id="productPrice" step="0.5" placeholder="Enter price" required />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div>
+
+          <label>Unit</label>
+          <select name="unit" id="productUnit" required>
+            <option value="">Select product unit</option>
+            <option value="KG">KG</option>
+            <option value="PCS">PCS</option>
+            <option value="BOX">BOX</option>
+          </select>
+        </div>
+
+      </div>
+
+      <button type="submit">Update Product</button>
     </form>
   </div>
 </div>

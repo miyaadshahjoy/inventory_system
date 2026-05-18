@@ -1,9 +1,11 @@
 <?php
 
-class Logger{
+class Logger
+{
     # log()
 
-    public static function log($type, $message){
+    public static function log(string $type, string $message)
+    {
 
         # Format message
         $timestamp = date("Y-m-d H:i:s");
@@ -15,19 +17,23 @@ class Logger{
     }
     # info()
 
-    public static function info($message){
+    public static function info(string $message)
+    {
         self::log('info', $message);
     }
     # warning()
-    public static function warning($message){
+    public static function warning(string $message)
+    {
         self::log('warning', $message);
     }
     # error()
-    public static function error($message){
+    public static function error(string $message)
+    {
         self::log('error', $message);
     }
     # critical()
-    public static function critical($message){
+    public static function critical(string $message)
+    {
         self::log('critical', $message);
     }
 

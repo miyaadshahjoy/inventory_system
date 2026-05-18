@@ -13,7 +13,7 @@ html {
 
 body {
   font-family: Arial, sans-serif;
-  font-size: 1.125rem;
+  font-size: 1rem;
   color: #495057;
   height: 100vh;
   overflow: hidden;
@@ -59,9 +59,12 @@ select {
 textarea {
   font-family: Arial, sans-serif;
   font-size: 0.75rem;
+  width: 100%;
   padding: 4px 10px;
   resize: none;
   max-height: 30px;
+  margin-bottom: 18px;
+
   outline: none;
 }
 
@@ -155,7 +158,10 @@ button {
 /*  MAIN CONTENT */
 .main-content {
   flex: 1;
-  padding: 24px;
+  padding-top: 48px;
+  padding-bottom: 48px;
+  padding-left: 48px;
+  padding-right: 48px;
   overflow-y: auto;
   overflow-x: auto;
   height: 100vh;
@@ -205,7 +211,7 @@ button {
 /* Table styles */
 
 table {
-  min-width: 650px;
+  width: 100%;
   border-collapse: collapse;
   background: #fff;
   border: 1px solid #ddd;
@@ -213,6 +219,7 @@ table {
 
 th,
 td {
+  font-size: 1rem;
   text-align: left;
   padding: 12px 24px;
   border-bottom: 1px solid #eee;
@@ -251,7 +258,8 @@ tbody tr:hover {
 }
 
 .product-modal .modal-content,
-.movement-modal .modal-content {
+.movement-modal .modal-content,
+.transfer-modal .modal-content {
   max-width: 700px;
 }
 
@@ -290,7 +298,9 @@ tbody tr:hover {
 }
 
 .product-form,
-.movement-form {
+.movement-form,
+.transfer-form,
+.warehouse-form {
   width: 100%;
 }
 
@@ -313,6 +323,93 @@ form label {
 .product-form select,
 .movement-form input,
 .movement-form select,
-.movement-form textarea {
+.movement-form textarea,
+.transfer-form input,
+.transfer-form select,
+.transfer-form textarea {
   width: 100%;
+}
+
+.warehouse-form div,
+.category-form div {
+  width: 100%;
+}
+/* Error pages styles */
+.error-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  background: #f7f7f7;
+  font-family: Arial, sans-serif;
+}
+
+.error-card {
+  width: 100%;
+  max-width: 450px;
+  background: #ffffff;
+  padding: 24px 24px;
+  text-align: center;
+}
+
+.error-code {
+  margin: 0 0 24px;
+  font-size: 64px;
+  font-weight: 700;
+}
+
+.error-title {
+  margin: 0 0 14px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.error-message {
+  margin: 0 0 32px;
+  line-height: 1.6;
+}
+
+.error-button a {
+  text-decoration: none;
+  color: #495057;
+}
+
+/* OVERVIEW CARDS */
+.overview-cards {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* STATUS (ONLY COLOR IS HERE) */
+.status {
+  text-transform: lowercase;
+}
+
+.status.OK {
+  color: #2e7d32;
+}
+
+.status.LOW {
+  color: #b26a00;
+}
+
+.status.OUT {
+  color: #b71c1c;
+}
+
+/* HIDE */
+.hide {
+  display: none;
 }

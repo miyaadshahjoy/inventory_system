@@ -1,10 +1,12 @@
 CREATE TABLE stock_snapshots (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    product_id INT NOT NULL UNIQUE,
+    product_id INT NOT NULL,
+    warehouse_id INT NOT NULL,
     quantity INT NOT NULL DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    ON UPDATE CURRENT_TIMESTAMP
+    ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE (product_id, warehouse_id)
 );
 
 FOREIGN KEY (product_id)

@@ -1,31 +1,183 @@
 const modal = document.getElementById("modal");
 const categoryUpdateModal = document.getElementById("categoryUpdateModal");
+const transferMovementModal = document.getElementById("transferModal");
+const productUpdateModal = document.getElementById("productUpdateModal");
+const warehouseUpdateModal = document.getElementById("warehouseUpdateModal");
 
 function openModal() {
   modal.classList.add("show");
 }
-function openCategoryUpdateModal() {
+function openTransferModal() {
+  transferMovementModal.classList.add("show");
+}
+function openCategoryUpdateModal(button) {
+  const categoryId = button.getAttribute("data-categoryId");
+  const categoryName = button.getAttribute("data-categoryName");
+  document.getElementById("categoryId").value = categoryId;
+  document.getElementById("categoryName").value = categoryName;
+
   categoryUpdateModal.classList.add("show");
 }
+
+function openProductUpdateModal(button) {
+  const productId = button.getAttribute("data-productId");
+  const productName = button.getAttribute("data-productName");
+  const productSku = button.getAttribute("data-productSKU");
+  const productPrice = button.getAttribute("data-productPrice");
+
+  document.getElementById("productId").value = productId;
+  document.getElementById("productName").value = productName;
+  document.getElementById("productSKU").value = productSku;
+  document.getElementById("productPrice").value = productPrice;
+  productUpdateModal.classList.add("show");
+}
+
+function openWarehouseUpdateModal(button) {
+  const warehouseId = button.getAttribute("data-warehouseId");
+  const warehouseName = button.getAttribute("data-warehouseName");
+  const warehouseLocation = button.getAttribute("data-warehouseLocation");
+  document.getElementById("warehouseId").value = warehouseId;
+  document.getElementById("warehouseName").value = warehouseName;
+  document.getElementById("warehouseLocation").value = warehouseLocation;
+  warehouseUpdateModal.classList.add("show");
+}
+
+async function deleteCategory(button) {
+  const categoryId = button.getAttribute("data-categoryId");
+  try {
+    const response = await fetch(`/categories/delete`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: categoryId }),
+    });
+    const data = await response.json();
+    console.log(data);
+    const categoryStatus = data.data.category_status;
+    const categoryStatusEls = document.querySelectorAll(".categoryStatus");
+    const categoryActionsEls = document.querySelectorAll(".categoryActions");
+    categoryStatusEls.forEach((el) => {
+      if (el.getAttribute("data-categoryId") === categoryId) {
+        el.textContent = categoryStatus;
+      }
+    });
+    categoryActionsEls.forEach((el) => {
+      if (el.getAttribute("data-categoryId") === categoryId) {
+        el.style.display = "none";
+      }
+    });
+    // location.reload();
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function deleteProduct(button) {
+  const productId = button.getAttribute("data-productId");
+  try {
+    const response = await fetch(`/products/delete`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: productId }),
+    });
+    const data = await response.json();
+    console.log(data);
+    const productStatus = data.data.product_status;
+    const productStatusEls = document.querySelectorAll(".productStatus");
+    const productActionsEls = document.querySelectorAll(".productActions");
+    console.log(productStatusEls, productActionsEls);
+    productStatusEls.forEach((el) => {
+      if (el.getAttribute("data-productId") === productId) {
+        el.textContent = productStatus;
+      }
+    });
+    productActionsEls.forEach((el) => {
+      if (el.getAttribute("data-productId") === productId) {
+        el.style.display = "none";
+      }
+    });
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function deleteWarehouse(button) {
+  const warehouseId = button.getAttribute("data-warehouseId");
+  try {
+    const response = await fetch(`/warehouses/delete`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: warehouseId }),
+    });
+    const data = await response.json();
+    console.log(data);
+    const warehouseStatus = data.data.warehouse_status;
+    const warehouseStatusEls = document.querySelectorAll(".warehouseStatus");
+    const warehouseActionsEls = document.querySelectorAll(".warehouseActions");
+    warehouseStatusEls.forEach((el) => {
+      if (el.getAttribute("data-warehouseId") === warehouseId) {
+        el.textContent = warehouseStatus;
+      }
+    });
+    console.log(warehouseActionsEls, warehouseStatusEls);
+    warehouseActionsEls.forEach((el) => {
+      if (el.getAttribute("data-warehouseId") === warehouseId) {
+        el.style.display = "none";
+      }
+    });
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 function closeModal() {
   modal.classList.remove("show");
 }
+function closeTransferModal() {
+  transferMovementModal.classList.remove("show");
+}
 function closeCategoryUpdateModal() {
   categoryUpdateModal.classList.remove("show");
+}
+
+function closeProductUpdateModal() {
+  productUpdateModal.classList.remove("show");
+}
+
+function closeWarehouseUpdateModal() {
+  warehouseUpdateModal.classList.remove("show");
 }
 
 window.addEventListener("click", function (event) {
   if (event.target === modal) {
     closeModal();
   }
+  if (event.target === transferMovementModal) {
+    closeTransferModal();
+  }
   if (event.target === categoryUpdateModal) {
     closeCategoryUpdateModal();
+  }
+  if (event.target === productUpdateModal) {
+    closeProductUpdateModal();
+  }
+
+  if (event.target === warehouseUpdateModal) {
+    closeWarehouseUpdateModal();
   }
 });
 
 window.addEventListener("keydown", function (event) {
   if (event.key === "Escape") {
     closeModal();
+    closeTransferModal();
     closeCategoryUpdateModal();
+    closeProductUpdateModal();
+    closeWarehouseUpdateModal();
   }
 });
