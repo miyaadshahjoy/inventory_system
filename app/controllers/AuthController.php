@@ -1,9 +1,5 @@
 <?php
 
-require_once __DIR__ . '/../core/Database.php';
-require_once __DIR__ . '/../core/Session.php';
-require_once __DIR__ . '/../core/Logger.php';
-
 
 class AuthController
 {
@@ -37,7 +33,12 @@ class AuthController
 
             # 5) Authenticate user
             $conn = Database::connect();
-            $statement = $conn->prepare('SELECT * FROM users WHERE email = ?');
+            $statement = $conn->prepare("
+                SELECT * 
+                FROM users 
+                WHERE email = ?
+                AND user_status = 'ACTIVE'
+            ");
             $statement->bind_param('s', $email);
             if (!$statement->execute()) {
                 throw new SystemException("Database error: Error fetching user. $statement->error");
@@ -61,7 +62,7 @@ class AuthController
 
             Session::flashSet('success', 'Login successful');
             Logger::info("User logged in: {$user['email']} (ID: {$user['id']})");
-            header("Location: /stock-movements");
+            header("Location: /dashboard");
             exit;
         } catch (Exception $e) {
             throw $e;

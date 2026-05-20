@@ -1,8 +1,6 @@
 <?php
 
-require_once __DIR__ . "/../core/Database.php";
-require_once __DIR__ . "/../services/InventoryService.php";
-require_once __DIR__ . "/../services/ProductService.php";
+
 
 class ProductController
 {
@@ -27,7 +25,7 @@ class ProductController
             }
 
             # 2) Validate input data
-            if (!isset($_POST['name']) || !isset($_POST['category_id']) || !isset($_POST['sku']) || !isset($_POST['price']) || !isset($_POST['unit'])) {
+            if (!isset($_POST['name']) || !isset($_POST['category_id']) || !isset($_POST['sku']) || !isset($_POST['price']) || !isset($_POST['reorder_level']) || !isset($_POST['unit'])) {
                 throw new ValidationException('All fields are required');
             }
 
@@ -36,20 +34,32 @@ class ProductController
             $category_id = htmlspecialchars($_POST['category_id']);
             $sku = htmlspecialchars($_POST['sku']);
             $price = htmlspecialchars($_POST['price']);
+            $reorder_level = htmlspecialchars($_POST['reorder_level']);
             $unit = htmlspecialchars($_POST['unit']);
 
             $name = trim($name);
             $category_id = (int) $category_id;
             $sku = trim($sku);
             $price = (float) $price;
+            $reorder_level = (int) $reorder_level;
+
+            # 3.A) Check if price is greater than 0
+            if ($price <= 0) {
+                throw new ValidationException('Price must be greater than 0');
+            }
+
+            # 3.B) Check if reorder level is greater than 0
+            if ($reorder_level <= 0) {
+                throw new ValidationException('Reorder level must be greater than 0');
+            }
 
             # 4) Create and store product in database
 
             $conn = Database::connect();
             $statement = $conn->prepare("
-                INSERT INTO products(name, category_id, sku, price, unit) VALUES (?, ?, ?, ?, ?)");
+                INSERT INTO products(name, category_id, sku, price, unit, reorder_level) VALUES (?, ?, ?, ?, ?, ?)");
 
-            $statement->bind_param("sisis", $name, $category_id, $sku, $price, $unit);
+            $statement->bind_param("sisisi", $name, $category_id, $sku, $price, $unit, $reorder_level);
             try {
                 $statement->execute();
             } catch (mysqli_sql_exception $e) {
@@ -86,9 +96,9 @@ class ProductController
                 throw new SystemException("Database error: Error fetching products. $statement->error");
             }
             $result = $statement->get_result();
-            if ($result->num_rows === 0) {
-                throw new ValidationException("No products found.");
-            }
+            // if ($result->num_rows === 0) {
+            //     throw new ValidationException("No products found.");
+            // }
             $products = $result->fetch_all(MYSQLI_ASSOC);
             return $products;
 
@@ -113,9 +123,9 @@ class ProductController
                 throw new SystemException("Database error: Error fetching products. $statement->error");
             }
             $result = $statement->get_result();
-            if ($result->num_rows === 0) {
-                throw new ValidationException("No products found.");
-            }
+            // if ($result->num_rows === 0) {
+            //     throw new ValidationException("No products found.");
+            // }
             $products = $result->fetch_all(MYSQLI_ASSOC);
             return $products;
 
@@ -168,7 +178,7 @@ class ProductController
                 throw new SystemException('Product id is required');
             }
 
-            if (!isset($_POST['name']) || !isset($_POST['category_id']) || !isset($_POST['sku']) || !isset($_POST['price']) || !isset($_POST['unit'])) {
+            if (!isset($_POST['name']) || !isset($_POST['category_id']) || !isset($_POST['sku']) || !isset($_POST['price']) || !isset($_POST['unit']) || !isset($_POST['reorder_level'])) {
                 throw new ValidationException('All fields are required');
             }
 
@@ -179,12 +189,23 @@ class ProductController
             $sku = htmlspecialchars($_POST['sku']);
             $price = htmlspecialchars($_POST['price']);
             $unit = htmlspecialchars($_POST['unit']);
+            $reorder_level = htmlspecialchars($_POST['reorder_level']);
 
             $id = (int) $id;
             $name = trim($name);
             $category_id = (int) $category_id;
             $sku = trim($sku);
             $price = (float) $price;
+            $reorder_level = (int) $reorder_level;
+
+            # 3.A) Check if price is greater than 0
+            if ($price <= 0) {
+                throw new ValidationException('Price must be greater than 0');
+            }
+            # 3.B) Check if reorder level is greater than 0
+            if ($reorder_level <= 0) {
+                throw new ValidationException('Reorder level must be greater than 0');
+            }
 
             # 4) Update product in DB
             $conn = Database::connect();
@@ -203,10 +224,11 @@ class ProductController
             category_id = ?,
             sku = ?, 
             price = ?,
-            unit = ?
+            unit = ?,
+            reorder_level = ?
             WHERE id = ?
             ");
-            $statement->bind_param("sisisi", $name, $category_id, $sku, $price, $unit, $id);
+            $statement->bind_param("sisisii", $name, $category_id, $sku, $price, $unit, $reorder_level, $id);
             try {
                 $statement->execute();
             } catch (mysqli_sql_exception $e) {
@@ -282,17 +304,17 @@ class ProductController
                 "message" => "Database error: Error deleting product."
             ]);
             exit;
-        } else {
-            http_response_code(200);
-            echo json_encode([
-                "status" => "success",
-                "message" => "Product deleted successfully",
-                "data" => [
-                    "product_status" => 'INACTIVE'
-                ]
-            ]);
-            exit;
         }
+        http_response_code(200);
+        echo json_encode([
+            "status" => "success",
+            "message" => "Product deleted successfully",
+            "data" => [
+                "product_status" => 'INACTIVE'
+            ]
+        ]);
+        exit;
+
 
     }
 

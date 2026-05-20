@@ -126,3 +126,55 @@
 [2026-05-18 17:50:35] [INFO] User logged in: admin@example.com (ID: 6)
 [2026-05-18 17:50:50] [INFO] User logged in: admin@example.com (ID: 6)
 [2026-05-18 18:01:17] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-19 07:30:51] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-19 08:10:55] [CRITICAL] [2] Undefined array key "quantity" in D:\XAMPP\htdocs\inventory-system\app\views\movements\movementHistory.php on line 55 in: D:\XAMPP\htdocs\inventory-system\app\views\movements\movementHistory.php on line: 55
+[2026-05-19 08:13:52] [CRITICAL] Unknown column 'u.name' in 'field list' in: D:\XAMPP\htdocs\inventory-system\app\services\InventoryService.php on line: 177
+[2026-05-19 08:14:14] [CRITICAL] Unknown column 'u.name' in 'field list' in: D:\XAMPP\htdocs\inventory-system\app\services\InventoryService.php on line: 177
+[2026-05-19 08:16:23] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-19 08:17:31] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-19 08:22:53] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-19 08:56:22] [CRITICAL] Class "WarehouseController" not found in: D:\XAMPP\htdocs\inventory-system\app\controllers\StockMovementController.php on line: 11
+[2026-05-19 09:01:14] [CRITICAL] [2] Undefined array key "resulting_stock" in D:\XAMPP\htdocs\inventory-system\app\views\movements\movementHistory.php on line 62 in: D:\XAMPP\htdocs\inventory-system\app\views\movements\movementHistory.php on line: 62
+[2026-05-19 10:31:41] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-19 10:31:44] [CRITICAL] [2] Undefined array key "current_stock" in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 42 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 42
+[2026-05-19 10:35:12] [CRITICAL] [2] Undefined array key "id" in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 48 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 48
+[2026-05-19 10:36:04] [CRITICAL] [2] Undefined array key "status" in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 48 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 48
+[2026-05-19 10:36:23] [CRITICAL] [2] Undefined array key "status" in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 48 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 48
+[2026-05-19 10:37:41] [CRITICAL] [2] Undefined array key "unit" in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 58 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 58
+[2026-05-19 11:04:21] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-19 11:05:58] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-19 13:17:27] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-19 13:31:46] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-19 18:20:49] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-19 18:48:33] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-19 19:12:40] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-20 07:29:29] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-20 07:33:25] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-20 07:35:16] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-20 07:35:48] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-20 09:04:06] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-20 09:05:11] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-20 09:56:41] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-20 12:08:14] [CRITICAL] Unknown column 'u.name' in 'field list' in: D:\XAMPP\htdocs\inventory-system\app\services\ReturnService.php on line: 127
+[2026-05-20 12:48:18] [INFO] User logged in: admin@example.com (ID: 6)
+[2026-05-20 15:40:18] [CRITICAL] [2] Undefined variable $categories in D:\XAMPP\htdocs\inventory-system\app\views\users\index.php on line 78 in: D:\XAMPP\htdocs\inventory-system\app\views\users\index.php on line: 78
+[2026-05-20 15:42:20] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-05-20 15:42:23] [CRITICAL] Class "RoleMiddleware" not found in: D:\XAMPP\htdocs\inventory-system\public\index.php on line: 164
+[2026-05-20 16:45:10] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-05-20 16:45:34] [CRITICAL] You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'ON UPDATE' at line 4 in: D:\XAMPP\htdocs\inventory-system\app\controllers\UserController.php on line: 76
+[2026-05-20 16:48:15] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-05-20 16:58:10] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-05-20 17:01:41] [INFO] User logged in: staffone@example.com (ID: 2)
+[2026-05-20 17:03:52] [CRITICAL] Class "RoleMiddleware" not found in: D:\XAMPP\htdocs\inventory-system\public\index.php on line: 165
+[2026-05-20 17:05:49] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-05-20 17:06:05] [INFO] User logged in: staffone@example.com (ID: 2)
+[2026-05-20 17:15:35] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-05-20 17:16:28] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-05-20 17:34:13] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-05-20 17:46:31] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-05-20 17:57:56] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-05-20 18:02:12] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-05-20 18:02:41] [INFO] User logged in: staffone@example.com (ID: 2)
+[2026-05-20 18:03:58] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-05-20 18:13:56] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-05-20 18:14:10] [INFO] User logged in: staffone@example.com (ID: 2)

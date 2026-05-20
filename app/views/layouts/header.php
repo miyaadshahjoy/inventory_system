@@ -13,29 +13,26 @@
     <header>
       <!-- Show flash messages -->
       <?php if (Session::hasFlash('success')): ?>
-        <div>
-          &#10004;
-          <?php echo Session::flashGet('success'); ?>
+        <div class="flash flash-success">
+          ✔ <?= Session::flashGet('success'); ?>
         </div>
       <?php endif; ?>
 
       <?php if (Session::hasFlash('error')): ?>
-        <div>
-          &#10006;
-          <?php echo Session::flashGet('error'); ?>
+        <div class="flash flash-error">
+          ❌ <?= Session::flashGet('error'); ?>
         </div>
       <?php endif; ?>
+
       <?php if (Session::hasFlash('warning')): ?>
-        <div>
-          &#33;
-          <?php echo Session::flashGet('warning') ?>
+        <div class="flash flash-warning">
+          ❕ <?= Session::flashGet('warning'); ?>
         </div>
       <?php endif; ?>
 
       <?php if (Session::hasFlash('info')): ?>
-        <div>
-          &#161;
-          <?php echo Session::flashGet('info') ?>
+        <div class="flash flash-info">
+          &#8505; <?= Session::flashGet('info'); ?>
         </div>
       <?php endif; ?>
     </header>

@@ -6,7 +6,7 @@ ob_start();
 ?>
 <div class="container">
   <div class="container-header">
-    <h1>Stock Movement History</h1>
+    <h2>Stock Movement History</h2>
     <div>
 
       <button onclick="openModal()">
@@ -19,33 +19,55 @@ ob_start();
   </div>
 
   <!-- TODO: Filter data -->
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Product</th>
-        <th>Type</th>
-        <th>Direction</th>
-        <th>Created By</th>
-        <th>Created At</th>
-        <th>Notes</th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php foreach ($movements as $movement): ?>
+  <!--  
+  # Date -> date
+  # Product (name and sku) -> product_name, product_sku
+  # Warehouse name -> warehouse_name
+  # Movement Type  -> movement_type
+  # Direction -> direction
+  # Quantity -> quantity
+  # Resulting stock -> resulting_stock
+  # Created by -> created_by
+  # Notes -> notes
+  -->
+
+  <?php if (empty($movements)): ?>
+    <p>No movements found.</p>
+  <?php endif; ?>
+  <?php if (!empty($movements)): ?>
+    <table>
+      <thead>
         <tr>
-          <td><?= $movement['id']; ?></td>
-          <td><?= $movement['product']; ?></td>
-          <td><?= $movement['type']; ?></td>
-          <td><?= $movement['direction']; ?></td>
-          <td><?= $movement['created_by']; ?></td>
-          <td><?php $created_at = new DateTime($movement['created_at']);
-          echo $created_at->format('Y-m-d H:i'); ?></td>
-          <td><?= $movement['notes']; ?></td>
+          <th>Date</th>
+          <th>Product</th>
+          <th>Warehouse</th>
+          <th>Type</th>
+          <th>Direction</th>
+          <th>Quantity</th>
+          <th>Resulting Stock</th>
+          <th>Created by</th>
+          <th>Notes</th>
         </tr>
-      <?php endforeach; ?>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <?php foreach ($movements as $movement): ?>
+          <tr>
+            <td><?= $movement['date']; ?></td>
+            <td><?= $movement['product_name']; ?> (sku-<?= $movement['product_sku']; ?>)</td>
+            <td><?= $movement['warehouse_name']; ?></td>
+            <td><?= $movement['movement_type']; ?></td>
+            <td><?= $movement['direction']; ?></td>
+            <td><?= $movement['quantity']; ?></td>
+            <td>
+              <?= $movement['resulting_stock']; ?>
+            </td>
+            <td><?= $movement['created_by']; ?></td>
+            <td><?= $movement['notes']; ?></td>
+          </tr>
+        <?php endforeach; ?>
+      </tbody>
+    </table>
+  <?php endif; ?>
 </div>
 
 <!-- Create movement modal -->
@@ -57,7 +79,7 @@ ob_start();
     </div>
 
 
-    <form class="movement-form" action="/stock-movements/form-submit" method="post">
+    <form class="form movement-form" action="/stock-movements/form-submit" method="post">
       <!-- Form fields will go here -->
       <!-- Product selection: Dropdown, required -->
       <div class="form-group">
@@ -81,8 +103,6 @@ ob_start();
             <option value="">Select movement type</option>
             <option value="STOCK_IN">Stock-in</option>
             <option value="STOCK_OUT">Stock-out</option>
-            <option value="ADJUSTMENT_IN">Adjustment-in</option>
-            <option value="ADJUSTMENT_OUT">Adjustment-out</option>
             <option value="EXPIRE">Expire</option>
             <option value="RETURN">Return</option>
             <option value="DAMAGE">Damage</option>
@@ -114,13 +134,9 @@ ob_start();
         </div>
       </div>
       <!-- Notes: Optional -->
-      <div class="form-group">
-
-        <div>
-
-          <label for="notes">Notes</label>
-          <textarea name="notes" id="notes"></textarea>
-        </div>
+      <div>
+        <label for="notes">Notes</label>
+        <textarea name="notes" id="notes"></textarea>
       </div>
       <button type="submit">Create Movement</button>
     </form>

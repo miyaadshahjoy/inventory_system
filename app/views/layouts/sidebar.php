@@ -31,6 +31,10 @@ function isActive(string $path, string $current_uri): string
       Inventory Overview
     </a>
 
+    <a href="/returns" class="sidebar-link <?= isActive('/returns', $current_uri) ?>">
+      Returns
+    </a>
+
 
     <div class="sidebar-section-title">CATALOG</div>
 
@@ -46,8 +50,10 @@ function isActive(string $path, string $current_uri): string
       Warehouses
     </a>
 
-    <div class="sidebar-section-title">USERS</div>
-
-    <a href="/users" class="sidebar-link <?= isActive('/users', $current_uri) ?>"> Users </a>
+    <div class="sidebar-section-title">SYSTEM</div>
+    <?php if ($_SESSION['user']['role'] === 'ADMIN'): ?>
+      <a href="/users" class="sidebar-link <?= isActive('/users', $current_uri) ?>"> Users & Roles </a>
+    <?php endif; ?>
+    <a href="/logout" class="sidebar-link <?= isActive('/logout', $current_uri) ?>">Logout</a>
   </nav>
 </aside>

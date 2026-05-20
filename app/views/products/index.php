@@ -14,48 +14,56 @@ ob_start(); # Start the output buffer
   </div>
 
   <div>
-    <table>
-      <thead>
-        <tr>
-          <th>Product Name</th>
-          <th>SKU</th>
-          <th>Category</th>
-          <th>Stock</th>
-          <th>Price</th>
-          <th>Unit</th>
-          <th>Status</th>
-          <th>Created</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
+    <?php if (empty($products)): ?>
+      <p>No products found.</p>
+    <?php endif; ?>
+    <?php if (!empty($products)): ?>
+      <table>
+        <!-- 
+          # Product name | SKU | Category | Price | Total Stock | Status | Reorder | Updated | Actions 
+        -->
 
-      <tbody>
-        <?php foreach ($products as $product): ?>
+        <thead>
           <tr>
-            <td><?= htmlspecialchars($product['product_name']) ?></td>
-            <td><?= htmlspecialchars($product['sku']) ?></td>
-            <td><?= htmlspecialchars($product['category']) ?></td>
-            <td><?= $product['current_stock'] ?></td>
-            <td><?= $product['price'] ?></td>
-            <td><?= $product['unit'] ?></td>
-            <td class="productStatus" data-productId="<?= $product['id'] ?>"><?= $product['status'] ?></td>
-            <td><?php $created_at = new DateTime($product['created_at']);
-            echo $created_at->format('Y-m-d H:i'); ?></td>
-            <td>
-              <div class="productActions <?= $product['status'] === 'INACTIVE' ? 'hide' : '' ?>"
-                data-productId="<?= $product['id'] ?>">
-                <button data-productId="<?= htmlspecialchars($product['id']) ?>"
-                  data-productName="<?= htmlspecialchars($product['product_name']) ?>"
-                  data-categoryID="<?= $product['category_id'] ?>" data-productSKU="<?= $product['sku'] ?>"
-                  data-productPrice="<?= $product['price'] ?>" data-productUnit="<?= $product['unit'] ?>"
-                  onclick=" openProductUpdateModal(this)">Edit</button>
-                <button data-productId="<?= $product['id'] ?>" onclick="deleteProduct(this)">Delete</button>
-              </div>
-            </td>
+            <th>Product Name</th>
+            <th>SKU</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Total Stock</th>
+            <th>Status</th>
+            <th>Reorder</th>
+            <th>Last Updated</th>
+            <th>Actions</th>
           </tr>
-        <?php endforeach; ?>
-      </tbody>
-    </table>
+        </thead>
+
+        <tbody>
+          <?php foreach ($products as $product): ?>
+            <tr>
+              <td><?= $product['product_name'] ?></td>
+              <td><?= $product['sku'] ?></td>
+              <td><?= $product['category'] ?></td>
+              <td><?= $product['price'] ?></td>
+              <td><?= $product['total_stock'] ?></td>
+              <td class="productStatus" data-productId="<?= $product['id'] ?>"><?= $product['product_status'] ?></td>
+              <td><?= $product['reorder_level'] ?></td>
+              <td><?php $updated_at = new DateTime($product['updated_at']);
+              echo $updated_at->format('Y-m-d H:i'); ?></td>
+              <td>
+                <div class="actions productActions <?= $product['product_status'] === 'INACTIVE' ? 'hide' : '' ?>"
+                  data-productId="<?= $product['id'] ?>">
+                  <button data-productId="<?= $product['id'] ?>" data-productName="<?= $product['product_name'] ?>"
+                    data-productSKU="<?= $product['sku'] ?>" data-categoryID="<?= $product['category_id'] ?>"
+                    data-productPrice="<?= $product['price'] ?>" data-productReorder="<?= $product['reorder_level'] ?>"
+                    data-productUnit="<?= $product['unit'] ?>" onclick=" openProductUpdateModal(this)">Edit</button>
+                  <button data-productId="<?= $product['id'] ?>" onclick="deleteProduct(this)">Delete</button>
+                </div>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    <?php endif; ?>
   </div>
 
 </div>
@@ -105,8 +113,15 @@ ob_start(); # Start the output buffer
       </div>
 
       <div class="form-group">
+        <!-- Product reorder level -->
         <div>
+          <label>Reorder Level</label>
+          <input type="number" name="reorder_level" step="1" placeholder="Enter reorder level" required />
+        </div>
 
+
+        <!-- Product unit -->
+        <div>
           <label>Unit</label>
           <select name="unit" required>
             <option value="">Select product unit</option>
@@ -167,7 +182,11 @@ ob_start(); # Start the output buffer
 
       <div class="form-group">
         <div>
-
+          <label>Reorder Level</label>
+          <input type="number" name="reorder_level" id="productReorderLevel" step="1" placeholder="Enter reorder level"
+            required />
+        </div>
+        <div>
           <label>Unit</label>
           <select name="unit" id="productUnit" required>
             <option value="">Select product unit</option>

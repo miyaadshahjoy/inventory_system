@@ -19,8 +19,29 @@ CREATE TABLE stock_movements(
         'DAMAGE',
         'EXPIRE'
     ) NOT NULL,
-    quantity INT NOT NULL CHECK (quantity > 0),
-    notes VARCHAR(255),
+    quantity INT NOT NULL CHECK( quantity > 0),
+    resulting_stock INT NOT NULL CHECK( resulting_stock >= 0),
+    notes TEXT,
     created_by INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+ALTER TABLE stock_movements
+ADD FOREIGN KEY(product_id)
+REFERENCES products(id)
+ON DELETE CASCADE;
+
+ALTER TABLE stock_movements
+ADD FOREIGN KEY(warehouse_id)
+REFERENCES warehouses(id)
+ON DELETE CASCADE;
+
+ALTER TABLE stock_movements
+ADD FOREIGN KEY(reference_warehouse_id)
+REFERENCES warehouses(id)
+ON DELETE CASCADE;
+
+ALTER TABLE stock_movements
+ADD FOREIGN KEY(created_by)
+REFERENCES users(id)
+ON DELETE CASCADE;

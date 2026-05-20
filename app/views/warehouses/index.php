@@ -12,45 +12,52 @@ ob_start(); # Start the output buffer
     <button onclick="openModal()">+ Add new warehouse</button>
   </div>
   <div>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Location</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php foreach ($warehouses as $warehouse): ?>
+    <?php if (empty($warehouses)): ?>
+      <div>
+        No warehouses available
+      </div>
+    <?php endif; ?>
+    <?php if (!empty($warehouses)): ?>
+      <table>
+        <thead>
           <tr>
-            <td><?= $warehouse['name'] ?></td>
-            <td><?= $warehouse['location'] ?></td>
-            <td data-warehouseId="<?= $warehouse['id'] ?>" class="warehouseStatus">
-              <?= $warehouse['warehouse_status'] ?>
-            </td>
-            <td>
-              <div data-warehouseId="<?= $warehouse['id'] ?>"
-                class="warehouseActions <?= $warehouse['warehouse_status'] === 'INACTIVE' ? 'hide' : '' ?>">
-                <button data-warehouseId="<?= $warehouse['id'] ?>" data-warehouseName="<?= $warehouse['name'] ?>"
-                  data-warehouseLocation="<?= $warehouse['location'] ?>" onclick="openWarehouseUpdateModal(this)">
-                  Edit
-                </button>
-                <button data-warehouseId="<?= $warehouse['id'] ?>" onclick="deleteWarehouse(this)">
-                  Delete
-                </button>
-              </div>
-            </td>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th>Actions</th>
           </tr>
-        <?php endforeach; ?>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <?php foreach ($warehouses as $warehouse): ?>
+            <tr>
+              <td><?= $warehouse['name'] ?></td>
+              <td><?= $warehouse['location'] ?></td>
+              <td data-warehouseId="<?= $warehouse['id'] ?>" class="warehouseStatus">
+                <?= $warehouse['warehouse_status'] ?>
+              </td>
+              <td>
+                <div data-warehouseId="<?= $warehouse['id'] ?>"
+                  class="actions warehouseActions <?= $warehouse['warehouse_status'] === 'INACTIVE' ? 'hide' : '' ?>">
+                  <button data-warehouseId="<?= $warehouse['id'] ?>" data-warehouseName="<?= $warehouse['name'] ?>"
+                    data-warehouseLocation="<?= $warehouse['location'] ?>" onclick="openWarehouseUpdateModal(this)">
+                    Edit
+                  </button>
+                  <button data-warehouseId="<?= $warehouse['id'] ?>" onclick="deleteWarehouse(this)">
+                    Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    <?php endif; ?>
   </div>
 </div>
 
 <!--
 # ADD NEW WAREHOUSE
--->
+  -->
 <!-- Modal Window for adding new warehouse -->
 <div id="modal" class="modal warehouse-modal">
   <div class="modal-content">
@@ -75,7 +82,7 @@ ob_start(); # Start the output buffer
 
 <!-- 
 # UPDATE WAREHOUSE
--->
+  -->
 <!-- Modal Window for updating warehouse -->
 <div id="warehouseUpdateModal" class="modal warehouse-modal">
   <div class="modal-content">

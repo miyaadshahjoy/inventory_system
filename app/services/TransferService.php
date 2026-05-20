@@ -1,5 +1,4 @@
 <?php
-require_once __DIR__ . '/../core/Database.php';
 class TransferService
 {
     # Data: product_id, from_warehouse, to_warehouse, quantity, user_id, notes
@@ -137,18 +136,21 @@ class TransferService
             # quantity
             # notes-> optional
 
+            # Calculate resulting stock
+            $updated_from_warehouse_stock = $current_from_warehouse_stock - $quantity;
+
+            # 4.A) Create TRANSFER_OUT movement
             $statement = $conn->prepare("
-            INSERT INTO stock_movements( product_id, warehouse_id, reference_warehouse_id, transfer_group_id, direction, movement_type, quantity, notes, created_by) VALUES (
-            ?, ?, ?, ?, 'OUT', 'TRANSFER_OUT', ?, ?, ?)
+            INSERT INTO stock_movements( product_id, warehouse_id, reference_warehouse_id, transfer_group_id, direction, movement_type, quantity, resulting_stock, notes, created_by) VALUES (
+            ?, ?, ?, ?, 'OUT', 'TRANSFER_OUT', ?, ?, ?, ?)
             ");
-            $statement->bind_param("iiisisi", $product_id, $from_warehouse, $to_warehouse, $transfer_group_id, $quantity, $notes, $user_id);
+            $statement->bind_param("iiisiisi", $product_id, $from_warehouse, $to_warehouse, $transfer_group_id, $quantity, $updated_from_warehouse_stock, $notes, $user_id);
 
             if (!$statement->execute()) {
                 throw new SystemException("Database error: Error creating TRANSFER_OUT movement.  $statement->error");
             }
 
             # 5) Update stock_snapshot in from_warehouse
-            $updated_from_warehouse_stock = $current_from_warehouse_stock - $quantity;
             $statement = $conn->prepare("
             UPDATE stock_snapshots
             SET quantity = ?
@@ -209,11 +211,16 @@ class TransferService
             # quantity
             # notes-> optional
 
+            # Calculate resulting stock
+            $updated_to_warehouse_stock = $current_to_warehouse_stock + $quantity;
+
+            # 7.A) Create TRANSFER_IN movement
+
             $statement = $conn->prepare("
-            INSERT INTO stock_movements( product_id, warehouse_id, reference_warehouse_id, transfer_group_id, direction, movement_type, quantity, notes, created_by) VALUES (
-            ?, ?, ?, ?, 'IN', 'TRANSFER_IN', ?, ?, ?)
+            INSERT INTO stock_movements( product_id, warehouse_id, reference_warehouse_id, transfer_group_id, direction, movement_type, quantity, resulting_stock, notes, created_by) VALUES (
+            ?, ?, ?, ?, 'IN', 'TRANSFER_IN', ?, ?, ?, ?)
             ");
-            $statement->bind_param("iiisisi", $product_id, $to_warehouse, $from_warehouse, $transfer_group_id, $quantity, $notes, $user_id);
+            $statement->bind_param("iiisiisi", $product_id, $to_warehouse, $from_warehouse, $transfer_group_id, $quantity, $updated_to_warehouse_stock, $notes, $user_id);
 
             if (!$statement->execute()) {
                 throw new SystemException("Database error: Error creating TRANSFER_IN movement.  $statement->error");
@@ -221,7 +228,6 @@ class TransferService
 
 
             # 8) Update stock in the to_warehouse
-            $updated_to_warehouse_stock = $current_to_warehouse_stock + $quantity;
             $statement = $conn->prepare("
                 UPDATE stock_snapshots
                 SET quantity = ?

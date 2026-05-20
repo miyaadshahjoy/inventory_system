@@ -11,7 +11,7 @@ http_response_code(403);
 
     <title>403 - Forbidden</title>
 
-    <link rel="stylesheet" href="/assets/css/app.css" />
+    <link rel="stylesheet" href="/assets/css/style.css" />
   </head>
 
   <body>

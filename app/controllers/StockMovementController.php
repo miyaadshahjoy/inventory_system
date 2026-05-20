@@ -1,11 +1,4 @@
 <?php
-require_once __DIR__ . '/../core/Database.php';
-require_once __DIR__ . '/../controllers/ProductController.php';
-require_once __DIR__ . '/../controllers/WarehouseController.php';
-require_once __DIR__ . '/../services/InventoryService.php';
-require_once __DIR__ . '/../services/TransferService.php';
-
-
 
 class StockMovementController
 {
@@ -13,7 +6,7 @@ class StockMovementController
     public function index()
     {
         $controller = new ProductController();
-        $products = $controller->getAllProducts();
+        $products = $controller->getAllActiveProducts();
         $movements = InventoryService::getAllMovements();
         $warehouses = WarehouseController::getAllActiveWarehouses();
         $data = [

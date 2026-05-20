@@ -1,5 +1,4 @@
 <?php
-require_once __DIR__ . '/../core/Database.php';
 class WarehouseController
 {
 
@@ -79,9 +78,9 @@ class WarehouseController
 
             $result = $statement->get_result();
 
-            if ($result->num_rows === 0) {
-                throw new ValidationException("No warehouses found.");
-            }
+            // if ($result->num_rows === 0) {
+            //     throw new ValidationException("No warehouses found.");
+            // }
 
             $warehouses = $result->fetch_all(MYSQLI_ASSOC);
             return $warehouses;
@@ -110,9 +109,9 @@ class WarehouseController
 
             $result = $statement->get_result();
 
-            if ($result->num_rows === 0) {
-                throw new ValidationException("No warehouses found.");
-            }
+            // if ($result->num_rows === 0) {
+            //     throw new ValidationException("No warehouses found.");
+            // }
 
             $warehouses = $result->fetch_all(MYSQLI_ASSOC);
             return $warehouses;

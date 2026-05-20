@@ -24,11 +24,13 @@ function openProductUpdateModal(button) {
   const productName = button.getAttribute("data-productName");
   const productSku = button.getAttribute("data-productSKU");
   const productPrice = button.getAttribute("data-productPrice");
+  const productReorder = button.getAttribute("data-productReorder");
 
   document.getElementById("productId").value = productId;
   document.getElementById("productName").value = productName;
   document.getElementById("productSKU").value = productSku;
   document.getElementById("productPrice").value = productPrice;
+  document.getElementById("productReorderLevel").value = productReorder;
   productUpdateModal.classList.add("show");
 }
 
@@ -135,6 +137,36 @@ async function deleteWarehouse(button) {
   }
 }
 
+async function deleteUser(button) {
+  const userId = button.getAttribute("data-userId");
+  try {
+    const response = await fetch(`/users/delete`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: userId }),
+    });
+    const data = await response.json();
+    console.log(data);
+    const userStatus = data.data.user_status;
+    const userStatusEls = document.querySelectorAll(".userStatus");
+    const userActionsEls = document.querySelectorAll(".userActions");
+    userStatusEls.forEach((el) => {
+      if (el.getAttribute("data-userId") === userId) {
+        el.textContent = userStatus;
+      }
+    });
+    userActionsEls.forEach((el) => {
+      if (el.getAttribute("data-userId") === userId) {
+        el.style.display = "none";
+      }
+    });
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 function closeModal() {
   modal.classList.remove("show");
 }
@@ -181,3 +213,44 @@ window.addEventListener("keydown", function (event) {
     closeWarehouseUpdateModal();
   }
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const flashes = document.querySelectorAll(".flash");
+
+  flashes.forEach((flash) => {
+    setTimeout(() => {
+      flash.style.opacity = "0";
+      flash.style.transition = "0.3s";
+
+      setTimeout(() => flash.remove(), 300);
+    }, 4000);
+  });
+
+  flashes.forEach((flash) => {
+    setTimeout(() => {
+      flash.style.opacity = "0";
+      flash.style.transform = "translateY(-5px)";
+      flash.style.transition = "all 0.3s ease";
+
+      setTimeout(() => {
+        flash.remove();
+      }, 300);
+    }, 3000);
+  });
+});
+
+// document.addEventListener("DOMContentLoaded", () => {
+//   const flashes = document.querySelectorAll(".js-flash");
+
+//   flashes.forEach((flash) => {
+//     setTimeout(() => {
+//       flash.style.opacity = "0";
+//       flash.style.transform = "translateY(-5px)";
+//       flash.style.transition = "all 0.3s ease";
+
+//       setTimeout(() => {
+//         flash.remove();
+//       }, 300);
+//     }, 3000);
+//   });
+// });

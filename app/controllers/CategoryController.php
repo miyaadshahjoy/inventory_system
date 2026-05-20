@@ -1,5 +1,4 @@
 <?php
-require_once __DIR__ . '/../core/Database.php';
 
 class CategoriesController
 {
@@ -66,13 +65,13 @@ class CategoriesController
             ORDER BY created_at DESC
             ");
             if (!$statement->execute()) {
-                throw new Exception('Error fetching categories');
-            } else {
-
-                $result = $statement->get_result();
-                $categories = $result->fetch_all(MYSQLI_ASSOC);
-                return $categories;
+                throw new Exception("Database error: Error fetching categories. $statement->error");
             }
+
+            $result = $statement->get_result();
+            $categories = $result->fetch_all(MYSQLI_ASSOC);
+            return $categories;
+
 
         } catch (Exception $e) {
             throw $e;

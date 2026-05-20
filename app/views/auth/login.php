@@ -1,6 +1,7 @@
 <?php
 $title = 'Login';
-require_once __DIR__ . '/../layouts/header.php'; ?>
+require_once __DIR__ . '/../layouts/header.php';
+?>
 
 <div class="login-container">
   <h2>Login</h2>

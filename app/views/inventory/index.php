@@ -1,5 +1,4 @@
 <?php
-ob_start();
 $overview_data = $data['inventory_overview_data'] ?? [];
 $total_skus = $data['total_skus'] ?? 0;
 $total_stock = $data['total_stocks'] ?? 0;
@@ -7,6 +6,7 @@ $total_stock_value = $data['total_stock_value'] ?? 0;
 $total_low_stocks = $data['total_low_stocks'] ?? 0;
 $total_out_stocks = $data['total_out_stocks'] ?? 0;
 $total_movements_today = $data['total_movements_today'] ?? 0;
+ob_start();
 
 ?>
 
@@ -52,54 +52,63 @@ $total_movements_today = $data['total_movements_today'] ?? 0;
   status 
   reorder_level 
   last_movement_date  -->
-    <div class="overview-table">
-        <table>
-            <thead>
-                <tr>
-                    <th>Product Name</th>
-                    <th>SKU</th>
-                    <th>Category</th>
-                    <th>Warehouse</th>
-                    <th>Stock</th>
-                    <th>Status</th>
-                    <th>Reorder Level</th>
-                    <th>Last Movement</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($overview_data as $data): ?>
+    <?php if (empty($overview_data)): ?>
+        <div>
+            No data available
+        </div>
+    <?php endif; ?>
+    <?php if (!empty($overview_data)): ?>
+        <div class="overview-table">
+            <table>
+                <thead>
                     <tr>
-                        <td>
-                            <?= $data['product_name'] ?>
-                        </td>
-                        <td>
-                            <?= $data['sku'] ?>
-                        </td>
-                        <td>
-                            <?= $data['product_category'] ?>
-                        </td>
-                        <td>
-                            <?= $data['warehouse'] ?>
-                        </td>
-                        <td>
-                            <?= $data['stock'] ?>
-                        </td>
-                        <td class="status <?= $data['status'] ?>">
-                            <?= $data['status'] ?>
-                        </td>
-                        <td>
-                            <?= $data['reorder_level'] ?>
-                        </td>
-                        <td>
-                            <?= $data['last_movement_date'] ?>
-                        </td>
+                        <th>Product Name</th>
+                        <th>SKU</th>
+                        <th>Category</th>
+                        <th>Warehouse</th>
+                        <th>Stock</th>
+                        <th>Status</th>
+                        <th>Reorder Level</th>
+                        <th>Last Movement</th>
                     </tr>
-                <?php endforeach; ?>
+                </thead>
+                <tbody>
+                    <?php foreach ($overview_data as $data): ?>
+                        <tr>
+                            <td>
+                                <?= $data['product_name'] ?>
+                            </td>
+                            <td>
+                                <?= $data['sku'] ?>
+                            </td>
+                            <td>
+                                <?= $data['product_category'] ?>
+                            </td>
+                            <td>
+                                <?= $data['warehouse'] ?>
+                            </td>
+                            <td>
+                                <?= $data['stock'] ?>
+                            </td>
+                            <td class="status <?= $data['status'] ?>">
+                                <?= $data['status'] ?>
+                            </td>
+                            <td>
+                                <?= $data['reorder_level'] ?>
+                            </td>
+                            <td>
+                                <?= $data['last_movement_date'] ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
 
-            </tbody>
-        </table>
-    </div>
+                </tbody>
+            </table>
+        </div>
+    <?php endif; ?>
 </div>
+
+
 
 
 <?php

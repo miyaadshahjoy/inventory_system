@@ -4,4 +4,4 @@ CREATE TABLE warehouses(
     location VARCHAR(255),
     warehouse_status ENUM('ACTIVE', 'INACTIVE') DEFAULT 'ACTIVE',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)
+);

@@ -1,16 +1,21 @@
 <?php
-
 session_start();
+
 
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../app/core/Database.php';
 require_once __DIR__ . '/../app/core/Session.php';
 require_once __DIR__ . '/../app/core/Logger.php';
 require_once __DIR__ . '/../app/controllers/AuthController.php';
+require_once __DIR__ . '/../app/controllers/DashboardController.php';
 require_once __DIR__ . '/../app/controllers/StockMovementController.php';
 require_once __DIR__ . '/../app/controllers/InventoryController.php';
 require_once __DIR__ . '/../app/controllers/CategoryController.php';
 require_once __DIR__ . '/../app/controllers/ProductController.php';
+require_once __DIR__ . '/../app/controllers/WarehouseController.php';
+require_once __DIR__ . '/../app/controllers/ReturnController.php';
+require_once __DIR__ . '/../app/controllers/UserController.php';
+require_once __DIR__ . '/../app/middlewares/RoleMiddleware.php';
 require_once __DIR__ . '/../app/middlewares/AuthMiddleware.php';
 require_once __DIR__ . '/../app/core/ErrorHandler.php';
 require_once __DIR__ . '/../app/exceptions/SystemException.php';
@@ -18,6 +23,8 @@ require_once __DIR__ . '/../app/exceptions/ValidationException.php';
 require_once __DIR__ . '/../app/services/TransferService.php';
 require_once __DIR__ . '/../app/services/InventoryService.php';
 require_once __DIR__ . '/../app/services/ProductService.php';
+require_once __DIR__ . '/../app/services/ReturnService.php';
+require_once __DIR__ . '/../app/services/UserService.php';
 
 
 /*
@@ -48,6 +55,11 @@ switch ($url) {
     case 'login/form-submit':
         $controller = new AuthController();
         $controller->login();
+        break;
+    case 'dashboard':
+        AuthMiddleware::check();
+        $controller = new DashboardController();
+        $controller->index();
         break;
 
     case 'stock-movements':
@@ -138,6 +150,33 @@ switch ($url) {
         AuthMiddleware::check();
         $controller = new ProductController();
         $controller->deleteProduct();
+        break;
+    case 'returns':
+        AuthMiddleware::check();
+        $controller = new ReturnController();
+        $controller->index();
+        break;
+    case 'returns/form-submit':
+        AuthMiddleware::check();
+        $controller = new ReturnController();
+        $controller->create();
+    case 'users':
+        AuthMiddleware::check();
+        RoleMiddleware::check(['ADMIN']);
+        $controller = new UserController();
+        $controller->index();
+        break;
+    case 'users/form-submit':
+        AuthMiddleware::check();
+        RoleMiddleware::check(['ADMIN']);
+        $controller = new UserController();
+        $controller->create();
+        break;
+    case 'users/delete':
+        AuthMiddleware::check();
+        RoleMiddleware::check(['ADMIN']);
+        $controller = new UserController();
+        $controller->deleteUser();
         break;
     default:
         http_response_code(404);

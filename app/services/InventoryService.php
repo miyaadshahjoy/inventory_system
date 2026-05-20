@@ -1,5 +1,4 @@
 <?php
-require_once __DIR__ . '/../core/Database.php';
 class InventoryService
 {
 
@@ -117,19 +116,22 @@ class InventoryService
                 throw new ValidationException('Not enough stock for this movement');
 
             }
-            # 8) Create movement record in stock_movements table
+
+            # 8) Calculate new stock
+            $new_stock = $movement_direction === 'IN' ? $current_stock + $quantity : $current_stock - $quantity;
+
+            # 9) Create movement record in stock_movements table
             $statement = $conn->prepare("
-            INSERT INTO stock_movements(product_id, warehouse_id, direction, movement_type, quantity, notes, created_by) VALUES(?, ?, ?, ?, ?, ?, ?)");
-            $statement->bind_param("iissisi", $product_id, $warehouse_id, $movement_direction, $movement_type, $quantity, $notes, $created_by);
+            INSERT INTO stock_movements(product_id, warehouse_id, direction, movement_type, quantity, resulting_stock, notes, created_by) VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
+            $statement->bind_param("iissiisi", $product_id, $warehouse_id, $movement_direction, $movement_type, $quantity, $new_stock, $notes, $created_by);
 
             if (!$statement->execute()) {
                 throw new SystemException("Database error: Failed to create stock movement.  $statement->error");
             }
 
 
-            # 9) Update stock_snapshots table
+            # 10) Update stock_snapshots table
 
-            $new_stock = $movement_direction === 'IN' ? $current_stock + $quantity : $current_stock - $quantity;
 
             $statement = $conn->prepare("
             UPDATE stock_snapshots 
@@ -144,7 +146,7 @@ class InventoryService
                 throw new SystemException("Database error: Failed to update stock snapshot.  $statement->error");
             }
 
-            # 9) Commit transaction
+            # 11) Commit transaction
 
             $conn->commit();
             return [
@@ -154,7 +156,7 @@ class InventoryService
             ];
         } catch (Exception $e) {
 
-            # 10) Rollback on any error
+            # 12) Rollback on any error
             $conn->rollback();
             throw $e;
         }
@@ -162,30 +164,43 @@ class InventoryService
 
     public static function getAllMovements()
     {
-        // ID  
-        // Product
-        // Type 
-        // Direction 
-        // Created by 
-        // Created at
-        // Notes 
+        # Date
+        # Product (name and sku)
+        # Warehouse name
+        # Movement Type 
+        # Direction
+        # Quantity
+        # Resulting stock 
+        # Created by 
+        # Notes 
         try {
 
             $conn = Database::connect();
             $statement = $conn->prepare("
-            SELECT sm.id, p.name as product, sm.movement_type as type, sm.direction, u.full_name created_by, sm.created_at, sm.notes 
-            FROM stock_movements sm INNER JOIN products p 
-            ON sm.product_id = p.id 
-            INNER JOIN users u
-            ON sm.created_by = u.id
+                SELECT DATE(sm.created_at) as date,
+                    p.name as product_name,
+                    p.sku as product_sku,
+                    w.name as warehouse_name,
+                    sm.movement_type,
+                    sm.direction,
+                    sm.quantity,
+                    sm.resulting_stock,
+                    u.full_name as created_by,
+                    sm.notes
+                FROM stock_movements sm JOIN products p 
+                ON sm.product_id = p.id
+                JOIN warehouses w 
+                ON sm.warehouse_id = w.id 
+                JOIN users u 
+                ON sm.created_by = u.id
             ");
             if (!$statement->execute()) {
                 throw new SystemException("Database error: Failed to retrieve stock movements.  $statement->error");
             }
             $result = $statement->get_result();
-            if ($result->num_rows === 0) {
-                throw new ValidationException("No stock movements found.");
-            }
+            // if ($result->num_rows === 0) {
+            //     throw new ValidationException("No stock movements found.");
+            // }
             $movements = $result->fetch_all(MYSQLI_ASSOC);
             return $movements;
 
@@ -202,7 +217,7 @@ class InventoryService
         try {
             $conn = Database::connect();
             $statement = $conn->prepare("
-                SELECT COUNT(sku) as total_skus FROM PRODUCTS
+                SELECT COUNT(sku) as total_skus FROM products
                 WHERE product_status = 'ACTIVE'
             ");
 
@@ -291,6 +306,7 @@ class InventoryService
                 products p LEFT JOIN stock_snapshots ss 
                 ON p.id = ss.product_id
                 WHERE COALESCE(ss.quantity, 0) < p.reorder_level
+                AND COALESCE(ss.quantity, 0) > 0
                 AND p.product_status = 'ACTIVE'
             ");
 
@@ -316,8 +332,8 @@ class InventoryService
         try {
             $conn = Database::connect();
             $statement = $conn->prepare("
-                SELECT COUNT(p.id) total_out_stocks FROM 
-                products p LEFT JOIN stock_snapshots ss 
+                SELECT COUNT(p.id) as total_out_stocks 
+                FROM products p LEFT JOIN stock_snapshots ss 
                 ON p.id = ss.product_id
                 WHERE COALESCE(ss.quantity, 0) = 0
                 AND p.product_status = 'ACTIVE'
@@ -407,6 +423,8 @@ class InventoryService
             ON p.category_id = c.id 
             LEFT JOIN warehouses w 
             ON ss.warehouse_id = w.id 
+            WHERE p.product_status = 'ACTIVE'
+            ORDER BY last_movement_date DESC
         ");
 
         if (!$statement->execute()) {
@@ -414,9 +432,9 @@ class InventoryService
         }
 
         $result = $statement->get_result();
-        if ($result->num_rows === 0) {
-            throw new ValidationException("No inventory overview data found.");
-        }
+        // if ($result->num_rows === 0) {
+        //     throw new ValidationException("No inventory overview data found.");
+        // }
         $data = $result->fetch_all(MYSQLI_ASSOC);
         return $data;
 
