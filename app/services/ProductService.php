@@ -122,7 +122,7 @@ class ProductService
 
             // echo "<pre>";
             // print_r($params);
-            echo ($query);
+            // echo ($query);
             $statement = $conn->prepare($query);
 
             $statement->bind_param($param_types, ...$params);
