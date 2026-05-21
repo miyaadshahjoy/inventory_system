@@ -1,17 +1,49 @@
 <?php
 
-
+const PRODUCTS_PER_PAGE = 5;
 
 class ProductController
 {
 
     public function index()
     {
-        $products = ProductService::getAllProducts();
+        # Get page number
+        $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+
+        # Validate filter inputs
+        # Search data
+        $product_search = isset($_GET['product_search']) ? trim(htmlspecialchars($_GET['product_search'])) : null;
+
+        # Filter data
+        $product_category = isset($_GET['product_category']) ? (int) htmlspecialchars($_GET['product_category']) : null;
+        $start_date = isset($_GET['start_date']) ? htmlspecialchars($_GET['start_date']) : null;
+        $end_date = isset($_GET['end_date']) ? htmlspecialchars($_GET['end_date']) : null;
+        $sort_by = isset($_GET['sort_by']) ? htmlspecialchars($_GET['sort_by']) : null; # name, price, created_at
+        $min_price = isset($_GET['min_price']) ? (float) htmlspecialchars($_GET['min_price']) : null;
+        $max_price = isset($_GET['max_price']) ? (float) htmlspecialchars($_GET['max_price']) : null;
+        $product_status = isset($_GET['product_status']) ? htmlspecialchars($_GET['product_status']) : null; # ACTIVE, INACTIVE
+
+        $filter_data = [
+            'product_search' => $product_search,
+            'product_category' => $product_category,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'sort_by' => $sort_by,
+            'min_price' => $min_price,
+            'max_price' => $max_price,
+            'product_status' => $product_status
+        ];
+
+        $total_products = $this->totalProducts();
+        $limit = PRODUCTS_PER_PAGE;
+        $products = ProductService::getAllProducts($page, $limit, $filter_data);
         $categories = CategoriesController::getAllActiveCategories();
         $data = [
             'products' => $products,
-            'categories' => $categories
+            'categories' => $categories,
+            'total_products' => $total_products,
+            'limit' => $limit,
+            'page' => $page
         ];
         require __DIR__ . '/../views/products/index.php';
     }
@@ -136,6 +168,29 @@ class ProductController
 
     }
 
+    # Get total products
+    public function totalProducts()
+    {
+
+        $conn = Database::connect();
+        try {
+            $statement = $conn->prepare("
+                SELECT COUNT(id) as total_products
+                FROM products
+            ");
+
+            if (!$statement->execute()) {
+                throw new SystemException("Database error: Failed to retrieve total products.  $statement->error");
+            }
+
+            $result = $statement->get_result();
+            $row = $result->fetch_assoc();
+            return $row['total_products'];
+
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
 
     public function getProductById(int $id)
     {

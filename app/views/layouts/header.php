@@ -14,7 +14,7 @@
       <!-- Show flash messages -->
       <?php if (Session::hasFlash('success')): ?>
         <div class="flash flash-success">
-          ✔ <?= Session::flashGet('success'); ?>
+           <?= Session::flashGet('success'); ?>
         </div>
       <?php endif; ?>
 

@@ -6,6 +6,12 @@ $total_stock_value = $data['total_stock_value'] ?? 0;
 $total_low_stocks = $data['total_low_stocks'] ?? 0;
 $total_out_stocks = $data['total_out_stocks'] ?? 0;
 $total_movements_today = $data['total_movements_today'] ?? 0;
+
+$total_inventory_overview = $data['total_inventory_overview'] ?? 0;
+$limit = $data['limit'] ?? 5;
+$page = $data['page'] ?? 1;
+$total_pages = ceil($total_inventory_overview / $limit);
+
 ob_start();
 
 ?>
@@ -104,6 +110,32 @@ ob_start();
 
                 </tbody>
             </table>
+
+            <!-- Implementing pagination buttons -->
+            <div class="pagination">
+                <?php if ($page > 1): ?>
+                    <button class="button-pagination">
+                        <a href="/inventory-overview?page=<?= $page - 1 ?>">
+                            Prev
+                        </a>
+                    </button>
+                <?php endif; ?>
+                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                    <button class="button-pagination <?= $page === $i ? 'active' : '' ?>">
+                        <a href="/inventory-overview?page=<?= $i ?>" class="">
+                            <?= $i ?>
+                        </a>
+                    </button>
+                <?php endfor; ?>
+                <?php if ($page < $total_pages): ?>
+                    <button class="button-pagination">
+                        <a href="/inventory-overview?page=<?= $page + 1 ?>">
+                            Next
+                        </a>
+                    </button>
+                <?php endif; ?>
+
+            </div>
         </div>
     <?php endif; ?>
 </div>

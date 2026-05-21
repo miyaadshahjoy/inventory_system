@@ -92,6 +92,20 @@ button {
   padding: 10px 12px;
 }
 
+.button-pagination a {
+  text-decoration: none;
+  color: #495057;
+}
+
+.button-pagination.active {
+  border: 1px solid #000;
+  border-radius: 4px;
+}
+
+.button-pagination.active a {
+  color: #000;
+}
+
 /* Container */
 .container-header {
   display: flex;
@@ -472,6 +486,81 @@ header {
 
 .flash-info {
   border-left: 4px solid #1971c2;
+}
+
+/* Pagination styles */
+.pagination {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 5rem;
+}
+
+/* Poduct filters styles */
+
+.product-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 3rem;
+}
+
+.product-search input {
+  width: 100%;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  outline: none;
+}
+
+.product-search input:focus {
+  border-color: #000;
+}
+
+.product-filters {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  align-items: end;
+}
+
+.product-filter {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Inputs & Selects */
+.product-filter input,
+.product-filter select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+/* Focus */
+.product-filter input:focus,
+.product-filter select:focus {
+  border-color: #000;
+}
+
+.date-filter div,
+.price-filter div {
+  display: flex;
+  gap: 8px;
+}
+
+.date-filter input,
+.price-filter input {
+  flex: 1;
+}
+
+.product-filters button {
+  grid-column: 1 / -1;
+  justify-self: end;
+  cursor: pointer;
 }
 
 /* HIDE */

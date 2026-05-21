@@ -1,4 +1,5 @@
 <?php
+
 class InventoryService
 {
 
@@ -162,7 +163,7 @@ class InventoryService
         }
     }
 
-    public static function getAllMovements()
+    public static function getAllMovements(int $page, int $limit)
     {
         # Date
         # Product (name and sku)
@@ -175,25 +176,37 @@ class InventoryService
         # Notes 
         try {
 
+            # Pagination
+
+            $page = max($page, 1);
+            $offset = ($page - 1) * $limit;
+            $start = $offset + 1;
+            $end = $offset + $limit;
+
+            # Get stock movements from stock_movements table
             $conn = Database::connect();
             $statement = $conn->prepare("
-                SELECT DATE(sm.created_at) as date,
-                    p.name as product_name,
-                    p.sku as product_sku,
-                    w.name as warehouse_name,
-                    sm.movement_type,
-                    sm.direction,
-                    sm.quantity,
-                    sm.resulting_stock,
-                    u.full_name as created_by,
-                    sm.notes
-                FROM stock_movements sm JOIN products p 
-                ON sm.product_id = p.id
-                JOIN warehouses w 
-                ON sm.warehouse_id = w.id 
-                JOIN users u 
-                ON sm.created_by = u.id
+                SELECT * FROM (
+                    SELECT DATE(sm.created_at) as date,
+                        p.name as product_name,
+                        p.sku as product_sku,
+                        w.name as warehouse_name,
+                        sm.movement_type,
+                        sm.direction,
+                        sm.quantity,
+                        sm.resulting_stock,
+                        u.full_name as created_by,
+                        sm.notes,
+                        ROW_NUMBER() OVER (ORDER BY sm.created_at DESC) as rn
+                    FROM stock_movements sm JOIN products p 
+                    ON sm.product_id = p.id
+                    JOIN warehouses w 
+                    ON sm.warehouse_id = w.id 
+                    JOIN users u 
+                    ON sm.created_by = u.id ) t
+                WHERE rn BETWEEN ? AND ?
             ");
+            $statement->bind_param('ii', $start, $end);
             if (!$statement->execute()) {
                 throw new SystemException("Database error: Failed to retrieve stock movements.  $statement->error");
             }
@@ -383,7 +396,7 @@ class InventoryService
         }
     }
 
-    public static function getInventoryOverviewData()
+    public static function getInventoryOverviewData(int $page, int $limit)
     {
         /*
         # Data:
@@ -397,9 +410,16 @@ class InventoryService
         -- Last movement date
         */
 
+        # Pagination
+        $page = max($page, 1);
+        $offset = ($page - 1) * $limit;
+        $start = $offset + 1;
+        $end = $offset + $limit;
+
         $conn = Database::connect();
         $statement = $conn->prepare("
-        
+        SELECT * 
+        FROM (
             SELECT 
                 p.name as product_name,
                 p.sku, 
@@ -411,12 +431,11 @@ class InventoryService
                 WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
                 ELSE 'OK'
             END as status, p.reorder_level,(
-
                 SELECT MAX(sm.created_at)
                 FROM stock_movements sm 
                 WHERE sm.product_id = p.id
-                ) as last_movement_date
-
+                ) as last_movement_date,
+            ROW_NUMBER() OVER (ORDER BY last_movement_date DESC) as rn
             FROM products p LEFT JOIN stock_snapshots ss 
             ON p.id = ss.product_id
             LEFT JOIN categories c 
@@ -424,7 +443,8 @@ class InventoryService
             LEFT JOIN warehouses w 
             ON ss.warehouse_id = w.id 
             WHERE p.product_status = 'ACTIVE'
-            ORDER BY last_movement_date DESC
+            ORDER BY last_movement_date DESC ) t
+        WHERE rn BETWEEN $start AND $end
         ");
 
         if (!$statement->execute()) {
@@ -438,6 +458,55 @@ class InventoryService
         $data = $result->fetch_all(MYSQLI_ASSOC);
         return $data;
 
+    }
+
+    public static function getTotalInventoryOverview()
+    {
+
+        $conn = Database::connect();
+        try {
+
+            $statement = $conn->prepare("
+                SELECT COUNT(*) as total_inventory_overview
+                FROM (
+                    SELECT 
+                        p.name as product_name,
+                        p.sku, 
+                        c.name as product_category,
+                        w.name as warehouse, 
+                        COALESCE(ss.quantity, 0) as stock,
+                    CASE 
+                        WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                        WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                        ELSE 'OK'
+                    END as status, p.reorder_level,(
+                        SELECT MAX(sm.created_at)
+                        FROM stock_movements sm 
+                        WHERE sm.product_id = p.id
+                        ) as last_movement_date,
+                    ROW_NUMBER() OVER (ORDER BY last_movement_date DESC) as rn
+                    FROM products p LEFT JOIN stock_snapshots ss 
+                    ON p.id = ss.product_id
+                    LEFT JOIN categories c 
+                    ON p.category_id = c.id 
+                    LEFT JOIN warehouses w 
+                    ON ss.warehouse_id = w.id 
+                    WHERE p.product_status = 'ACTIVE'
+                    ORDER BY last_movement_date DESC 
+                ) t
+            ");
+
+            if (!$statement->execute()) {
+                throw new SystemException("Database error: Failed to retrieve total inventory overview.  $statement->error");
+            }
+
+            $result = $statement->get_result();
+            $row = $result->fetch_assoc();
+            return $row['total_inventory_overview'];
+
+        } catch (Exception $e) {
+            throw $e;
+        }
     }
 
 }

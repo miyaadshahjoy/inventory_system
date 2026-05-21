@@ -1,18 +1,28 @@
 <?php
-
+const MOVEMENTS_PER_PAGE = 1;
 class StockMovementController
 {
 
     public function index()
     {
+        # Get page number
+
+        $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+
+        $total_movements = $this->totalMovements();
+        $limit = MOVEMENTS_PER_PAGE;
+
         $controller = new ProductController();
         $products = $controller->getAllActiveProducts();
-        $movements = InventoryService::getAllMovements();
+        $movements = InventoryService::getAllMovements($page, $limit);
         $warehouses = WarehouseController::getAllActiveWarehouses();
         $data = [
             'movements' => $movements,
             'products' => $products,
-            'warehouses' => $warehouses
+            'warehouses' => $warehouses,
+            'total_movements' => $total_movements,
+            'limit' => $limit,
+            'page' => $page
         ];
 
         require_once __DIR__ . '/../views/movements/movementHistory.php';
@@ -149,4 +159,31 @@ class StockMovementController
         }
     }
     */
+
+    # Get total number of movements
+    public function totalMovements()
+    {
+
+        $conn = Database::connect();
+        try {
+
+            $statement = $conn->prepare("
+                SELECT COUNT(id) as total_movements
+                FROM stock_movements
+            ");
+
+            if (!$statement->execute()) {
+                throw new SystemException("Database error: Failed to retrieve total movements.  $statement->error");
+            }
+
+            $result = $statement->get_result();
+            $row = $result->fetch_assoc();
+            return $row['total_movements'];
+
+
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
 }

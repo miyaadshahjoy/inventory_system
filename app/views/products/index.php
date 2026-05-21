@@ -1,6 +1,23 @@
 <?php
 $products = $data['products'] ?? [];
 $categories = $data['categories'] ?? [];
+
+$total_products = $data['total_products'] ?? 0;
+$limit = $data['limit'] ?? 5;
+$page = $data['page'] ?? 1;
+
+$total_pages = ceil($total_products / $limit);
+
+$currentPage = $page ?? 1;
+$queryParams = $_GET;
+// Previous page 
+$queryParams['page'] = $currentPage > 1 ? $currentPage - 1 : $currentPage;
+$prevUrl = http_build_query($queryParams);
+
+// Next page
+$queryParams['page'] = $currentPage < $total_pages ? $currentPage + 1 : $currentPage;
+$nextUrl = http_build_query($queryParams);
+
 ob_start(); # Start the output buffer
 ?>
 
@@ -11,6 +28,76 @@ ob_start(); # Start the output buffer
 
     <!-- Add new product button -->
     <button onclick="openModal()">+ Add Product</button>
+  </div>
+
+  <div class="product-controls">
+    <!-- Product search -->
+    <form action="/products" method="get" class="form product-search">
+      <input type="text" name="product_search" placeholder="Search product by name or sku">
+    </form>
+
+    <!-- 
+    # Product filters  
+    -->
+    <!-- Filter by category -->
+    <form action="/products" method="get" class="form product-filters">
+
+      <div class="category-filter product-filter">
+        <h4>Filter by category</h4>
+        <!-- <label for="product_category">Filter by category</label> -->
+        <select name="product_category" id="productCategory">
+          <option value="">Select category</option>
+          <?php foreach ($categories as $category): ?>
+            <option value="<?= $category['id'] ?>">
+              <?= htmlspecialchars($category['name']) ?>
+            </option>
+          <?php endforeach; ?>
+        </select>
+      </div>
+
+      <!-- Filter by date -->
+      <div class="date-filter product-filter">
+        <h4>Filter by date created</h4>
+        <div>
+          <input type="date" name="start_date" placeholder="From">
+          <input type="date" name="end_date" placeholder="To">
+        </div>
+      </div>
+
+      <!-- Filter by price range -->
+      <div class="price-filter product-filter">
+        <h4>Filter by price</h4>
+        <div>
+          <input type="number" name="min_price" placeholder="Min">
+          <input type="number" name="max_price" placeholder="Max">
+        </div>
+      </div>
+
+      <!-- Filter by status -->
+      <div class="status-filter product-filter">
+        <h4>Filter by status</h4>
+        <select name="product_status">
+          <option value="">Select status</option>
+          <option value="ACTIVE">Active</option>
+          <option value="INACTIVE">Inactive</option>
+        </select>
+      </div>
+
+
+      <!-- Sort products: name, price, created_at -->
+      <div class="sort-filter product-filter">
+        <h4>Sort by</h4>
+        <select name="sort_by">
+          <option value="name">Name</option>
+          <option value="price">Price</option>
+          <option value="created_at">Created At</option>
+        </select>
+      </div>
+
+      <button type="submit">Apply Filters</button>
+
+    </form>
+
   </div>
 
   <div>
@@ -63,6 +150,37 @@ ob_start(); # Start the output buffer
           <?php endforeach; ?>
         </tbody>
       </table>
+
+      <!-- Implementing pagination buttons -->
+      <div class="pagination">
+        <?php if ($page > 1): ?>
+          <button class="button-pagination">
+            <a href="/products?<?= $prevUrl ?>">
+              Prev
+            </a>
+          </button>
+        <?php endif; ?>
+        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+
+          <?php
+          $queryParams['page'] = $i;
+          $pageUrl = http_build_query($queryParams);
+          ?>
+          <button class="button-pagination <?= $page === $i ? 'active' : '' ?>">
+            <a href="/products?<?= $pageUrl ?>">
+              <?= $i ?>
+            </a>
+          </button>
+        <?php endfor; ?>
+        <?php if ($page < $total_pages): ?>
+          <button class="button-pagination">
+            <a href="/products?<?= $nextUrl ?>">
+              Next
+            </a>
+          </button>
+        <?php endif; ?>
+
+      </div>
     <?php endif; ?>
   </div>
 
@@ -72,7 +190,7 @@ ob_start(); # Start the output buffer
 # ADD NEW PRODUCT
  -->
 <!-- Modal Window for adding new product -->
-<div id="modal" class="modal product-modal">
+<div id=" modal" class="modal product-modal">
   <div class="modal-content">
     <div class="modal-header">
       <h3>Create Product</h3>

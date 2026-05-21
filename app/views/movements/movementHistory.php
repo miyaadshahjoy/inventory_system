@@ -2,6 +2,11 @@
 $movements = $data['movements'] ?? [];
 $products = $data['products'] ?? [];
 $warehouses = $data['warehouses'] ?? [];
+$total_movements = $data['total_movements'] ?? 0;
+$limit = $data['limit'] ?? 5;
+$page = $data['page'] ?? 1;
+$total_pages = ceil($total_movements / $limit);
+
 ob_start();
 ?>
 <div class="container">
@@ -67,6 +72,34 @@ ob_start();
         <?php endforeach; ?>
       </tbody>
     </table>
+
+    <!-- Implementing pagination buttons -->
+    <div class="pagination">
+      <?php if ($page > 1): ?>
+        <button class="button-pagination">
+          <a href="/stock-movements?page=<?= $page - 1 ?>">
+            Prev
+          </a>
+        </button>
+      <?php endif; ?>
+      <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+        <button class="button-pagination <?= $page === $i ? 'active' : '' ?>">
+          <a href="/stock-movements?page=<?= $i ?>" class="">
+            <?= $i ?>
+          </a>
+        </button>
+      <?php endfor; ?>
+      <?php if ($page < $total_pages): ?>
+        <button class="button-pagination">
+          <a href="/stock-movements?page=<?= $page + 1 ?>">
+            Next
+          </a>
+        </button>
+      <?php endif; ?>
+
+    </div>
+
+
   <?php endif; ?>
 </div>
 

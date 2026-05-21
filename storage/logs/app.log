@@ -178,3 +178,42 @@
 [2026-05-20 18:03:58] [INFO] User logged in: admin@example.com (ID: 1)
 [2026-05-20 18:13:56] [INFO] User logged in: admin@example.com (ID: 1)
 [2026-05-20 18:14:10] [INFO] User logged in: staffone@example.com (ID: 2)
+[2026-05-21 09:07:38] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-05-21 09:07:48] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-05-21 10:47:06] [CRITICAL]  in: D:\XAMPP\htdocs\inventory-system\app\controllers\StockMovementController.php on line: 174
+[2026-05-21 10:48:25] [CRITICAL] Unknown column 'rn' in 'where clause' in: D:\XAMPP\htdocs\inventory-system\app\services\InventoryService.php on line: 188
+[2026-05-21 10:56:15] [CRITICAL] You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'SELECT DATE(sm.created_at) as date,
+                        p.name as produc...' at line 2 in: D:\XAMPP\htdocs\inventory-system\app\services\InventoryService.php on line: 188
+[2026-05-21 11:53:19] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-05-21 11:55:53] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-05-21 12:48:00] [CRITICAL] You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '(
+            SELECT 
+                p.name as product_name,
+            ...' at line 1 in: D:\XAMPP\htdocs\inventory-system\app\services\InventoryService.php on line: 420
+[2026-05-21 12:52:26] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-05-21 15:33:52] [CRITICAL] Unknown column 'p.name' in 'where clause' in: D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php on line: 56
+[2026-05-21 15:37:32] [CRITICAL] You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'WHERE 1=1
+             AND p.name LIKE '%?%' OR p.sku LIKE '%?%'' at line 19 in: D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php on line: 55
+[2026-05-21 15:37:35] [CRITICAL] [8192] htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php on line 14 in: D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php on line: 14
+[2026-05-21 15:37:40] [CRITICAL] [8192] htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php on line 14 in: D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php on line: 14
+[2026-05-21 15:38:37] [CRITICAL] [2] Undefined array key "product_search" in D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php on line 14 in: D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php on line: 14
+[2026-05-21 15:42:22] [CRITICAL] You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'WHERE 1=1' at line 19 in: D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php on line: 55
+[2026-05-21 15:47:17] [CRITICAL] The number of variables must match the number of parameters in the prepared statement in: D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php on line: 62
+[2026-05-21 15:49:16] [CRITICAL] The number of variables must match the number of parameters in the prepared statement in: D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php on line: 65
+[2026-05-21 15:49:55] [CRITICAL] The number of variables must match the number of parameters in the prepared statement in: D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php on line: 65
+[2026-05-21 15:50:30] [CRITICAL] The number of variables must match the number of parameters in the prepared statement in: D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php on line: 66
+[2026-05-21 15:51:13] [CRITICAL] The number of elements in the type definition string must match the number of bind variables in: D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php on line: 66
+[2026-05-21 15:52:41] [CRITICAL] The number of variables must match the number of parameters in the prepared statement in: D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php on line: 61
+[2026-05-21 15:59:13] [CRITICAL] print_r() expects at most 2 arguments, 4 given in: D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php on line: 61
+[2026-05-21 16:05:29] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-05-21 16:05:54] [CRITICAL] The number of variables must match the number of parameters in the prepared statement in: D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php on line: 63
+[2026-05-21 16:06:44] [CRITICAL] The number of variables must match the number of parameters in the prepared statement in: D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php on line: 63
+[2026-05-21 16:08:46] [CRITICAL] The number of variables must match the number of parameters in the prepared statement in: D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php on line: 64
+[2026-05-21 16:09:08] [CRITICAL] The number of variables must match the number of parameters in the prepared statement in: D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php on line: 64
+[2026-05-21 16:45:17] [CRITICAL] [2] Undefined variable $nextPage in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 108 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 108
+[2026-05-21 16:45:29] [CRITICAL] [2] Undefined variable $nextPage in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 108 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 108
+[2026-05-21 16:45:32] [CRITICAL] [2] Undefined variable $nextPage in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 108 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 108
+[2026-05-21 16:45:44] [CRITICAL] [2] Undefined variable $nextPage in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 108 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 108
+[2026-05-21 17:01:39] [CRITICAL] [2] Undefined variable $products in D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php on line 28 in: D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php on line: 28
+[2026-05-21 17:38:15] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-05-21 17:38:29] [INFO] User logged in: admin@example.com (ID: 1)
