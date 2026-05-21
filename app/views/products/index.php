@@ -18,6 +18,7 @@ $prevUrl = http_build_query($queryParams);
 $queryParams['page'] = $currentPage < $total_pages ? $currentPage + 1 : $currentPage;
 $nextUrl = http_build_query($queryParams);
 
+
 ob_start(); # Start the output buffer
 ?>
 
@@ -39,12 +40,11 @@ ob_start(); # Start the output buffer
     <!-- 
     # Product filters  
     -->
-    <!-- Filter by category -->
     <form action="/products" method="get" class="form product-filters">
 
+      <!-- Filter by category -->
       <div class="category-filter product-filter">
         <h4>Filter by category</h4>
-        <!-- <label for="product_category">Filter by category</label> -->
         <select name="product_category" id="productCategory">
           <option value="">Select category</option>
           <?php foreach ($categories as $category): ?>
@@ -88,6 +88,7 @@ ob_start(); # Start the output buffer
       <div class="sort-filter product-filter">
         <h4>Sort by</h4>
         <select name="sort_by">
+          <option value="">Select sort option</option>
           <option value="name">Name</option>
           <option value="price">Price</option>
           <option value="created_at">Created At</option>
@@ -95,9 +96,84 @@ ob_start(); # Start the output buffer
       </div>
 
       <button type="submit">Apply Filters</button>
+      <!-- Reset filters -->
+      <?php if (in_array('product_search', array_keys($_GET)) || in_array('product_category', array_keys($_GET)) || in_array('start_date', array_keys($_GET)) || in_array('end_date', array_keys($_GET)) || in_array('min_price', array_keys($_GET)) || in_array('max_price', array_keys($_GET)) || in_array('product_status', array_keys($_GET)) || in_array('sort_by', array_keys($_GET))): ?>
+        <button class="reset-filters">
+          <a href="/products">Reset Filters</a>
+        </button>
+      <?php endif; ?>
 
     </form>
 
+    <!-- Active filters -->
+    <div class="active-filters">
+      <!-- Search -->
+      <?php if (isset($_GET['product_search']) && !empty($_GET['product_search'])): ?>
+        <div class="filters-tag">
+          <span>
+            Search: <?= htmlspecialchars($_GET['product_search']) ?>
+            <a href="/products?<?= createUrlWithout(['product_search']) ?>">❌</a>
+          </span>
+        </div>
+      <?php endif; ?>
+    </div>
+
+    <!-- Category -->
+    <?php if (isset($_GET['product_category']) && !empty($_GET['product_category'])): ?>
+      <div class="filters-tag">
+        <span>
+          Category:
+          <?php
+          $filteredCategories = array_filter($categories, fn($category) => $category['id'] === (int) htmlspecialchars($_GET['product_category']));
+          $categoryName = !empty($filteredCategories) ? array_values($filteredCategories)[0]['name'] : '';
+          ?>
+          <?= $categoryName ?>
+          <a href="/products?<?= createUrlWithout(['product_category']) ?>">❌</a>
+        </span>
+      </div>
+    <?php endif; ?>
+
+    <!-- Date -->
+    <?php if ((isset($_GET['start_date']) && !empty($_GET['start_date'])) || (isset($_GET['end_date']) && !empty($_GET['end_date']))): ?>
+      <div class="filters-tag">
+        <span>
+          From: <?= htmlspecialchars($_GET['start_date']) ?><br>
+          To: <?= htmlspecialchars($_GET['end_date']) ?>
+          <a href="/products?<?= createUrlWithout(['start_date', 'end_date']) ?>">❌</a>
+        </span>
+      </div>
+    <?php endif; ?>
+
+    <!-- Price -->
+    <?php if (isset($_GET['min_price']) && !empty($_GET['min_price']) || (isset($_GET['max_price']) && !empty($_GET['max_price']))): ?>
+      <div class="filters-tag">
+        <span>
+          Min price: <?= htmlspecialchars($_GET['min_price']) ?><br>
+          Max price: <?= htmlspecialchars($_GET['max_price']) ?>
+          <a href="/products?<?= createUrlWithout(['min_price', 'max_price']) ?>">❌</a>
+        </span>
+      </div>
+    <?php endif; ?>
+
+    <!-- Status -->
+    <?php if (isset($_GET['product_status']) && !empty($_GET['product_status'])): ?>
+      <div class="filters-tag">
+        <span>
+          Status: <?= htmlspecialchars($_GET['product_status']) ?>
+          <a href="/products?<?= createUrlWithout(['product_status']) ?>">❌</a>
+        </span>
+      </div>
+    <?php endif; ?>
+
+    <!-- Sort -->
+    <?php if (isset($_GET['sort_by']) && !empty($_GET['sort_by'])): ?>
+      <div class="filters-tag">
+        <span>
+          Sort by: <?= htmlspecialchars($_GET['sort_by']) ?>
+          <a href="/products?<?= createUrlWithout(['sort_by']) ?>">❌</a>
+        </span>
+      </div>
+    <?php endif; ?>
   </div>
 
   <div>

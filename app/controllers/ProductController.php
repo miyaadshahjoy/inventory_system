@@ -34,6 +34,17 @@ class ProductController
             'product_status' => $product_status
         ];
 
+        function createUrlWithout(array $keys)
+        {
+            $_GET['page'] = 1; # 
+            $queryParams = $_GET;
+            foreach ($keys as $key) {
+                unset($queryParams[$key]);
+            }
+            return http_build_query($queryParams);
+
+        }
+
         $total_products = $this->totalProducts();
         $limit = PRODUCTS_PER_PAGE;
         $products = ProductService::getAllProducts($page, $limit, $filter_data);

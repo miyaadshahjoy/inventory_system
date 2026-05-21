@@ -4,6 +4,11 @@ const transferMovementModal = document.getElementById("transferModal");
 const productUpdateModal = document.getElementById("productUpdateModal");
 const warehouseUpdateModal = document.getElementById("warehouseUpdateModal");
 
+/////////////////////////////////////////////////////////////////////////////////
+const sidebar = document.getElementById("sidebar");
+const toggleBtn = document.getElementById("sidebarToggle");
+const layout = document.querySelector(".app-layout");
+
 function openModal() {
   modal.classList.add("show");
 }
@@ -239,18 +244,21 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-// document.addEventListener("DOMContentLoaded", () => {
-//   const flashes = document.querySelectorAll(".js-flash");
+// Sidebar collapse state management
+// Load state
+if (localStorage.getItem("sidebar") === "hidden") {
+  sidebar.classList.add("hidden");
+  layout.classList.add("sidebar-hidden");
+}
 
-//   flashes.forEach((flash) => {
-//     setTimeout(() => {
-//       flash.style.opacity = "0";
-//       flash.style.transform = "translateY(-5px)";
-//       flash.style.transition = "all 0.3s ease";
+// Toggle
+toggleBtn.addEventListener("click", () => {
+  sidebar.classList.toggle("hidden");
+  layout.classList.toggle("sidebar-hidden");
 
-//       setTimeout(() => {
-//         flash.remove();
-//       }, 300);
-//     }, 3000);
-//   });
-// });
+  if (sidebar.classList.contains("hidden")) {
+    localStorage.setItem("sidebar", "hidden");
+  } else {
+    localStorage.setItem("sidebar", "visible");
+  }
+});

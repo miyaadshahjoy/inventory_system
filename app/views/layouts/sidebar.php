@@ -9,7 +9,7 @@ function isActive(string $path, string $current_uri): string
     : '';
 }
 ?>
-<aside class="sidebar">
+<aside id="sidebar" class="sidebar">
   <div class="sidebar-logo">
     <h2>InventorySys</h2>
   </div>

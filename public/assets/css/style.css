@@ -92,7 +92,8 @@ button {
   padding: 10px 12px;
 }
 
-.button-pagination a {
+.button-pagination a,
+.reset-filters a {
   text-decoration: none;
   color: #495057;
 }
@@ -561,6 +562,42 @@ header {
   grid-column: 1 / -1;
   justify-self: end;
   cursor: pointer;
+}
+
+/* SIDEBAR TOGGLE STYLES  */
+.sidebar-toggle {
+  position: fixed;
+  top: 12px;
+  left: 180px;
+  z-index: 1000;
+  background: none;
+  border: none;
+
+  cursor: pointer;
+  transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar {
+  transition: all 0.3s ease;
+}
+
+.sidebar.hidden {
+  width: 0;
+  padding: 0;
+  border: none;
+  overflow: hidden;
+}
+
+.sidebar.hidden + .main-content {
+  margin-left: 0;
+}
+
+.main-content {
+  transition: all 0.3s ease;
+}
+
+.app-layout.sidebar-hidden .sidebar-toggle {
+  left: 0px;
 }
 
 /* HIDE */

@@ -217,3 +217,17 @@
 [2026-05-21 17:01:39] [CRITICAL] [2] Undefined variable $products in D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php on line 28 in: D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php on line: 28
 [2026-05-21 17:38:15] [INFO] User logged in: admin@example.com (ID: 1)
 [2026-05-21 17:38:29] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-05-21 19:02:18] [INFO] User logged in: staffone@example.com (ID: 2)
+[2026-05-21 19:49:23] [CRITICAL] [2] Undefined array key "product_status" in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 148 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 148
+[2026-05-21 19:57:19] [CRITICAL] [2] Undefined array key 0 in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 119 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 119
+[2026-05-21 19:57:24] [CRITICAL] [2] Undefined array key 0 in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 119 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 119
+[2026-05-21 19:58:13] [CRITICAL] [2] Undefined array key 0 in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 119 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 119
+[2026-05-21 19:59:35] [CRITICAL] [2] Undefined array key 0 in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 119 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 119
+[2026-05-21 20:01:03] [CRITICAL] [2] Undefined array key "product_category" in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 21 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 21
+[2026-05-21 20:06:01] [CRITICAL] [2] Undefined array key "product_category" in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 21 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 21
+[2026-05-21 20:33:41] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-05-21 20:34:58] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-05-21 21:32:17] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-05-21 21:38:32] [INFO] User logged in: staffone@example.com (ID: 2)
+[2026-05-21 21:52:55] [INFO] User logged in: staffone@example.com (ID: 2)
+[2026-05-21 21:55:53] [INFO] User logged in: admin@example.com (ID: 1)
