@@ -22,7 +22,6 @@ $nextUrl = http_build_query($queryParams);
 ob_start(); # Start the output buffer
 ?>
 
-<!-- Showing product list -->
 <div class="container">
   <div class="container-header">
     <h2>Products</h2>
@@ -96,12 +95,6 @@ ob_start(); # Start the output buffer
       </div>
 
       <button type="submit">Apply Filters</button>
-      <!-- Reset filters -->
-      <?php if (in_array('product_search', array_keys($_GET)) || in_array('product_category', array_keys($_GET)) || in_array('start_date', array_keys($_GET)) || in_array('end_date', array_keys($_GET)) || in_array('min_price', array_keys($_GET)) || in_array('max_price', array_keys($_GET)) || in_array('product_status', array_keys($_GET)) || in_array('sort_by', array_keys($_GET))): ?>
-        <button class="reset-filters">
-          <a href="/products">Reset Filters</a>
-        </button>
-      <?php endif; ?>
 
     </form>
 
@@ -116,65 +109,91 @@ ob_start(); # Start the output buffer
           </span>
         </div>
       <?php endif; ?>
+
+      <!-- Category -->
+      <?php if (isset($_GET['product_category']) && !empty($_GET['product_category'])): ?>
+        <div class="filters-tag">
+          <span>
+            Category:
+            <?php
+            $filteredCategories = array_filter($categories, fn($category) => $category['id'] === (int) htmlspecialchars($_GET['product_category']));
+            $categoryName = !empty($filteredCategories) ? array_values($filteredCategories)[0]['name'] : '';
+            ?>
+            <?= $categoryName ?>
+            <a href="/products?<?= createUrlWithout(['product_category']) ?>">❌</a>
+          </span>
+        </div>
+      <?php endif; ?>
+
+      <!-- Date -->
+      <?php if ((isset($_GET['start_date']) && !empty($_GET['start_date'])) || (isset($_GET['end_date']) && !empty($_GET['end_date']))): ?>
+        <div class="filters-tag">
+          <span>
+            From: <?= htmlspecialchars($_GET['start_date']) ?><br>
+            To: <?= htmlspecialchars($_GET['end_date']) ?>
+            <a href="/products?<?= createUrlWithout(['start_date', 'end_date']) ?>">❌</a>
+          </span>
+        </div>
+      <?php endif; ?>
+
+      <!-- Price -->
+      <?php if (isset($_GET['min_price']) && !empty($_GET['min_price']) || (isset($_GET['max_price']) && !empty($_GET['max_price']))): ?>
+        <div class="filters-tag">
+          <span>
+            Min price: <?= htmlspecialchars($_GET['min_price']) ?><br>
+            Max price: <?= htmlspecialchars($_GET['max_price']) ?>
+            <a href="/products?<?= createUrlWithout(['min_price', 'max_price']) ?>">❌</a>
+          </span>
+        </div>
+      <?php endif; ?>
+
+      <!-- Status -->
+      <?php if (isset($_GET['product_status']) && !empty($_GET['product_status'])): ?>
+        <div class="filters-tag">
+          <span>
+            Status: <?= htmlspecialchars($_GET['product_status']) ?>
+            <a href="/products?<?= createUrlWithout(['product_status']) ?>">❌</a>
+          </span>
+        </div>
+      <?php endif; ?>
+
+      <!-- Sort -->
+      <?php if (isset($_GET['sort_by']) && !empty($_GET['sort_by'])): ?>
+        <div class="filters-tag">
+          <span>
+            Sort by: <?= htmlspecialchars($_GET['sort_by']) ?>
+            <a href="/products?<?= createUrlWithout(['sort_by']) ?>">❌</a>
+          </span>
+        </div>
+      <?php endif; ?>
     </div>
+    <!-- Reset filters -->
+    <?php if (in_array('product_search', array_keys($_GET)) || in_array('product_category', array_keys($_GET)) || in_array('start_date', array_keys($_GET)) || in_array('end_date', array_keys($_GET)) || in_array('min_price', array_keys($_GET)) || in_array('max_price', array_keys($_GET)) || in_array('product_status', array_keys($_GET)) || in_array('sort_by', array_keys($_GET))): ?>
 
-    <!-- Category -->
-    <?php if (isset($_GET['product_category']) && !empty($_GET['product_category'])): ?>
-      <div class="filters-tag">
-        <span>
-          Category:
-          <?php
-          $filteredCategories = array_filter($categories, fn($category) => $category['id'] === (int) htmlspecialchars($_GET['product_category']));
-          $categoryName = !empty($filteredCategories) ? array_values($filteredCategories)[0]['name'] : '';
-          ?>
-          <?= $categoryName ?>
-          <a href="/products?<?= createUrlWithout(['product_category']) ?>">❌</a>
-        </span>
-      </div>
+      <a href="/products" class="reset-filters">
+        <button>
+          Reset Filters
+        </button>
+      </a>
     <?php endif; ?>
 
-    <!-- Date -->
-    <?php if ((isset($_GET['start_date']) && !empty($_GET['start_date'])) || (isset($_GET['end_date']) && !empty($_GET['end_date']))): ?>
-      <div class="filters-tag">
-        <span>
-          From: <?= htmlspecialchars($_GET['start_date']) ?><br>
-          To: <?= htmlspecialchars($_GET['end_date']) ?>
-          <a href="/products?<?= createUrlWithout(['start_date', 'end_date']) ?>">❌</a>
-        </span>
-      </div>
-    <?php endif; ?>
-
-    <!-- Price -->
-    <?php if (isset($_GET['min_price']) && !empty($_GET['min_price']) || (isset($_GET['max_price']) && !empty($_GET['max_price']))): ?>
-      <div class="filters-tag">
-        <span>
-          Min price: <?= htmlspecialchars($_GET['min_price']) ?><br>
-          Max price: <?= htmlspecialchars($_GET['max_price']) ?>
-          <a href="/products?<?= createUrlWithout(['min_price', 'max_price']) ?>">❌</a>
-        </span>
-      </div>
-    <?php endif; ?>
-
-    <!-- Status -->
-    <?php if (isset($_GET['product_status']) && !empty($_GET['product_status'])): ?>
-      <div class="filters-tag">
-        <span>
-          Status: <?= htmlspecialchars($_GET['product_status']) ?>
-          <a href="/products?<?= createUrlWithout(['product_status']) ?>">❌</a>
-        </span>
-      </div>
-    <?php endif; ?>
-
-    <!-- Sort -->
-    <?php if (isset($_GET['sort_by']) && !empty($_GET['sort_by'])): ?>
-      <div class="filters-tag">
-        <span>
-          Sort by: <?= htmlspecialchars($_GET['sort_by']) ?>
-          <a href="/products?<?= createUrlWithout(['sort_by']) ?>">❌</a>
-        </span>
-      </div>
-    <?php endif; ?>
+    <!-- Export CSV -->
+    <?php
+    if (isset($_GET['url']))
+      unset($_GET['url']);
+    if (isset($_GET['page']))
+      unset($_GET['page']);
+    ?>
+    <div class="export-data">
+      <a href="/products/export?<?= http_build_query($_GET) ?>">
+        <button>
+          Export CSV
+        </button>
+      </a>
+    </div>
   </div>
+
+  <!-- Showing product list -->
 
   <div>
     <?php if (empty($products)): ?>
@@ -211,7 +230,7 @@ ob_start(); # Start the output buffer
               <td class="productStatus" data-productId="<?= $product['id'] ?>"><?= $product['product_status'] ?></td>
               <td><?= $product['reorder_level'] ?></td>
               <td><?php $updated_at = new DateTime($product['updated_at']);
-              echo $updated_at->format('Y-m-d H:i'); ?></td>
+              echo $updated_at->format('Y-m-d'); ?></td>
               <td>
                 <div class="actions productActions <?= $product['product_status'] === 'INACTIVE' ? 'hide' : '' ?>"
                   data-productId="<?= $product['id'] ?>">
@@ -230,11 +249,11 @@ ob_start(); # Start the output buffer
       <!-- Implementing pagination buttons -->
       <div class="pagination">
         <?php if ($page > 1): ?>
-          <button class="button-pagination">
-            <a href="/products?<?= $prevUrl ?>">
+          <a href="/products?<?= $prevUrl ?>" class="button-pagination">
+            <button>
               Prev
-            </a>
-          </button>
+            </button>
+          </a>
         <?php endif; ?>
         <?php for ($i = 1; $i <= $total_pages; $i++): ?>
 
@@ -242,18 +261,18 @@ ob_start(); # Start the output buffer
           $queryParams['page'] = $i;
           $pageUrl = http_build_query($queryParams);
           ?>
-          <button class="button-pagination <?= $page === $i ? 'active' : '' ?>">
-            <a href="/products?<?= $pageUrl ?>">
+          <a href="/products?<?= $pageUrl ?>" class="button-pagination <?= $page === $i ? 'active' : '' ?>">
+            <button>
               <?= $i ?>
-            </a>
-          </button>
+            </button>
+          </a>
         <?php endfor; ?>
         <?php if ($page < $total_pages): ?>
-          <button class="button-pagination">
-            <a href="/products?<?= $nextUrl ?>">
+          <a href="/products?<?= $nextUrl ?>" class="button-pagination">
+            <button>
               Next
-            </a>
-          </button>
+            </button>
+          </a>
         <?php endif; ?>
 
       </div>
@@ -266,7 +285,7 @@ ob_start(); # Start the output buffer
 # ADD NEW PRODUCT
  -->
 <!-- Modal Window for adding new product -->
-<div id=" modal" class="modal product-modal">
+<div id="modal" class="modal product-modal">
   <div class="modal-content">
     <div class="modal-header">
       <h3>Create Product</h3>
@@ -317,11 +336,17 @@ ob_start(); # Start the output buffer
         <!-- Product unit -->
         <div>
           <label>Unit</label>
+          <!-- 'PCS', 'KG', 'LITRE', 'METER', 'BOX', 'SET', 'PACK', 'UNIT' -->
           <select name="unit" required>
             <option value="">Select product unit</option>
-            <option value="KG">KG</option>
-            <option value="PCS">PCS</option>
-            <option value="BOX">BOX</option>
+            <option value="PCS">Pcs</option>
+            <option value="KG">Kg</option>
+            <option value="LITRE">Litre</option>
+            <option value="METER">Meter</option>
+            <option value="BOX">Box</option>
+            <option value="SET">Set</option>
+            <option value="PACK">Pack</option>
+            <option value="UNIT">Unit</option>
           </select>
         </div>
 
@@ -384,9 +409,14 @@ ob_start(); # Start the output buffer
           <label>Unit</label>
           <select name="unit" id="productUnit" required>
             <option value="">Select product unit</option>
-            <option value="KG">KG</option>
-            <option value="PCS">PCS</option>
-            <option value="BOX">BOX</option>
+            <option value="PCS">Pcs</option>
+            <option value="KG">Kg</option>
+            <option value="LITRE">Litre</option>
+            <option value="METER">Meter</option>
+            <option value="BOX">Box</option>
+            <option value="SET">Set</option>
+            <option value="PACK">Pack</option>
+            <option value="UNIT">Unit</option>
           </select>
         </div>
 

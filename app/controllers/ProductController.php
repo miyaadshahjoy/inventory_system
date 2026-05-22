@@ -1,38 +1,17 @@
 <?php
 
-const PRODUCTS_PER_PAGE = 5;
+const PRODUCTS_PER_PAGE = 10;
 
 class ProductController
 {
 
     public function index()
     {
+
         # Get page number
         $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
-
-        # Validate filter inputs
-        # Search data
-        $product_search = isset($_GET['product_search']) ? trim(htmlspecialchars($_GET['product_search'])) : null;
-
-        # Filter data
-        $product_category = isset($_GET['product_category']) ? (int) htmlspecialchars($_GET['product_category']) : null;
-        $start_date = isset($_GET['start_date']) ? htmlspecialchars($_GET['start_date']) : null;
-        $end_date = isset($_GET['end_date']) ? htmlspecialchars($_GET['end_date']) : null;
-        $sort_by = isset($_GET['sort_by']) ? htmlspecialchars($_GET['sort_by']) : null; # name, price, created_at
-        $min_price = isset($_GET['min_price']) ? (float) htmlspecialchars($_GET['min_price']) : null;
-        $max_price = isset($_GET['max_price']) ? (float) htmlspecialchars($_GET['max_price']) : null;
-        $product_status = isset($_GET['product_status']) ? htmlspecialchars($_GET['product_status']) : null; # ACTIVE, INACTIVE
-
-        $filter_data = [
-            'product_search' => $product_search,
-            'product_category' => $product_category,
-            'start_date' => $start_date,
-            'end_date' => $end_date,
-            'sort_by' => $sort_by,
-            'min_price' => $min_price,
-            'max_price' => $max_price,
-            'product_status' => $product_status
-        ];
+        # Limit of products
+        $limit = PRODUCTS_PER_PAGE;
 
         function createUrlWithout(array $keys)
         {
@@ -45,10 +24,11 @@ class ProductController
 
         }
 
+        $filter_data = $this->getProductFilters();
+
         $total_products = $this->totalProducts();
-        $limit = PRODUCTS_PER_PAGE;
-        $products = ProductService::getAllProducts($page, $limit, $filter_data);
-        $categories = CategoriesController::getAllActiveCategories();
+        $products = ProductService::getAllProducts($filter_data);
+        $categories = (new CategoriesController())->getAllActiveCategories();
         $data = [
             'products' => $products,
             'categories' => $categories,
@@ -180,7 +160,7 @@ class ProductController
     }
 
     # Get total products
-    public function totalProducts()
+    public function totalProducts(): int
     {
 
         $conn = Database::connect();
@@ -382,6 +362,58 @@ class ProductController
         exit;
 
 
+    }
+
+    public function getProductFilters(): array
+    {
+        # Get page number
+        $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+        # Limit of products
+        $limit = PRODUCTS_PER_PAGE;
+
+        # Validate filter inputs
+        # Search data
+        $product_search = isset($_GET['product_search']) ? trim(htmlspecialchars($_GET['product_search'])) : null;
+
+        # Filter data
+        $product_category = isset($_GET['product_category']) ? (int) htmlspecialchars($_GET['product_category']) : null;
+        $start_date = isset($_GET['start_date']) ? htmlspecialchars($_GET['start_date']) : null;
+        $end_date = isset($_GET['end_date']) ? htmlspecialchars($_GET['end_date']) : null;
+        $sort_by = isset($_GET['sort_by']) ? htmlspecialchars($_GET['sort_by']) : null; # name, price, created_at
+        $min_price = isset($_GET['min_price']) ? (float) htmlspecialchars($_GET['min_price']) : null;
+        $max_price = isset($_GET['max_price']) ? (float) htmlspecialchars($_GET['max_price']) : null;
+        $product_status = isset($_GET['product_status']) ? htmlspecialchars($_GET['product_status']) : null; # ACTIVE, INACTIVE
+
+        $filter_data = [
+            'product_search' => $product_search,
+            'product_category' => $product_category,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'sort_by' => $sort_by,
+            'min_price' => $min_price,
+            'max_price' => $max_price,
+            'product_status' => $product_status,
+            'page' => $page,
+            'limit' => $limit
+        ];
+
+        return $filter_data;
+
+    }
+
+    /*
+    # Architecture for data CSV export
+    - Data Flow: Request -> Controller -> Service -> Query -> Stream -> Download
+    - endpoint: products/export
+    - controller method: exportCSV( )
+    - service method: exportCSV( )
+    */
+
+    public function exportCSV()
+    {
+        $product_filters = $this->getProductFilters();
+        $product_filters['limit'] = $this->totalProducts();
+        ProductService::exportCSV($product_filters);
     }
 
 }

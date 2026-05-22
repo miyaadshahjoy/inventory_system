@@ -99,8 +99,8 @@ class ReturnService
             */
 
             # Add movement of type RETURN
-            $service = new InventoryService();
-            $movement = $service->addMovement($product_id, 'RETURN', $warehouse_id, $quantity, $created_by, $reason);
+
+            $movement = InventoryService::addMovement($product_id, 'RETURN', $warehouse_id, $quantity, $created_by, $reason);
             if (!$movement) {
                 throw new ValidationException("Failed to create RETURN movement.");
             }

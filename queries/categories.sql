@@ -7,3 +7,9 @@ CREATE TABLE categories (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     ON UPDATE CURRENT_TIMESTAMP
 );
+
+CREATE INDEX idx_cat_status
+ON categories(categories_status);
+
+CREATE INDEX idx_cat_created
+ON categories(created_at);

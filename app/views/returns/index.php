@@ -62,20 +62,21 @@ ob_start();
 
         <form class="return-form" action="returns/form-submit" method="post">
 
+            <!-- Product: Dropdown, required -->
+            <div>
+                <label for="product_id">Product</label>
+                <select name="product_id" required>
+                    <option value="">Select product</option>
+                    <?php foreach ($products as $product): ?>
+                        <option value="<?= $product['id'] ?>">
+                            <?= $product['name'] ?> (sku-
+                            <?= $product['sku'] ?>)
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
             <div class="form-group">
-                <div>
-                    <label for="product_id">Product</label>
-                    <select name="product_id" required>
-                        <option value="">Select product</option>
-                        <?php foreach ($products as $product): ?>
-                            <option value="<?= $product['id'] ?>">
-                                <?= $product['name'] ?> (sku-
-                                <?= $product['sku'] ?>)
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-
+                <!-- Warehouse: Dropdown, required -->
                 <div>
                     <label for="warehouse_id">Warehouse</label>
                     <select name="warehouse_id" required>
@@ -87,18 +88,17 @@ ob_start();
                         <?php endforeach; ?>
                     </select>
                 </div>
-            </div>
-
-            <div class="form-group">
+                <!-- Quantity: required -->
                 <div>
                     <label for="quantity">Quantity</label>
                     <input type="number" name="quantity" placeholder="Enter quantity" required />
                 </div>
-                <div>
-                    <label for="reason">Reason</label>
-                    <textarea name="reason"></textarea>
-                </div>
             </div>
+            <div>
+                <label for="reason">Reason</label>
+                <textarea name="reason" rows="5"></textarea>
+            </div>
+
 
             <button type="submit">Process Return</button>
         </form>

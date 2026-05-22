@@ -50,8 +50,8 @@ input {
   font-family: "Inter", sans-serif;
   color: #495057;
   margin-bottom: 18px;
-  padding: 4px 10px;
-  /* border: 1px solid #ccc; */
+  padding: 4px 12px;
+  border: 1px solid #ccc;
   /* border-radius: 4px; */
   outline: none;
 }
@@ -59,20 +59,30 @@ input {
 select {
   font-family: "Inter", sans-serif;
   color: #495057;
+  border: 1px solid #ccc;
   margin-bottom: 18px;
-  padding: 4px 10px;
+  padding: 4px 12px;
+  /* border-radius: 4px; */
+  outline: none;
 }
 textarea {
   /* font-family: Arial, sans-serif; */
   font-family: "Inter", sans-serif;
   font-size: 1rem;
   width: 100%;
-  padding: 4px 10px;
+  padding: 4px 12px;
   resize: none;
-  max-height: 30px;
+  /* max-height: 64px; */
   margin-bottom: 18px;
+  border: 1px solid #ccc;
 
   outline: none;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #000;
 }
 
 /* BUTTON STYLES */
@@ -92,11 +102,13 @@ button {
   padding: 10px 12px;
 }
 
-.button-pagination a,
-.reset-filters a {
+.button-pagination a {
   text-decoration: none;
   color: #495057;
 }
+
+/* .reset-filters button {
+} */
 
 .button-pagination.active {
   border: 1px solid #000;
@@ -189,47 +201,6 @@ button {
   height: 100vh;
 }
 
-/* Responsive styles */
-@media (max-width: 768px) {
-  .sidebar {
-    width: 180px;
-    padding: 12px;
-    overflow-x: auto;
-  }
-
-  .main-content {
-    padding: 16px;
-  }
-}
-
-@media (max-width: 600px) {
-  .app-layout {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    width: 100%;
-    border-right: none;
-    border-bottom: 1px solid #ddd;
-    flex-direction: row;
-    overflow-x: auto;
-    height: 100vh;
-  }
-
-  .sidebar-nav {
-    flex-direction: row;
-    gap: 8px;
-  }
-
-  .sidebar-section-title {
-    display: none;
-  }
-
-  .sidebar-link {
-    white-space: nowrap;
-  }
-}
-
 /* Table styles */
 
 table {
@@ -282,6 +253,7 @@ tbody tr:hover {
 .product-modal .modal-content,
 .movement-modal .modal-content,
 .transfer-modal .modal-content,
+.adjustment-modal .modal-content,
 .return-modal .modal-content,
 .user-modal .modal-content {
   max-width: 700px;
@@ -324,6 +296,7 @@ tbody tr:hover {
 .product-form,
 .movement-form,
 .transfer-form,
+.adjustment-form,
 .warehouse-form,
 .return-form,
 .user-form {
@@ -353,6 +326,9 @@ form label {
 .transfer-form input,
 .transfer-form select,
 .transfer-form textarea,
+.adjustment-form input,
+.adjustment-form select,
+.adjustment-form textarea,
 .return-form input,
 .return-form select,
 .return-form textarea,
@@ -364,6 +340,9 @@ form label {
 
 .warehouse-form div,
 .category-form div,
+.transfer-form div,
+.adjustment-form div,
+.return-form div,
 .user-form div,
 .movement-form div {
   width: 100%;
@@ -450,7 +429,7 @@ form label {
 }
 
 /* Flash container */
-header {
+.header-flash {
   position: fixed;
   top: 16px;
   right: 16px;
@@ -564,11 +543,19 @@ header {
   cursor: pointer;
 }
 
+.reset-filters {
+  margin-bottom: 3rem;
+}
+
+.export-data {
+  margin-bottom: 3rem;
+}
+
 /* SIDEBAR TOGGLE STYLES  */
 .sidebar-toggle {
   position: fixed;
-  top: 12px;
-  left: 180px;
+  top: 16px;
+  left: 190px;
   z-index: 1000;
   background: none;
   border: none;
@@ -598,6 +585,25 @@ header {
 
 .app-layout.sidebar-hidden .sidebar-toggle {
   left: 0px;
+}
+
+/* Header info styles */
+.header-info {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+  margin-top: -35px;
+}
+.header-info button {
+  border: none;
+}
+.low-stock {
+  color: #e67700;
+}
+.out-stock {
+  color: #f03e3e;
 }
 
 /* HIDE */

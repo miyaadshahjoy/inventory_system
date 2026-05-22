@@ -60,7 +60,7 @@ class WarehouseController
         }
     }
 
-    public static function getAllWarehouses()
+    public function getAllWarehouses()
     {
 
         try {
@@ -91,7 +91,7 @@ class WarehouseController
         }
     }
 
-    public static function getAllActiveWarehouses()
+    public function getAllActiveWarehouses()
     {
 
         try {

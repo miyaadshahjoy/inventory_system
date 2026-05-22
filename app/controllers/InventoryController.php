@@ -1,5 +1,5 @@
 <?php
-const OVERVIEW_PER_PAGE = 1;
+const OVERVIEW_PER_PAGE = 10;
 class InventoryController
 {
 
@@ -30,5 +30,14 @@ class InventoryController
         require_once __DIR__ . '/../views/inventory/index.php';
     }
 
+
+    public function exportCSV()
+    {
+
+        // $page , $limit
+        $page = 1;
+        $limit = InventoryService::getTotalInventoryOverview();
+        InventoryService::exportCSV($page, $limit);
+    }
 
 }

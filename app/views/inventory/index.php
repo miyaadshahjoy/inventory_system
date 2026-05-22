@@ -64,6 +64,21 @@ ob_start();
         </div>
     <?php endif; ?>
     <?php if (!empty($overview_data)): ?>
+
+        <div class="export-data">
+            <!-- Export CSV -->
+            <?php
+            if (isset($_GET['url']))
+                unset($_GET['url']);
+            if (isset($_GET['page']))
+                unset($_GET['page']);
+            ?>
+            <a href="/inventory-overview/export?<?= http_build_query($_GET) ?>">
+                <button>
+                    Export CSV
+                </button>
+            </a>
+        </div>
         <div class="overview-table">
             <table>
                 <thead>
@@ -114,25 +129,25 @@ ob_start();
             <!-- Implementing pagination buttons -->
             <div class="pagination">
                 <?php if ($page > 1): ?>
-                    <button class="button-pagination">
-                        <a href="/inventory-overview?page=<?= $page - 1 ?>">
+                    <a href="/inventory-overview?page=<?= $page - 1 ?>" class="button-pagination">
+                        <button>
                             Prev
-                        </a>
-                    </button>
+                        </button>
+                    </a>
                 <?php endif; ?>
                 <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                    <button class="button-pagination <?= $page === $i ? 'active' : '' ?>">
-                        <a href="/inventory-overview?page=<?= $i ?>" class="">
+                    <a href="/inventory-overview?page=<?= $i ?>" class="button-pagination <?= $page === $i ? 'active' : '' ?>">
+                        <button>
                             <?= $i ?>
-                        </a>
-                    </button>
+                        </button>
+                    </a>
                 <?php endfor; ?>
                 <?php if ($page < $total_pages): ?>
-                    <button class="button-pagination">
-                        <a href="/inventory-overview?page=<?= $page + 1 ?>">
+                    <a href="/inventory-overview?page=<?= $page + 1 ?>" class="button-pagination">
+                        <button>
                             Next
-                        </a>
-                    </button>
+                        </button>
+                    </a>
                 <?php endif; ?>
 
             </div>

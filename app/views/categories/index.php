@@ -26,7 +26,7 @@ ob_start();
         </tr>
       </thead>
       <tbody>
-          <?php foreach ($categories as $category): ?>
+        <?php foreach ($categories as $category): ?>
           <tr>
             <td><?= $category['name'] ?></td>
             <td class="categoryStatus" data-categoryID="<?= $category['id'] ?>"><?= $category['categories_status'] ?></td>
@@ -44,7 +44,7 @@ ob_start();
               </div>
             </td>
           </tr>
-          <?php endforeach; ?>
+        <?php endforeach; ?>
       </tbody>
     </table>
   <?php endif; ?>
@@ -54,20 +54,20 @@ ob_start();
 # ADD NEW CATEGORY 
   -->
 <!-- Modal for adding a new category -->
-<div id="modal" class="modal">
+<div id="modal" class="modal categories-modal">
   <div class="modal-content">
     <div class="modal-header">
       <h3>Create Category</h3>
       <span class="close" onclick="closeModal()">×</span>
     </div>
-    <f orm class="category-form" action="/categories/form-submit" method="post">
+    <form class="category-form" action="/categories/form-submit" method="post">
       <div>
 
         <label for="name">Category Name</label>
         <input type="text" id="" name="name" placeholder="Enter category name" required />
       </div>
       <button type="submit">Add Category</button>
-      </form>
+    </form>
   </div>
 </div>
 
@@ -77,20 +77,20 @@ ob_start();
 <!-- Modal for updating a category -->
 <div id="categoryUpdateModal" class="modal">
   <div class="modal-content">
-    <d iv class="modal-header">
+    <div class="modal-header">
       <h3>Update Category</h3>
       <span class="close" onclick="closeCategoryUpdateModal()">×</span>
-  </div>
-  <f orm class="category-form" action="/categories/update/form-submit" method="post">
-    <input type="text" name="id" id="categoryId" hidden>
-    <div>
-
-      <label for="name">Category Name</label>
-      <input type="text" id="categoryName" name="name" placeholder="Enter category name" required />
     </div>
-    <button type="submit">Update Category</button>
+    <form class="category-form" action="/categories/update/form-submit" method="post">
+      <input type="text" name="id" id="categoryId" hidden>
+      <div>
+
+        <label for="name">Category Name</label>
+        <input type="text" id="categoryName" name="name" placeholder="Enter category name" required />
+      </div>
+      <button type="submit">Update Category</button>
     </form>
-</div>
+  </div>
 </div>
 
 

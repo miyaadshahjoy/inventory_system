@@ -3,7 +3,7 @@
 class InventoryService
 {
 
-    public function addMovement(int $product_id, string $movement_type, int $warehouse_id, int $quantity, int $created_by, $notes = null): array
+    public static function addMovement(int $product_id, string $movement_type, int $warehouse_id, int $quantity, int $created_by, $notes = null): array
     {
         $conn = Database::connect();
 
@@ -163,64 +163,7 @@ class InventoryService
         }
     }
 
-    public static function getAllMovements(int $page, int $limit)
-    {
-        # Date
-        # Product (name and sku)
-        # Warehouse name
-        # Movement Type 
-        # Direction
-        # Quantity
-        # Resulting stock 
-        # Created by 
-        # Notes 
-        try {
 
-            # Pagination
-
-            $page = max($page, 1);
-            $offset = ($page - 1) * $limit;
-            $start = $offset + 1;
-            $end = $offset + $limit;
-
-            # Get stock movements from stock_movements table
-            $conn = Database::connect();
-            $statement = $conn->prepare("
-                SELECT * FROM (
-                    SELECT DATE(sm.created_at) as date,
-                        p.name as product_name,
-                        p.sku as product_sku,
-                        w.name as warehouse_name,
-                        sm.movement_type,
-                        sm.direction,
-                        sm.quantity,
-                        sm.resulting_stock,
-                        u.full_name as created_by,
-                        sm.notes,
-                        ROW_NUMBER() OVER (ORDER BY sm.created_at DESC) as rn
-                    FROM stock_movements sm JOIN products p 
-                    ON sm.product_id = p.id
-                    JOIN warehouses w 
-                    ON sm.warehouse_id = w.id 
-                    JOIN users u 
-                    ON sm.created_by = u.id ) t
-                WHERE rn BETWEEN ? AND ?
-            ");
-            $statement->bind_param('ii', $start, $end);
-            if (!$statement->execute()) {
-                throw new SystemException("Database error: Failed to retrieve stock movements.  $statement->error");
-            }
-            $result = $statement->get_result();
-            // if ($result->num_rows === 0) {
-            //     throw new ValidationException("No stock movements found.");
-            // }
-            $movements = $result->fetch_all(MYSQLI_ASSOC);
-            return $movements;
-
-        } catch (Exception $e) {
-            throw $e;
-        }
-    }
 
 
     # Get Total SKUs: number of active products
@@ -416,6 +359,7 @@ class InventoryService
         $start = $offset + 1;
         $end = $offset + $limit;
 
+        # product_name | sku | product_category | warehouse | stock | status | reorder_level | last_movement_date
         $conn = Database::connect();
         $statement = $conn->prepare("
         SELECT * 
@@ -431,7 +375,7 @@ class InventoryService
                 WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
                 ELSE 'OK'
             END as status, p.reorder_level,(
-                SELECT MAX(sm.created_at)
+                SELECT DATE(MAX(sm.created_at))
                 FROM stock_movements sm 
                 WHERE sm.product_id = p.id
                 ) as last_movement_date,
@@ -460,7 +404,7 @@ class InventoryService
 
     }
 
-    public static function getTotalInventoryOverview()
+    public static function getTotalInventoryOverview(): int
     {
 
         $conn = Database::connect();
@@ -507,6 +451,68 @@ class InventoryService
         } catch (Exception $e) {
             throw $e;
         }
+    }
+
+    public static function exportCSV(int $page, int $limit)
+    {
+        try {
+            # Clean output buffer
+            if (ob_get_length()) {
+                ob_end_clean();
+            }
+            # Get overview data
+            $inventory_overviews = self::getInventoryOverviewData($page, $limit);
+            if (!is_array($inventory_overviews))
+                throw new ValidationException("Invalid inventory overview data format.");
+
+            # Headers 
+            header('Content-Type: text/csv; charset=utf-8');
+            header('Content-Disposition: attachment; filename="inventory_overview_' . date('Y-m-d_H-i') . '.csv"');
+
+            # Open output stream
+            $output = fopen('php://output', 'w');
+            if ($output === false) {
+                throw new SystemException("Failed to open output stream.");
+            }
+
+            # Excel UTF-8 BOM
+            fprintf($output, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+            # product_name | sku | product_category | warehouse | stock | status | reorder_level | last_movement_date
+            # Header row
+            fputcsv($output, ['Product Name', 'SKU', 'Category', 'Warehouse', 'Stock', 'Status', 'Reorder', 'Last Movement Date']);
+
+            # Data rows
+            if (empty($inventory_overviews)) {
+                fputcsv($output, ['No data found']);
+                fclose($output);
+                throw new ValidationException("No inventory overview data found.");
+            }
+
+
+            # product_name | sku | product_category | warehouse | stock | status | reorder_level | last_movement_date
+            foreach ($inventory_overviews as $inventory_overview) {
+                fputcsv($output, [
+                    $inventory_overview['product_name'],
+                    $inventory_overview['sku'],
+                    $inventory_overview['product_category'],
+                    $inventory_overview['warehouse'],
+                    $inventory_overview['stock'],
+                    $inventory_overview['status'],
+                    $inventory_overview['reorder_level'],
+                    $inventory_overview['last_movement_date']
+                ]);
+            }
+
+            # Close stream
+            fclose($output);
+            exit;
+
+
+        } catch (Exception $e) {
+            throw $e;
+        }
+
     }
 
 }

@@ -11,4 +11,7 @@ CREATE TABLE users (
     ON UPDATE CURRENT_TIMESTAMP
 );
 
+CREATE INDEX idx_usr_status
+ON users(user_status);
+
 

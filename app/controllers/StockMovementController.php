@@ -1,5 +1,5 @@
 <?php
-const MOVEMENTS_PER_PAGE = 1;
+const MOVEMENTS_PER_PAGE = 10;
 class StockMovementController
 {
 
@@ -12,10 +12,9 @@ class StockMovementController
         $total_movements = $this->totalMovements();
         $limit = MOVEMENTS_PER_PAGE;
 
-        $controller = new ProductController();
-        $products = $controller->getAllActiveProducts();
-        $movements = InventoryService::getAllMovements($page, $limit);
-        $warehouses = WarehouseController::getAllActiveWarehouses();
+        $products = (new ProductController())->getAllActiveProducts();
+        $movements = MovementService::getAllMovements($page, $limit);
+        $warehouses = (new WarehouseController())->getAllActiveWarehouses();
         $data = [
             'movements' => $movements,
             'products' => $products,
@@ -62,8 +61,8 @@ class StockMovementController
             }
 
             # 6) Call InventoryService to add movement
-            $service = new InventoryService();
-            $movement = $service->addMovement($product_id, $movement_type, $warehouse_id, $quantity, $created_by, $notes);
+
+            $movement = InventoryService::addMovement($product_id, $movement_type, $warehouse_id, $quantity, $created_by, $notes);
             if (!$movement) {
                 throw new ValidationException('Failed to create movement');
             }
@@ -135,6 +134,57 @@ class StockMovementController
 
     }
 
+    public function storeAdjustment()
+    {
+        try {
+            # 1) Verify that the request method is POST
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+                throw new SystemException('Invalid request method');
+            }
+
+
+            # 2) Validate inputs
+            if (!isset($_POST['product_id']) || !isset($_POST['movement_type']) || !isset($_POST['warehouse_id']) || !isset($_POST['quantity']) || !isset($_POST['notes'])) {
+                throw new ValidationException('All fields are required');
+            }
+
+
+            # 3) Extract form inputs
+            $product_id = htmlspecialchars($_POST['product_id']);
+            $movement_type = htmlspecialchars($_POST['movement_type']);
+            $warehouse_id = htmlspecialchars($_POST['warehouse_id']);
+            $quantity = htmlspecialchars($_POST['quantity']);
+            $notes = htmlspecialchars($_POST['notes']);
+
+
+            # 4) Sanitize and normalize inputs
+            $product_id = (int) $product_id;
+            $warehouse_id = (int) $warehouse_id;
+            $quantity = (int) $quantity;
+
+            # 5) Get logged in user ID from session (for created_by field)
+            $created_by = $_SESSION['user']['id'];
+            if (!$created_by) {
+                throw new ValidationException('User not logged in. You need to be logged in to perform this action.');
+            }
+
+            # 6) Add adjustment movement
+            $movement = InventoryService::addMovement($product_id, $movement_type, $warehouse_id, $quantity, $created_by, $notes);
+
+            if (!$movement) {
+                throw new ValidationException('Failed to create adjustment movement');
+            }
+
+            Session::flashSet('success', 'Adjustment movement created successfully');
+            header("Location: /stock-movements");
+            exit;
+
+        } catch (Exception $e) {
+            throw $e;
+        }
+
+    }
+
 
     # GET ALL MOVEMENTS
     /*
@@ -184,6 +234,15 @@ class StockMovementController
         } catch (Exception $e) {
             throw $e;
         }
+    }
+
+    public function exportCSV()
+    {
+
+        // $page , $limit
+        $page = 1;
+        $limit = $this->totalMovements();
+        MovementService::exportCSV($page, $limit);
     }
 
 }

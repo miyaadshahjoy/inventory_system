@@ -7,7 +7,7 @@ $content ??= '';
 <div class="app-layout">
 
     <button id="sidebarToggle" class="sidebar-toggle">
-        <svg width="24px" height="24px" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" fill="#343a40">
+        <svg width="16px" height="16px" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" fill="#343a40">
             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
             <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
             <g id="SVGRepo_iconCarrier">
@@ -37,7 +37,33 @@ $content ??= '';
     <?php require_once __DIR__ . '/sidebar.php'; ?>
 
     <main class="main-content">
+        <!-- Show total low stock and out stock -->
+        <div class="header-info">
+
+            <?php if ($total_low_stocks > 0): ?>
+                <button class="low-stock">
+                    <span>Total low stocks: </span>
+                    <?= $total_low_stocks ?>
+                </button>
+
+            <?php endif; ?>
+
+            <?php if ($total_out_stocks > 0): ?>
+                <button class="out-stock">
+                    <span>Total out stocks: </span>
+                    <?= $total_out_stocks ?>
+                </button>
+
+            <?php endif; ?>
+
+            <!-- Current date -->
+            <?= date('M d, Y H:i A') ?>
+        </div>
+
+        <!-- ######################################## -->
+        <!-- # SHOW CONTENT -->
         <?= $content ?>
+        <!-- ######################################## -->
     </main>
 
 </div>

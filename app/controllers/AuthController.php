@@ -62,7 +62,7 @@ class AuthController
 
             Session::flashSet('success', 'Login successful');
             Logger::info("User logged in: {$user['email']} (ID: {$user['id']})");
-            header("Location: /dashboard");
+            header("Location: /inventory-overview");
             exit;
         } catch (Exception $e) {
             throw $e;

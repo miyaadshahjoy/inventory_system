@@ -2,12 +2,14 @@
 
 class ProductService
 {
-    public static function getAllProducts(int $page, int $limit, array $filter_data)
+    public static function getAllProducts(array $filter_data)
     {
         # Product name | SKU | Category | Price | Total Stock | Status | Reorder | Updated | Actions
         try {
 
             # Pagination data
+            $page = $filter_data['page'] ?? 1;
+            $limit = $filter_data['limit'] ?? 10;
             $page = max($page, 1);
             $offset = ($page - 1) * $limit;
 
@@ -134,6 +136,69 @@ class ProductService
             $products = $result->fetch_all(MYSQLI_ASSOC);
 
             return $products;
+        } catch (Exception $e) {
+            throw $e;
+        }
+
+    }
+
+    public static function exportCSV(array $product_filters)
+    {
+        try {
+            # Clean output buffer
+            if (ob_get_length()) {
+                ob_end_clean();
+            }
+            # Get products 
+            $products = self::getAllProducts($product_filters);
+            if (!is_array($products))
+                throw new ValidationException("Invalid product data format.");
+
+            # Headers 
+            header('Content-Type: text/csv; charset=utf-8');
+            header('Content-Disposition: attachment; filename="products_' . date('Y-m-d_H-i') . '.csv"');
+
+            # Open output stream
+            $output = fopen('php://output', 'w');
+            if ($output === false) {
+                throw new SystemException("Failed to open output stream.");
+            }
+
+            # Excel UTF-8 BOM
+            fprintf($output, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+            # Product name | SKU | Category | Price | Total Stock | Status | Reorder | Updated
+
+            # Header row
+            fputcsv($output, ['Product Name', 'SKU', 'Category', 'Price', 'Total Stock', 'Status', 'Reorder', 'Updated']);
+
+            # Data rows
+            if (empty($products)) {
+                fputcsv($output, ['No data found']);
+                # Close stream
+                fclose($output);
+                throw new ValidationException("No products found.");
+            }
+
+
+            foreach ($products as $product) {
+                fputcsv($output, [
+                    $product['product_name'],
+                    $product['sku'],
+                    $product['category'],
+                    $product['price'],
+                    $product['total_stock'],
+                    $product['product_status'],
+                    $product['reorder_level'],
+                    $product['updated_at']
+                ]);
+            }
+
+            # Close stream
+            fclose($output);
+            exit;
+
+
         } catch (Exception $e) {
             throw $e;
         }

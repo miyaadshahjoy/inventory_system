@@ -1,5 +1,6 @@
 <?php
 session_start();
+date_default_timezone_set('Asia/Dhaka');
 
 
 require_once __DIR__ . '/../config/config.php';
@@ -21,6 +22,7 @@ require_once __DIR__ . '/../app/core/ErrorHandler.php';
 require_once __DIR__ . '/../app/exceptions/SystemException.php';
 require_once __DIR__ . '/../app/exceptions/ValidationException.php';
 require_once __DIR__ . '/../app/services/TransferService.php';
+require_once __DIR__ . '/../app/services/MovementService.php';
 require_once __DIR__ . '/../app/services/InventoryService.php';
 require_once __DIR__ . '/../app/services/ProductService.php';
 require_once __DIR__ . '/../app/services/ReturnService.php';
@@ -39,6 +41,7 @@ ErrorHandler::register();
 # Basic Routing
 $url = $_GET['url'] ?? '';
 $url = trim($url, '/');
+// echo $url;
 
 
 switch ($url) {
@@ -67,10 +70,32 @@ switch ($url) {
         $controller = new StockMovementController();
         $controller->index();
         break;
+    /*
+    # Architecture for data CSV export
+    - Data Flow: Request -> Controller -> Service -> Query -> Stream -> Download
+    - endpoint: stock-movements/export
+    - controller method: exportCSV( )
+    */
+    case 'stock-movements/export':
+        AuthMiddleware::check();
+        $controller = new StockMovementController();
+        $controller->exportCSV();
+        break;
     case 'inventory-overview':
         AuthMiddleware::check();
         $controller = new InventoryController();
         $controller->index();
+        break;
+    /*
+    # Architecture for data CSV export
+    - Data Flow: Request -> Controller -> Service -> Query -> Stream -> Download
+    - endpoint: stock-movements/export
+    - controller method: exportCSV( )
+    */
+    case 'inventory-overview/export':
+        AuthMiddleware::check();
+        $controller = new InventoryController();
+        $controller->exportCSV();
         break;
     case 'stock-movements/form-submit':
         AuthMiddleware::check();
@@ -82,6 +107,13 @@ switch ($url) {
         $controller = new StockMovementController();
         $controller->storeTransfer();
         break;
+    case 'stock-movements/adjustment/form-submit':
+        AuthMiddleware::check();
+        RoleMiddleware::check(['ADMIN']);
+        $controller = new StockMovementController();
+        $controller->storeAdjustment();
+        break;
+
     case 'categories':
         AuthMiddleware::check();
         $controller = new CategoriesController();
@@ -150,6 +182,17 @@ switch ($url) {
         AuthMiddleware::check();
         $controller = new ProductController();
         $controller->deleteProduct();
+        break;
+    /*
+    # Architecture for data CSV export
+    - Data Flow: Request -> Controller -> Service -> Query -> Stream -> Download
+    - endpoint: products/export
+    - controller method: exportCSV( )
+    */
+    case 'products/export':
+        AuthMiddleware::check();
+        $controller = new ProductController();
+        $controller->exportCSV();
         break;
     case 'returns':
         AuthMiddleware::check();

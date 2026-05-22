@@ -1,6 +1,7 @@
 const modal = document.getElementById("modal");
 const categoryUpdateModal = document.getElementById("categoryUpdateModal");
 const transferMovementModal = document.getElementById("transferModal");
+const adjustmentModal = document.getElementById("adjustmentModal");
 const productUpdateModal = document.getElementById("productUpdateModal");
 const warehouseUpdateModal = document.getElementById("warehouseUpdateModal");
 
@@ -14,6 +15,9 @@ function openModal() {
 }
 function openTransferModal() {
   transferMovementModal.classList.add("show");
+}
+function openAdjustmentModal() {
+  adjustmentModal.classList.add("show");
 }
 function openCategoryUpdateModal(button) {
   const categoryId = button.getAttribute("data-categoryId");
@@ -178,6 +182,10 @@ function closeModal() {
 function closeTransferModal() {
   transferMovementModal.classList.remove("show");
 }
+
+function closeAdjustmentModal() {
+  adjustmentModal.classList.remove("show");
+}
 function closeCategoryUpdateModal() {
   categoryUpdateModal.classList.remove("show");
 }
@@ -207,18 +215,24 @@ window.addEventListener("click", function (event) {
   if (event.target === warehouseUpdateModal) {
     closeWarehouseUpdateModal();
   }
+
+  if (event.target === adjustmentModal) {
+    closeAdjustmentModal();
+  }
 });
 
 window.addEventListener("keydown", function (event) {
   if (event.key === "Escape") {
     closeModal();
     closeTransferModal();
+    closeAdjustmentModal();
     closeCategoryUpdateModal();
     closeProductUpdateModal();
     closeWarehouseUpdateModal();
   }
 });
 
+// Flash message
 document.addEventListener("DOMContentLoaded", () => {
   const flashes = document.querySelectorAll(".flash");
 
