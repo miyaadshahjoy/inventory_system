@@ -17,7 +17,7 @@ A production-oriented **Inventory Management System** built with **vanilla PHP +
 
 ### 📊 Inventory Overview
 
-[screenshots/inventory-page.png](https://github.com/miyaadshahjoy/inventory_system/blob/main/screenshots/inventory-page.png)
+![PREVIEW](/screenshots/inventory-page.png)
 
 ### 📦 Product Management
 
