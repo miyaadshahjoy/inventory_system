@@ -17,15 +17,15 @@ A production-oriented **Inventory Management System** built with **vanilla PHP +
 
 ### 📊 Inventory Overview
 
-_(Add real screenshots here)_
+![PREVIEW](/screenshots/inventory-page.png)
 
 ### 📦 Product Management
 
-_(Add real screenshots here)_
+![PREVIEW](/screenshots/product-page.png)
 
 ### 🔄 Stock Movements
 
-_(Add real screenshots here)_
+![PREVIEW](/screenshots/stock-movement-page.png)
 
 ---
 
@@ -100,6 +100,10 @@ inventory-system/
 ```
 
 ---
+
+## 🛢 Database ER Diagrams
+
+![PREVIEW](/screenshots/erd.svg)
 
 ## ⚙️ Installation Guide
 
