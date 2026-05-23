@@ -13,6 +13,13 @@ A production-oriented **Inventory Management System** built with **vanilla PHP +
 
 ---
 
+## 🔑 Demo Credentials
+
+Email: admin@example.com  
+Password: admin12345
+
+---
+
 ## 🖼️ Screenshots
 
 ### 📊 Inventory Overview
@@ -141,13 +148,6 @@ Run createAdmin.php script to create an admin user.
 ```
 php createAdmin.php
 ```
-
----
-
-## 🔑 Demo Credentials
-
-Email: admin@example.com  
-Password: admin12345
 
 ---
 
