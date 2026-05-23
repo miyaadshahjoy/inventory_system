@@ -2,8 +2,6 @@
 
 ![PHP](https://img.shields.io/badge/PHP-8%2B-blue)
 ![MySQL](https://img.shields.io/badge/MySQL-Database-orange)
-![Architecture](https://img.shields.io/badge/Architecture-Custom%20MVC-green)
-![Status](https://img.shields.io/badge/Status-Production--Ready-success)
 
 A production-oriented **Inventory Management System** built with **vanilla PHP + MySQL**, focusing on **clean architecture, scalability, and real-world inventory workflows**.
 
@@ -11,13 +9,13 @@ A production-oriented **Inventory Management System** built with **vanilla PHP +
 
 ## 🚀 Live Demo
 
-👉 _(Add your InfinityFree link here)_
+[https://inventorysystem.great-site.net](https://inventorysystem.great-site.net)
 
 ---
 
 ## 🖼️ Screenshots
 
-### 📊 Dashboard / Inventory Overview
+### 📊 Inventory Overview
 
 _(Add real screenshots here)_
 
@@ -48,7 +46,7 @@ _(Add real screenshots here)_
 ### 🔄 Movement Engine
 
 - Stock In / Out
-- Damage & Expiry tracking
+- Damage & Expiry movements
 - Warehouse Transfers
 - Returns module
 - Adjustment movements (Admin only)
