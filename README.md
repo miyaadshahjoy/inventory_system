@@ -21,11 +21,11 @@ A production-oriented **Inventory Management System** built with **vanilla PHP +
 
 ### 📦 Product Management
 
-_(Add real screenshots here)_
+![PREVIEW](/screenshots/product-page.png)
 
 ### 🔄 Stock Movements
 
-_(Add real screenshots here)_
+![PREVIEW](/screenshots/stock-movement-page.png)
 
 ---
 
