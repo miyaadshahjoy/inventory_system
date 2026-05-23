@@ -153,5 +153,4 @@ Password: admin12345
 
 ## 👨‍💻 Author
 
-Miyaad  
-Backend Developer
+Miyaad Islam
