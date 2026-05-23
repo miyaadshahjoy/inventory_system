@@ -117,8 +117,8 @@ inventory-system/
 ### 1. Clone
 
 ```
-git clone https://github.com/your-username/inventory-system.git
-cd inventory-system
+git clone https://github.com/miyaadshahjoy/inventory_system.git
+cd inventory_system
 ```
 
 ---
