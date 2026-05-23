@@ -9,14 +9,7 @@ A production-oriented **Inventory Management System** built with **vanilla PHP +
 
 ## 🚀 Live Demo
 
-https://inventorysystem.great-site.net
-
----
-
-## 🔑 Demo Credentials
-
-**Email:** admin@example.com
-**Password:** admin12345
+[https://inventorysystem.great-site.net](https://inventorysystem.great-site.net)
 
 ---
 
@@ -202,9 +195,9 @@ The database was designed around movement-based inventory tracking and warehouse
 
 ## 1️⃣ Clone Repository
 
-```bash
-git clone https://github.com/miyaadshahjoy/inventory_system.git
-cd inventory_system
+```
+git clone https://github.com/your-username/inventory-system.git
+cd inventory-system
 ```
 
 ---
@@ -237,6 +230,13 @@ php createAdmin.php
 
 ---
 
-# 👨‍💻 Author
+## 🔑 Demo Credentials
+
+Email: admin@example.com  
+Password: admin12345
+
+---
+
+## 👨‍💻 Author
 
 Miyaad Islam
