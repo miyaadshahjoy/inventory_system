@@ -17,7 +17,7 @@ A production-oriented **Inventory Management System** built with **vanilla PHP +
 
 ### 📊 Inventory Overview
 
-_(Add real screenshots here)_
+screenshots/inventory-page.png
 
 ### 📦 Product Management
 
