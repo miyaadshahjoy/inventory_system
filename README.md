@@ -132,18 +132,10 @@ CREATE DATABASE inventory_system;
 
 ### 4. Create Admin User
 
-Use:
+Run createAdmin.php script to create an admin user.
 
 ```
-password_hash('admin12345', PASSWORD_DEFAULT);
-```
-
----
-
-### 5. Run
-
-```
-php -S localhost:8000 -t public
+php createAdmin.php
 ```
 
 ---
