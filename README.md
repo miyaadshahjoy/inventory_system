@@ -101,6 +101,10 @@ inventory-system/
 
 ---
 
+## 🛢 Database ER Diagrams
+
+![PREVIEW](/screenshots/erd.svg)
+
 ## ⚙️ Installation Guide
 
 ### 1. Clone
