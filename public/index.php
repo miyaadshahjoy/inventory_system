@@ -14,9 +14,11 @@ require_once __DIR__ . '/../app/controllers/AuthController.php';
 require_once __DIR__ . '/../app/controllers/DashboardController.php';
 require_once __DIR__ . '/../app/controllers/StockMovementController.php';
 require_once __DIR__ . '/../app/controllers/InventoryController.php';
+require_once __DIR__ . '/../app/controllers/PurchaseOrderController.php';
 require_once __DIR__ . '/../app/controllers/CategoryController.php';
 require_once __DIR__ . '/../app/controllers/ProductController.php';
 require_once __DIR__ . '/../app/controllers/WarehouseController.php';
+require_once __DIR__ . '/../app/controllers/SupplierController.php';
 require_once __DIR__ . '/../app/controllers/ReturnController.php';
 require_once __DIR__ . '/../app/controllers/UserController.php';
 require_once __DIR__ . '/../app/middlewares/RoleMiddleware.php';
@@ -30,6 +32,7 @@ require_once __DIR__ . '/../app/services/InventoryService.php';
 require_once __DIR__ . '/../app/services/ProductService.php';
 require_once __DIR__ . '/../app/services/ReturnService.php';
 require_once __DIR__ . '/../app/services/UserService.php';
+require_once __DIR__ . '/../app/services/PurchaseOrderService.php';
 
 
 /*
@@ -224,6 +227,55 @@ switch ($url) {
         $controller = new UserController();
         $controller->deleteUser();
         break;
+
+    /////////////////////////////////
+    # Purchase order
+    case 'purchase-orders':
+        AuthMiddleware::check();
+        $controller = new PurchaseOrderController();
+        $controller->index();
+        break;
+
+    case 'purchase-orders/form-submit':
+        AuthMiddleware::check();
+        $controller = new PurchaseOrderController();
+        $controller->create();
+        break;
+    case 'purchase-orders/details':
+        AuthMiddleware::check();
+        $controller = new PurchaseOrderController();
+        $controller->purchaseOrderDetails();
+        break;
+    case 'purchase-orders/receive-items/form-submit':
+        AuthMiddleware::check();
+        $controller = new PurchaseOrderController();
+        $controller->receiveItems();
+        break;
+
+    case 'purchase-orders/approve':
+        AuthMiddleware::check();
+        RoleMiddleware::check(['ADMIN']);
+        $controller = new PurchaseOrderController();
+        $controller->approvePurchaseOrder();
+        break;
+
+    case 'purchase-orders/cancel':
+        AuthMiddleware::check();
+        RoleMiddleware::check(['ADMIN']);
+        $controller = new PurchaseOrderController();
+        $controller->cancelPurchaseOrder();
+        break;
+
+
+
+    # Suppliers 
+    case 'suppliers':
+        AuthMiddleware::check();
+        $controller = new SupplierController();
+        $controller->index();
+        break;
+
+
     default:
         http_response_code(404);
         require_once __DIR__ . '/../app/views/errors/404.php';

@@ -62,38 +62,41 @@ ob_start();
       </a>
     </div>
     <!-- Show movements data in a table -->
-    <table>
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Product</th>
-          <th>Warehouse</th>
-          <th>Type</th>
-          <th>Direction</th>
-          <th>Quantity</th>
-          <th>Resulting Stock</th>
-          <th>Created by</th>
-          <th>Notes</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php foreach ($movements as $movement): ?>
+    <div class="table-wrapper">
+
+      <table>
+        <thead>
           <tr>
-            <td><?= $movement['date']; ?></td>
-            <td><?= $movement['product_name']; ?> (sku-<?= $movement['product_sku']; ?>)</td>
-            <td><?= $movement['warehouse_name']; ?></td>
-            <td><?= $movement['movement_type']; ?></td>
-            <td><?= $movement['direction']; ?></td>
-            <td><?= $movement['quantity']; ?></td>
-            <td>
-              <?= $movement['resulting_stock']; ?>
-            </td>
-            <td><?= $movement['created_by']; ?></td>
-            <td><?= $movement['notes']; ?></td>
+            <th>Date</th>
+            <th>Product</th>
+            <th>Warehouse</th>
+            <th>Type</th>
+            <th>Direction</th>
+            <th>Quantity</th>
+            <th>Resulting Stock</th>
+            <th>Created by</th>
+            <th>Notes</th>
           </tr>
-        <?php endforeach; ?>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <?php foreach ($movements as $movement): ?>
+            <tr>
+              <td><?= $movement['date']; ?></td>
+              <td><?= $movement['product_name']; ?> (sku-<?= $movement['product_sku']; ?>)</td>
+              <td><?= $movement['warehouse_name']; ?></td>
+              <td><?= $movement['movement_type']; ?></td>
+              <td><?= $movement['direction']; ?></td>
+              <td><?= $movement['quantity']; ?></td>
+              <td>
+                <?= $movement['resulting_stock']; ?>
+              </td>
+              <td><?= $movement['created_by']; ?></td>
+              <td><?= $movement['notes']; ?></td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
 
     <!-- Implementing pagination buttons -->
     <div class="pagination">
@@ -125,7 +128,9 @@ ob_start();
   <?php endif; ?>
 </div>
 
-<!-- Create movement modal -->
+<!-- 
+# Create movement modal
+-->
 <div id="modal" class="modal movement-modal">
   <div class="modal-content">
     <div class="modal-header">

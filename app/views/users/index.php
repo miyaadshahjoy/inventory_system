@@ -14,43 +14,45 @@ ob_start();
         <p>No users found.</p>
     <?php endif; ?>
     <?php if (!empty($users)): ?>
-        <table>
-            <thead>
-                <tr>
-                    <th>User</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($users as $user): ?>
+        <div class="table-wrapper">
+            <table>
+                <thead>
                     <tr>
-                        <td>
-                            <?= $user['full_name']; ?>
-                        </td>
-                        <td>
-                            <?= $user['email']; ?>
-                        </td>
-                        <td>
-                            <?= $user['role']; ?>
-                        </td>
-                        <td class="userStatus" data-userId="<?= $user['id'] ?>">
-                            <?= $user['user_status']; ?>
-                        </td>
-                        <td>
-                            <div data-userId="<?= $user['id'] ?>"
-                                class="userActions <?= $user['user_status'] === 'INACTIVE' || $user['role'] === 'ADMIN' ? 'hide' : '' ?>">
-
-
-                                <button data-userId="<?= $user['id'] ?>" onclick="deleteUser(this)">Delete</button>
-                            </div>
-                        </td>
+                        <th>User</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Actions</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php foreach ($users as $user): ?>
+                        <tr>
+                            <td>
+                                <?= $user['full_name']; ?>
+                            </td>
+                            <td>
+                                <?= $user['email']; ?>
+                            </td>
+                            <td>
+                                <?= $user['role']; ?>
+                            </td>
+                            <td class="userStatus" data-userId="<?= $user['id'] ?>">
+                                <?= $user['user_status']; ?>
+                            </td>
+                            <td>
+                                <div data-userId="<?= $user['id'] ?>"
+                                    class="userActions <?= $user['user_status'] === 'INACTIVE' || $user['role'] === 'ADMIN' ? 'hide' : '' ?>">
+
+
+                                    <button data-userId="<?= $user['id'] ?>" onclick="deleteUser(this)">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
 
     <?php endif; ?>
 </div>

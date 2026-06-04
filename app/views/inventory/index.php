@@ -79,7 +79,7 @@ ob_start();
                 </button>
             </a>
         </div>
-        <div class="overview-table">
+        <div class="table-wrapper overview-table">
             <table>
                 <thead>
                     <tr>
@@ -118,40 +118,43 @@ ob_start();
                                 <?= $data['reorder_level'] ?>
                             </td>
                             <td>
-                                <?= $data['last_movement_date'] ?>
+                                <?php
+                                $date = new DateTime($data['last_movement_date']);
+                                echo $date->format('Y-m-d');
+                                ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
 
                 </tbody>
             </table>
-
-            <!-- Implementing pagination buttons -->
-            <div class="pagination">
-                <?php if ($page > 1): ?>
-                    <a href="/inventory-overview?page=<?= $page - 1 ?>" class="button-pagination">
-                        <button>
-                            Prev
-                        </button>
-                    </a>
-                <?php endif; ?>
-                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                    <a href="/inventory-overview?page=<?= $i ?>" class="button-pagination <?= $page === $i ? 'active' : '' ?>">
-                        <button>
-                            <?= $i ?>
-                        </button>
-                    </a>
-                <?php endfor; ?>
-                <?php if ($page < $total_pages): ?>
-                    <a href="/inventory-overview?page=<?= $page + 1 ?>" class="button-pagination">
-                        <button>
-                            Next
-                        </button>
-                    </a>
-                <?php endif; ?>
-
-            </div>
         </div>
+        <!-- Implementing pagination buttons -->
+        <div class="pagination">
+            <?php if ($page > 1): ?>
+                <a href="/inventory-overview?page=<?= $page - 1 ?>" class="button-pagination">
+                    <button>
+                        Prev
+                    </button>
+                </a>
+            <?php endif; ?>
+            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                <a href="/inventory-overview?page=<?= $i ?>" class="button-pagination <?= $page === $i ? 'active' : '' ?>">
+                    <button>
+                        <?= $i ?>
+                    </button>
+                </a>
+            <?php endfor; ?>
+            <?php if ($page < $total_pages): ?>
+                <a href="/inventory-overview?page=<?= $page + 1 ?>" class="button-pagination">
+                    <button>
+                        Next
+                    </button>
+                </a>
+            <?php endif; ?>
+
+        </div>
+
     <?php endif; ?>
 </div>
 

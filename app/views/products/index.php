@@ -200,51 +200,53 @@ ob_start(); # Start the output buffer
       <p>No products found.</p>
     <?php endif; ?>
     <?php if (!empty($products)): ?>
-      <table>
-        <!-- 
+      <div class="table-wrapper">
+        <table>
+          <!-- 
           # Product name | SKU | Category | Price | Total Stock | Status | Reorder | Updated | Actions 
         -->
 
-        <thead>
-          <tr>
-            <th>Product Name</th>
-            <th>SKU</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Total Stock</th>
-            <th>Status</th>
-            <th>Reorder</th>
-            <th>Last Updated</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <?php foreach ($products as $product): ?>
+          <thead>
             <tr>
-              <td><?= $product['product_name'] ?></td>
-              <td><?= $product['sku'] ?></td>
-              <td><?= $product['category'] ?></td>
-              <td><?= $product['price'] ?></td>
-              <td><?= $product['total_stock'] ?></td>
-              <td class="productStatus" data-productId="<?= $product['id'] ?>"><?= $product['product_status'] ?></td>
-              <td><?= $product['reorder_level'] ?></td>
-              <td><?php $updated_at = new DateTime($product['updated_at']);
-              echo $updated_at->format('Y-m-d'); ?></td>
-              <td>
-                <div class="actions productActions <?= $product['product_status'] === 'INACTIVE' ? 'hide' : '' ?>"
-                  data-productId="<?= $product['id'] ?>">
-                  <button data-productId="<?= $product['id'] ?>" data-productName="<?= $product['product_name'] ?>"
-                    data-productSKU="<?= $product['sku'] ?>" data-categoryID="<?= $product['category_id'] ?>"
-                    data-productPrice="<?= $product['price'] ?>" data-productReorder="<?= $product['reorder_level'] ?>"
-                    data-productUnit="<?= $product['unit'] ?>" onclick=" openProductUpdateModal(this)">Edit</button>
-                  <button data-productId="<?= $product['id'] ?>" onclick="deleteProduct(this)">Delete</button>
-                </div>
-              </td>
+              <th>Product Name</th>
+              <th>SKU</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Total Stock</th>
+              <th>Status</th>
+              <th>Reorder</th>
+              <th>Last Updated</th>
+              <th>Actions</th>
             </tr>
-          <?php endforeach; ?>
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            <?php foreach ($products as $product): ?>
+              <tr>
+                <td><?= $product['product_name'] ?></td>
+                <td><?= $product['sku'] ?></td>
+                <td><?= $product['category'] ?></td>
+                <td><?= $product['price'] ?></td>
+                <td><?= $product['total_stock'] ?></td>
+                <td class="productStatus" data-productId="<?= $product['id'] ?>"><?= $product['product_status'] ?></td>
+                <td><?= $product['reorder_level'] ?></td>
+                <td><?php $updated_at = new DateTime($product['updated_at']);
+                echo $updated_at->format('Y-m-d'); ?></td>
+                <td>
+                  <div class="actions productActions <?= $product['product_status'] === 'INACTIVE' ? 'hide' : '' ?>"
+                    data-productId="<?= $product['id'] ?>">
+                    <button data-productId="<?= $product['id'] ?>" data-productName="<?= $product['product_name'] ?>"
+                      data-productSKU="<?= $product['sku'] ?>" data-categoryID="<?= $product['category_id'] ?>"
+                      data-productPrice="<?= $product['price'] ?>" data-productReorder="<?= $product['reorder_level'] ?>"
+                      data-productUnit="<?= $product['unit'] ?>" onclick=" openProductUpdateModal(this)">Edit</button>
+                    <button data-productId="<?= $product['id'] ?>" onclick="deleteProduct(this)">Delete</button>
+                  </div>
+                </td>
+              </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
+      </div>
 
       <!-- Implementing pagination buttons -->
       <div class="pagination">

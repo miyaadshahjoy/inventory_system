@@ -62,6 +62,19 @@ class ErrorHandler
     # Conver PHP errors (not exceptions) to ErrorException, so they can be handled by the exception handler
     public static function errorHandler(int $errno, string $errstr, string $errfile, int $errline)
     {
+
+
+        $ignored_errors = [
+            E_DEPRECATED,
+            E_USER_DEPRECATED,
+            E_NOTICE,
+            E_USER_NOTICE
+        ];
+
+        if (in_array($errno, $ignored_errors)) {
+            Logger::warning($errstr);
+            return true;
+        }
         $error_message = "[$errno] $errstr in $errfile on line $errline";
         # $errno -> error level (E_ERROR, E_WARNING, etc.) / error severity
         throw new ErrorException($error_message, 0, $errno, $errfile, $errline);
@@ -72,8 +85,24 @@ class ErrorHandler
     {
         $error = error_get_last(); # Get the last error that occurred (if any)
         if ($error !== null) {
+
+            if (!isset($error['type'])) {
+                return;
+            }
+
+            $fatal_errors = [
+                E_ERROR,
+                E_PARSE,
+                E_CORE_ERROR,
+                E_COMPILE_ERROR
+            ];
+
+            if (!in_array($error['type'], $fatal_errors)) {
+
+                return;
+            }
             $error_message = $error['message'] . ' in: ' . $error['file'] . ' on line: ' . $error['line'];
-            Logger::critical($error_message);
+            Logger::critical("[Shutodown] : $error_message");
 
             self::renderErrorPage();
         }
@@ -82,7 +111,10 @@ class ErrorHandler
     # Render generic 500 error page for users 
     public static function renderErrorPage()
     {
-        http_response_code(500);
+        if (!headers_sent()) {
+
+            http_response_code(500);
+        }
         require __DIR__ . '/../views/errors/500.php';
         exit;
     }

@@ -22,30 +22,32 @@ ob_start();
         <!-- 
          Product | Warehouse | Quantity | Reason | Created by | Date
         -->
-        <table>
-            <thead>
-                <tr>
-                    <th>Product</th>
-                    <th>Warehouse</th>
-                    <th>Quantity</th>
-                    <th>Reason</th>
-                    <th>Created by</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($returns as $return): ?>
+        <div class="table-wrapper">
+            <table>
+                <thead>
                     <tr>
-                        <td><?= $return['product_name'] ?> (sku-<?= $return['product_sku'] ?>)</td>
-                        <td><?= $return['warehouse_name'] ?></td>
-                        <td><?= $return['quantity'] ?></td>
-                        <td><?= $return['reason'] ?></td>
-                        <td><?= $return['created_by'] ?></td>
-                        <td><?= $return['created_at'] ?></td>
+                        <th>Product</th>
+                        <th>Warehouse</th>
+                        <th>Quantity</th>
+                        <th>Reason</th>
+                        <th>Created by</th>
+                        <th>Date</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php foreach ($returns as $return): ?>
+                        <tr>
+                            <td><?= $return['product_name'] ?> (sku-<?= $return['product_sku'] ?>)</td>
+                            <td><?= $return['warehouse_name'] ?></td>
+                            <td><?= $return['quantity'] ?></td>
+                            <td><?= $return['reason'] ?></td>
+                            <td><?= $return['created_by'] ?></td>
+                            <td><?= $return['created_at'] ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
     <?php endif; ?>
 
 </div>

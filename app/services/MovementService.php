@@ -19,13 +19,12 @@ class MovementService
 
             $page = max($page, 1);
             $offset = ($page - 1) * $limit;
-            $start = $offset + 1;
-            $end = $offset + $limit;
+
             # date | prouct_name | product_sku | warehouse_name | movement_type | direction | quantity | resulting_stock | created_by | notes
             # Get stock movements from stock_movements table
             $conn = Database::connect();
             $statement = $conn->prepare("
-                SELECT * FROM (
+                
                     SELECT DATE(sm.created_at) as date,
                         p.name as product_name,
                         p.sku as product_sku,
@@ -35,17 +34,16 @@ class MovementService
                         sm.quantity,
                         sm.resulting_stock,
                         u.full_name as created_by,
-                        sm.notes,
-                        ROW_NUMBER() OVER (ORDER BY sm.created_at DESC) as rn
+                        sm.notes
                     FROM stock_movements sm JOIN products p 
                     ON sm.product_id = p.id
                     JOIN warehouses w 
                     ON sm.warehouse_id = w.id 
                     JOIN users u 
-                    ON sm.created_by = u.id ) t
-                WHERE rn BETWEEN ? AND ?
+                    ON sm.created_by = u.id 
+                    ORDER BY sm.created_at DESC LIMIT ? OFFSET ?
             ");
-            $statement->bind_param('ii', $start, $end);
+            $statement->bind_param('ii', $limit, $offset);
             if (!$statement->execute()) {
                 throw new SystemException("Database error: Failed to retrieve stock movements.  $statement->error");
             }

@@ -4,6 +4,9 @@ const transferMovementModal = document.getElementById("transferModal");
 const adjustmentModal = document.getElementById("adjustmentModal");
 const productUpdateModal = document.getElementById("productUpdateModal");
 const warehouseUpdateModal = document.getElementById("warehouseUpdateModal");
+const purchaseOrderItemsContainer = document.querySelector(
+  ".purchase-order-products",
+);
 
 /////////////////////////////////////////////////////////////////////////////////
 const sidebar = document.getElementById("sidebar");
@@ -276,3 +279,50 @@ toggleBtn.addEventListener("click", () => {
     localStorage.setItem("sidebar", "visible");
   }
 });
+
+//////////////////////////////////////////////////////////
+// Purchase order form: dynamic item addition
+
+let i = 0;
+const product = document.querySelector("#product");
+const quantity = document.querySelector("#quantity");
+const unitPrice = document.querySelector("#unit_price");
+
+function addItem() {
+  if (product.value === "" || quantity.value === "" || unitPrice.value === "") {
+    alert(
+      "Please fill in all fields for each item.(product, quantity, unit price)",
+    );
+    return;
+  }
+
+  purchaseOrderItemsContainer.insertAdjacentHTML(
+    "beforeend",
+    `
+    <div class="purchase-order-item">
+        <input name="items[${i}][product_id]" value="${product.value}" hidden>
+        <input name="items[${i}][product_name]" value="${product.selectedOptions[0]?.dataset.productName}" readonly>
+        <input name="items[${i}][quantity]" value="${quantity.value}" readonly>
+      
+        <input name="items[${i}][unit_price]" value="${unitPrice.value}" readonly>
+        <span data-product-id=${product.value} onclick="removeItem(this)">❌</span>
+    </div>
+    `,
+  );
+
+  i++;
+  //////////////////////////////////////////////
+  product.value = "";
+  quantity.value = "";
+  unitPrice.value = "";
+}
+
+function removeItem(button) {
+  const productId = button.dataset.productId;
+  const products = document.querySelectorAll(".purchase-order-item");
+  products.forEach((product) => {
+    if (product.querySelector("span").dataset.productId === productId) {
+      product.remove();
+    }
+  });
+}

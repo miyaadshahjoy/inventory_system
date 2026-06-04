@@ -254,9 +254,8 @@ class WarehouseController
 
     public function getWarehouseById(int $id)
     {
+        $conn = Database::connect();
         try {
-
-            $conn = Database::connect();
             $statement = $conn->prepare("
             SELECT *
             FROM warehouses

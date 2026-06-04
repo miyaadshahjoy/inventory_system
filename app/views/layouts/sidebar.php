@@ -35,6 +35,15 @@ function isActive(string $path, string $current_uri): string
       Returns
     </a>
 
+    <div class="sidebar-section-title">PROCUREMENT</div>
+    <a href="/purchase-orders" class="sidebar-link <?= isActive('/purchase-orders', $current_uri) ?>">
+      Purchase Orders
+    </a>
+
+    <!-- Suppliers -->
+    <a href="/suppliers" class="sidebar-link <?= isActive('/suppliers', $current_uri) ?>">
+      Suppliers
+    </a>
 
     <div class="sidebar-section-title">CATALOG</div>
 

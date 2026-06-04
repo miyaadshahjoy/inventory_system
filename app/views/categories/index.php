@@ -16,37 +16,39 @@ ob_start();
   <?php endif; ?>
 
   <?php if (!empty($categories)): ?>
-    <table>
-      <thead>
-        <tr>
-          <th>Category Name</th>
-          <th>Status</th>
-          <th>Created At</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php foreach ($categories as $category): ?>
+    <div class="table-wrapper">
+      <table>
+        <thead>
           <tr>
-            <td><?= $category['name'] ?></td>
-            <td class="categoryStatus" data-categoryID="<?= $category['id'] ?>"><?= $category['categories_status'] ?></td>
-            <td><?php $created_at = new DateTime($category['created_at']);
-            echo $created_at->format('Y-m-d H:i'); ?></td>
-            <td>
-              <div class="actions categoryActions <?= $category['categories_status'] === 'INACTIVE' ? 'hide' : '' ?>"
-                data-categoryId="<?= $category['id'] ?>">
-
-                <button data-categoryId="<?= htmlspecialchars($category['id']) ?>"
-                  data-categoryName="<?= htmlspecialchars($category['name']) ?>"
-                  onclick="openCategoryUpdateModal(this)">Edit</button>
-                <button data-categoryId="<?= htmlspecialchars($category['id']) ?>"
-                  onclick="deleteCategory(this)">Delete</button>
-              </div>
-            </td>
+            <th>Category Name</th>
+            <th>Status</th>
+            <th>Created At</th>
+            <th>Actions</th>
           </tr>
-        <?php endforeach; ?>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <?php foreach ($categories as $category): ?>
+            <tr>
+              <td><?= $category['name'] ?></td>
+              <td class="categoryStatus" data-categoryID="<?= $category['id'] ?>"><?= $category['categories_status'] ?></td>
+              <td><?php $created_at = new DateTime($category['created_at']);
+              echo $created_at->format('Y-m-d H:i'); ?></td>
+              <td>
+                <div class="actions categoryActions <?= $category['categories_status'] === 'INACTIVE' ? 'hide' : '' ?>"
+                  data-categoryId="<?= $category['id'] ?>">
+
+                  <button data-categoryId="<?= htmlspecialchars($category['id']) ?>"
+                    data-categoryName="<?= htmlspecialchars($category['name']) ?>"
+                    onclick="openCategoryUpdateModal(this)">Edit</button>
+                  <button data-categoryId="<?= htmlspecialchars($category['id']) ?>"
+                    onclick="deleteCategory(this)">Delete</button>
+                </div>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
   <?php endif; ?>
 </div>
 
