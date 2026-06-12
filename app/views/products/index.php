@@ -1,25 +1,26 @@
 <?php
-$products = $data['products'] ?? [];
-$categories = $data['categories'] ?? [];
+$products = $data["products"] ?? [];
+$categories = $data["categories"] ?? [];
 
-$total_products = $data['total_products'] ?? 0;
-$limit = $data['limit'] ?? 5;
-$page = $data['page'] ?? 1;
+$total_products = $data["total_products"] ?? 0;
+$limit = $data["limit"] ?? 10;
+$page = $data["page"] ?? 1;
 
 $total_pages = ceil($total_products / $limit);
 
 $currentPage = $page ?? 1;
 $queryParams = $_GET;
-// Previous page 
-$queryParams['page'] = $currentPage > 1 ? $currentPage - 1 : $currentPage;
+// Previous page
+$queryParams["page"] = $currentPage > 1 ? $currentPage - 1 : $currentPage;
 $prevUrl = http_build_query($queryParams);
 
 // Next page
-$queryParams['page'] = $currentPage < $total_pages ? $currentPage + 1 : $currentPage;
+$queryParams["page"] =
+    $currentPage < $total_pages ? $currentPage + 1 : $currentPage;
 $nextUrl = http_build_query($queryParams);
 
-
-ob_start(); # Start the output buffer
+# Start the output buffer
+ob_start();
 ?>
 
 <div class="container">
@@ -47,8 +48,8 @@ ob_start(); # Start the output buffer
         <select name="product_category" id="productCategory">
           <option value="">Select category</option>
           <?php foreach ($categories as $category): ?>
-            <option value="<?= $category['id'] ?>">
-              <?= htmlspecialchars($category['name']) ?>
+            <option value="<?= $category["id"] ?>">
+              <?= htmlspecialchars($category["name"]) ?>
             </option>
           <?php endforeach; ?>
         </select>
@@ -101,74 +102,118 @@ ob_start(); # Start the output buffer
     <!-- Active filters -->
     <div class="active-filters">
       <!-- Search -->
-      <?php if (isset($_GET['product_search']) && !empty($_GET['product_search'])): ?>
+      <?php if (
+          isset($_GET["product_search"]) &&
+          !empty($_GET["product_search"])
+      ): ?>
         <div class="filters-tag">
           <span>
-            Search: <?= htmlspecialchars($_GET['product_search']) ?>
-            <a href="/products?<?= createUrlWithout(['product_search']) ?>">❌</a>
+            Search: <?= htmlspecialchars($_GET["product_search"]) ?>
+            <a href="/products?<?= ProductService::createUrlWithout([
+                "product_search",
+            ]) ?>">❌</a>
           </span>
         </div>
       <?php endif; ?>
 
       <!-- Category -->
-      <?php if (isset($_GET['product_category']) && !empty($_GET['product_category'])): ?>
+      <?php if (
+          isset($_GET["product_category"]) &&
+          !empty($_GET["product_category"])
+      ): ?>
         <div class="filters-tag">
           <span>
             Category:
             <?php
-            $filteredCategories = array_filter($categories, fn($category) => $category['id'] === (int) htmlspecialchars($_GET['product_category']));
-            $categoryName = !empty($filteredCategories) ? array_values($filteredCategories)[0]['name'] : '';
+            $filteredCategories = array_filter(
+                $categories,
+                fn($category) => $category["id"] ===
+                    (int) htmlspecialchars($_GET["product_category"]),
+            );
+            $categoryName = !empty($filteredCategories)
+                ? array_values($filteredCategories)[0]["name"]
+                : "";
             ?>
             <?= $categoryName ?>
-            <a href="/products?<?= createUrlWithout(['product_category']) ?>">❌</a>
+            <a href="/products?<?= ProductService::createUrlWithout([
+                "product_category",
+            ]) ?>">❌</a>
           </span>
         </div>
       <?php endif; ?>
 
       <!-- Date -->
-      <?php if ((isset($_GET['start_date']) && !empty($_GET['start_date'])) || (isset($_GET['end_date']) && !empty($_GET['end_date']))): ?>
+      <?php if (
+          (isset($_GET["start_date"]) && !empty($_GET["start_date"])) ||
+          (isset($_GET["end_date"]) && !empty($_GET["end_date"]))
+      ): ?>
         <div class="filters-tag">
           <span>
-            From: <?= htmlspecialchars($_GET['start_date']) ?><br>
-            To: <?= htmlspecialchars($_GET['end_date']) ?>
-            <a href="/products?<?= createUrlWithout(['start_date', 'end_date']) ?>">❌</a>
+            From: <?= htmlspecialchars($_GET["start_date"]) ?><br>
+            To: <?= htmlspecialchars($_GET["end_date"]) ?>
+            <a href="/products?<?= ProductService::createUrlWithout([
+                "start_date",
+                "end_date",
+            ]) ?>">❌</a>
           </span>
         </div>
       <?php endif; ?>
 
       <!-- Price -->
-      <?php if (isset($_GET['min_price']) && !empty($_GET['min_price']) || (isset($_GET['max_price']) && !empty($_GET['max_price']))): ?>
+      <?php if (
+          (isset($_GET["min_price"]) && !empty($_GET["min_price"])) ||
+          (isset($_GET["max_price"]) && !empty($_GET["max_price"]))
+      ): ?>
         <div class="filters-tag">
           <span>
-            Min price: <?= htmlspecialchars($_GET['min_price']) ?><br>
-            Max price: <?= htmlspecialchars($_GET['max_price']) ?>
-            <a href="/products?<?= createUrlWithout(['min_price', 'max_price']) ?>">❌</a>
+            Min price: <?= htmlspecialchars($_GET["min_price"]) ?><br>
+            Max price: <?= htmlspecialchars($_GET["max_price"]) ?>
+            <a href="/products?<?= ProductService::createUrlWithout([
+                "min_price",
+                "max_price",
+            ]) ?>">❌</a>
           </span>
         </div>
       <?php endif; ?>
 
       <!-- Status -->
-      <?php if (isset($_GET['product_status']) && !empty($_GET['product_status'])): ?>
+      <?php if (
+          isset($_GET["product_status"]) &&
+          !empty($_GET["product_status"])
+      ): ?>
         <div class="filters-tag">
           <span>
-            Status: <?= htmlspecialchars($_GET['product_status']) ?>
-            <a href="/products?<?= createUrlWithout(['product_status']) ?>">❌</a>
+            Status: <?= htmlspecialchars($_GET["product_status"]) ?>
+            <a href="/products?<?= ProductService::createUrlWithout([
+                "product_status",
+            ]) ?>">❌</a>
           </span>
         </div>
       <?php endif; ?>
 
       <!-- Sort -->
-      <?php if (isset($_GET['sort_by']) && !empty($_GET['sort_by'])): ?>
+      <?php if (isset($_GET["sort_by"]) && !empty($_GET["sort_by"])): ?>
         <div class="filters-tag">
           <span>
-            Sort by: <?= htmlspecialchars($_GET['sort_by']) ?>
-            <a href="/products?<?= createUrlWithout(['sort_by']) ?>">❌</a>
+            Sort by: <?= htmlspecialchars($_GET["sort_by"]) ?>
+            <a href="/products?<?= ProductService::createUrlWithout([
+                "sort_by",
+            ]) ?>">❌</a>
           </span>
         </div>
       <?php endif; ?>
     </div>
     <!-- Reset filters -->
-    <?php if (in_array('product_search', array_keys($_GET)) || in_array('product_category', array_keys($_GET)) || in_array('start_date', array_keys($_GET)) || in_array('end_date', array_keys($_GET)) || in_array('min_price', array_keys($_GET)) || in_array('max_price', array_keys($_GET)) || in_array('product_status', array_keys($_GET)) || in_array('sort_by', array_keys($_GET))): ?>
+    <?php if (
+        in_array("product_search", array_keys($_GET)) ||
+        in_array("product_category", array_keys($_GET)) ||
+        in_array("start_date", array_keys($_GET)) ||
+        in_array("end_date", array_keys($_GET)) ||
+        in_array("min_price", array_keys($_GET)) ||
+        in_array("max_price", array_keys($_GET)) ||
+        in_array("product_status", array_keys($_GET)) ||
+        in_array("sort_by", array_keys($_GET))
+    ): ?>
 
       <a href="/products" class="reset-filters">
         <button>
@@ -179,10 +224,12 @@ ob_start(); # Start the output buffer
 
     <!-- Export CSV -->
     <?php
-    if (isset($_GET['url']))
-      unset($_GET['url']);
-    if (isset($_GET['page']))
-      unset($_GET['page']);
+    if (isset($_GET["url"])) {
+        unset($_GET["url"]);
+    }
+    if (isset($_GET["page"])) {
+        unset($_GET["page"]);
+    }
     ?>
     <div class="export-data">
       <a href="/products/export?<?= http_build_query($_GET) ?>">
@@ -194,7 +241,6 @@ ob_start(); # Start the output buffer
   </div>
 
   <!-- Showing product list -->
-
   <div>
     <?php if (empty($products)): ?>
       <p>No products found.</p>
@@ -204,7 +250,7 @@ ob_start(); # Start the output buffer
         <table>
           <!-- 
           # Product name | SKU | Category | Price | Total Stock | Status | Reorder | Updated | Actions 
-        -->
+          -->
 
           <thead>
             <tr>
@@ -223,23 +269,43 @@ ob_start(); # Start the output buffer
           <tbody>
             <?php foreach ($products as $product): ?>
               <tr>
-                <td><?= $product['product_name'] ?></td>
-                <td><?= $product['sku'] ?></td>
-                <td><?= $product['category'] ?></td>
-                <td><?= $product['price'] ?></td>
-                <td><?= $product['total_stock'] ?></td>
-                <td class="productStatus" data-productId="<?= $product['id'] ?>"><?= $product['product_status'] ?></td>
-                <td><?= $product['reorder_level'] ?></td>
-                <td><?php $updated_at = new DateTime($product['updated_at']);
-                echo $updated_at->format('Y-m-d'); ?></td>
+                <td><?= $product["product_name"] ?></td>
+                <td><?= $product["sku"] ?></td>
+                <td><?= $product["category"] ?></td>
+                <td><?= $product["price"] ?></td>
+                <td><?= $product["total_stock"] ?></td>
+                <td class="productStatus" data-productId="<?= $product[
+                    "id"
+                ] ?>"><?= $product["product_status"] ?></td>
+                <td><?= $product["reorder_level"] ?></td>
+                <td><?php
+                $updated_at = new DateTime($product["updated_at"]);
+                echo $updated_at->format("Y-m-d");
+                ?></td>
                 <td>
-                  <div class="actions productActions <?= $product['product_status'] === 'INACTIVE' ? 'hide' : '' ?>"
-                    data-productId="<?= $product['id'] ?>">
-                    <button data-productId="<?= $product['id'] ?>" data-productName="<?= $product['product_name'] ?>"
-                      data-productSKU="<?= $product['sku'] ?>" data-categoryID="<?= $product['category_id'] ?>"
-                      data-productPrice="<?= $product['price'] ?>" data-productReorder="<?= $product['reorder_level'] ?>"
-                      data-productUnit="<?= $product['unit'] ?>" onclick=" openProductUpdateModal(this)">Edit</button>
-                    <button data-productId="<?= $product['id'] ?>" onclick="deleteProduct(this)">Delete</button>
+                  <div class="actions productActions <?= $product[
+                      "product_status"
+                  ] === "INACTIVE"
+                      ? "hide"
+                      : "" ?>"
+                    data-productId="<?= $product["id"] ?>">
+                    <button data-productId="<?= $product[
+                        "id"
+                    ] ?>" data-productName="<?= $product["product_name"] ?>"
+                      data-productSKU="<?= $product[
+                          "sku"
+                      ] ?>" data-categoryID="<?= $product["category_id"] ?>"
+                      data-productPrice="<?= $product[
+                          "price"
+                      ] ?>" data-productReorder="<?= $product[
+    "reorder_level"
+] ?>"
+                      data-productUnit="<?= $product[
+                          "unit"
+                      ] ?>" onclick=" openProductUpdateModal(this)">Edit</button>
+                    <a href="/products/delete?id=<?= $product["id"] ?>">
+                      <button>Delete</button>
+                    </a>
                   </div>
                 </td>
               </tr>
@@ -260,10 +326,13 @@ ob_start(); # Start the output buffer
         <?php for ($i = 1; $i <= $total_pages; $i++): ?>
 
           <?php
-          $queryParams['page'] = $i;
+          $queryParams["page"] = $i;
           $pageUrl = http_build_query($queryParams);
           ?>
-          <a href="/products?<?= $pageUrl ?>" class="button-pagination <?= $page === $i ? 'active' : '' ?>">
+          <a href="/products?<?= $pageUrl ?>" class="button-pagination <?= $page ===
+$i
+    ? "active"
+    : "" ?>">
             <button>
               <?= $i ?>
             </button>
@@ -307,8 +376,8 @@ ob_start(); # Start the output buffer
           <select name="category_id" required>
             <option value="">Select product category</option>
             <?php foreach ($categories as $category): ?>
-              <option value="<?= $category['id'] ?>">
-                <?= htmlspecialchars($category['name']) ?>
+              <option value="<?= $category["id"] ?>">
+                <?= htmlspecialchars($category["name"]) ?>
               </option>
             <?php endforeach; ?>
           </select>
@@ -381,8 +450,8 @@ ob_start(); # Start the output buffer
           <select name="category_id" id="productCategory" required>
             <option value="">Select product category</option>
             <?php foreach ($categories as $category): ?>
-              <option value="<?= $category['id'] ?>">
-                <?= htmlspecialchars($category['name']) ?>
+              <option value="<?= $category["id"] ?>">
+                <?= htmlspecialchars($category["name"]) ?>
               </option>
             <?php endforeach; ?>
           </select>
@@ -432,5 +501,6 @@ ob_start(); # Start the output buffer
 
 <?php
 $content = ob_get_clean(); # Get the buffered content and clean the buffer
-require_once __DIR__ . '/../layouts/layout.php'; # Include the layout which will use the $content variable
+require_once __DIR__ . "/../layouts/layout.php"; # Include the layout which will use the $content variable
+
 ?>

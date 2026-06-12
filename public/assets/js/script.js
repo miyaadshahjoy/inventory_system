@@ -87,6 +87,7 @@ async function deleteCategory(button) {
   }
 }
 
+/*
 async function deleteProduct(button) {
   const productId = button.getAttribute("data-productId");
   try {
@@ -117,6 +118,7 @@ async function deleteProduct(button) {
     console.error(error);
   }
 }
+  */
 
 async function deleteWarehouse(button) {
   const warehouseId = button.getAttribute("data-warehouseId");
@@ -199,6 +201,10 @@ function closeProductUpdateModal() {
 
 function closeWarehouseUpdateModal() {
   warehouseUpdateModal.classList.remove("show");
+}
+
+function showProductList() {
+  document.querySelector(".purchase-order-items").classList.remove("hide");
 }
 
 window.addEventListener("click", function (event) {

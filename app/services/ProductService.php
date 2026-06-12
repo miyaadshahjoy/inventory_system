@@ -2,14 +2,126 @@
 
 class ProductService
 {
-    public static function getAllProducts(array $filter_data)
+    public static function createUrlWithout(array $keys)
+    {
+        $_GET["page"] = 1; #
+        $queryParams = $_GET;
+        foreach ($keys as $key) {
+            unset($queryParams[$key]);
+        }
+        # http_build_query: Creates a URL-encoded query string
+        return http_build_query($queryParams);
+    }
+    public static function createProduct(array $data): int
+    {
+        $name = $data["name"];
+        $category_id = $data["category_id"];
+        $sku = $data["sku"];
+        $price = $data["price"];
+        $reorder_level = $data["reorder_level"];
+        $unit = $data["unit"];
+
+        # Check if price is greater than 0
+        if ($price <= 0) {
+            throw new ValidationException("Price must be greater than 0");
+        }
+
+        # Check if reorder level is greater than 0
+        if ($reorder_level <= 0) {
+            throw new ValidationException(
+                "Reorder level must be greater than 0",
+            );
+        }
+
+        # Create and store product in database
+
+        $conn = Database::connect();
+        $statement = $conn->prepare("
+            INSERT INTO products
+            (name, category_id, sku, price, unit, reorder_level) 
+            VALUES (?, ?, ?, ?, ?, ?)
+        ");
+
+        $statement->bind_param(
+            "sisdsi",
+            $name,
+            $category_id,
+            $sku,
+            $price,
+            $unit,
+            $reorder_level,
+        );
+        try {
+            $statement->execute();
+        } catch (mysqli_sql_exception $e) {
+            if ($e->getCode() == 1062) {
+                throw new ValidationException(
+                    "Product with same SKU already exists.",
+                );
+            }
+        }
+        $product_id = $statement->insert_id;
+        return $product_id;
+    }
+
+    public static function getAllProducts()
+    {
+        $conn = Database::connect();
+        $statement = $conn->prepare("
+            SELECT * 
+            FROM products
+            ORDER BY created_at DESC
+        ");
+
+        $statement->execute();
+        $result = $statement->get_result();
+        $products = $result->fetch_all(MYSQLI_ASSOC);
+        return $products;
+    }
+
+    public static function getAllActiveProducts()
+    {
+        $conn = Database::connect();
+        $statement = $conn->prepare("
+            SELECT * 
+            FROM products
+            WHERE product_status = 'ACTIVE'
+            ORDER BY created_at DESC
+        ");
+
+        $statement->execute();
+        $result = $statement->get_result();
+
+        $products = $result->fetch_all(MYSQLI_ASSOC);
+        return $products;
+    }
+    public static function getProductById(int $id): array
+    {
+        $conn = Database::connect();
+        $statement = $conn->prepare("
+            SELECT * 
+            FROM products 
+            WHERE id = ?
+            AND product_status = 'ACTIVE'
+            FOR UPDATE
+        ");
+        $statement->bind_param("i", $id);
+        $statement->execute();
+
+        $result = $statement->get_result();
+        if ($result->num_rows === 0) {
+            throw new ValidationException("Product not found.");
+        }
+        $product = $result->fetch_assoc();
+        return $product;
+    }
+    public static function getAllFilteredProducts(array $filter_data)
     {
         # Product name | SKU | Category | Price | Total Stock | Status | Reorder | Updated | Actions
         try {
-
             # Pagination data
-            $page = $filter_data['page'] ?? 1;
-            $limit = $filter_data['limit'] ?? 10;
+            $page = $filter_data["page"] ?? 1;
+            $limit = $filter_data["limit"] ?? 10;
             $page = max($page, 1);
             $offset = ($page - 1) * $limit;
 
@@ -24,15 +136,14 @@ class ProductService
             - max_price
             - product_status
             */
-            $product_search = $filter_data['product_search'] ?? null;
-            $product_category = $filter_data['product_category'] ?? null;
-            $start_date = $filter_data['start_date'] ?? null;
-            $end_date = $filter_data['end_date'] ?? null;
-            $sort_by = $filter_data['sort_by'] ?? null; # name, price, created_at
-            $min_price = $filter_data['min_price'] ?? null;
-            $max_price = $filter_data['max_price'] ?? null;
-            $product_status = $filter_data['product_status'] ?? null; # ACTIVE, INACTIVE
-
+            $product_search = $filter_data["product_search"] ?? null;
+            $product_category = $filter_data["product_category"] ?? null;
+            $start_date = $filter_data["start_date"] ?? null;
+            $end_date = $filter_data["end_date"] ?? null;
+            $sort_by = $filter_data["sort_by"] ?? null; # name, price, created_at
+            $min_price = $filter_data["min_price"] ?? null;
+            $max_price = $filter_data["max_price"] ?? null;
+            $product_status = $filter_data["product_status"] ?? null; # ACTIVE, INACTIVE
             $conn = Database::connect();
 
             # Query
@@ -64,7 +175,11 @@ class ProductService
             if ($product_search) {
                 $query .= " AND (p.name LIKE ? OR p.sku LIKE ?)";
                 $param_types .= "ss";
-                array_push($params, '%' . $product_search . '%', '%' . $product_search . '%');
+                array_push(
+                    $params,
+                    "%" . $product_search . "%",
+                    "%" . $product_search . "%",
+                );
             }
 
             # Category
@@ -86,7 +201,6 @@ class ProductService
                 $query .= " AND DATE(p.created_at) <= ?";
                 $param_types .= "s";
                 array_push($params, $end_date);
-
             }
 
             # Min price
@@ -110,8 +224,6 @@ class ProductService
                 array_push($params, $product_status);
             }
 
-
-
             # Pagination
             $query .= " ORDER BY p.created_at DESC LIMIT ? OFFSET ?";
             $param_types .= "ii";
@@ -119,7 +231,11 @@ class ProductService
 
             # Sort by
             if ($sort_by) {
-                $query = str_replace("ORDER BY p.created_at DESC", "ORDER BY p.$sort_by DESC", $query);
+                $query = str_replace(
+                    "ORDER BY p.created_at DESC",
+                    "ORDER BY p.$sort_by DESC",
+                    $query,
+                );
             }
 
             // echo "<pre>";
@@ -128,10 +244,8 @@ class ProductService
             $statement = $conn->prepare($query);
 
             $statement->bind_param($param_types, ...$params);
+            $statement->execute();
 
-            if (!$statement->execute()) {
-                throw new SystemException("Database error: Error fetching products. $statement->error");
-            }
             $result = $statement->get_result();
             $products = $result->fetch_all(MYSQLI_ASSOC);
 
@@ -139,7 +253,101 @@ class ProductService
         } catch (Exception $e) {
             throw $e;
         }
+    }
 
+    # Get total products
+    public static function totalProducts(): int
+    {
+        $conn = Database::connect();
+
+        $statement = $conn->prepare("
+            SELECT COUNT(id) as total_products
+            FROM products
+        ");
+
+        $statement->execute();
+
+        $result = $statement->get_result();
+        $row = $result->fetch_assoc();
+        return $row["total_products"];
+    }
+
+    public static function updateProduct(int $id, array $data)
+    {
+        $name = $data["name"];
+        $category_id = $data["category_id"];
+        $sku = $data["sku"];
+        $price = $data["price"];
+        $reorder_level = $data["reorder_level"];
+        $unit = $data["unit"];
+
+        # Check if price is greater than 0
+        if ($price <= 0) {
+            throw new ValidationException("Price must be greater than 0");
+        }
+        # Check if reorder level is greater than 0
+        if ($reorder_level <= 0) {
+            throw new ValidationException(
+                "Reorder level must be greater than 0",
+            );
+        }
+
+        # Update product in DB
+        $conn = Database::connect();
+
+        # A) Check if product exists
+        $product = self::getProductById($id);
+        if (!$product) {
+            throw new ValidationException("Product not found");
+        }
+
+        # B) Update product
+        $statement = $conn->prepare("
+            UPDATE products 
+            SET name = ?,
+            category_id = ?,
+            sku = ?, 
+            price = ?,
+            unit = ?,
+            reorder_level = ?
+            WHERE id = ?
+        ");
+        $statement->bind_param(
+            "sisdsii",
+            $name,
+            $category_id,
+            $sku,
+            $price,
+            $unit,
+            $reorder_level,
+            $id,
+        );
+        try {
+            $statement->execute();
+        } catch (mysqli_sql_exception $e) {
+            if ($e->getCode() == 1062) {
+                throw new ValidationException(
+                    "Product with same SKU already exists",
+                );
+            }
+        }
+    }
+    public static function deleteProduct(int $id)
+    {
+        # Check if product exists
+        $product = self::getProductById($id);
+        if (!$product) {
+            throw new ValidationException("Product not found");
+        }
+
+        $conn = Database::connect();
+        $statement = $conn->prepare("
+            UPDATE products
+            SET product_status = 'INACTIVE'
+            WHERE id = ?
+        ");
+        $statement->bind_param("i", $id);
+        $statement->execute();
     }
 
     public static function exportCSV(array $product_filters)
@@ -149,59 +357,120 @@ class ProductService
             if (ob_get_length()) {
                 ob_end_clean();
             }
-            # Get products 
+            # Get products
             $products = self::getAllProducts($product_filters);
-            if (!is_array($products))
+            if (!is_array($products)) {
                 throw new ValidationException("Invalid product data format.");
+            }
 
-            # Headers 
-            header('Content-Type: text/csv; charset=utf-8');
-            header('Content-Disposition: attachment; filename="products_' . date('Y-m-d_H-i') . '.csv"');
+            # Headers
+            header("Content-Type: text/csv; charset=utf-8");
+            header(
+                'Content-Disposition: attachment; filename="products_' .
+                    date("Y-m-d_H-i") .
+                    '.csv"',
+            );
 
             # Open output stream
-            $output = fopen('php://output', 'w');
+            $output = fopen("php://output", "w");
             if ($output === false) {
                 throw new SystemException("Failed to open output stream.");
             }
 
             # Excel UTF-8 BOM
-            fprintf($output, chr(0xEF) . chr(0xBB) . chr(0xBF));
+            fprintf($output, chr(0xef) . chr(0xbb) . chr(0xbf));
 
             # Product name | SKU | Category | Price | Total Stock | Status | Reorder | Updated
 
             # Header row
-            fputcsv($output, ['Product Name', 'SKU', 'Category', 'Price', 'Total Stock', 'Status', 'Reorder', 'Updated']);
+            fputcsv($output, [
+                "Product Name",
+                "SKU",
+                "Category",
+                "Price",
+                "Total Stock",
+                "Status",
+                "Reorder",
+                "Updated",
+            ]);
 
             # Data rows
             if (empty($products)) {
-                fputcsv($output, ['No data found']);
+                fputcsv($output, ["No data found"]);
                 # Close stream
                 fclose($output);
                 throw new ValidationException("No products found.");
             }
 
-
             foreach ($products as $product) {
                 fputcsv($output, [
-                    $product['product_name'],
-                    $product['sku'],
-                    $product['category'],
-                    $product['price'],
-                    $product['total_stock'],
-                    $product['product_status'],
-                    $product['reorder_level'],
-                    $product['updated_at']
+                    $product["product_name"],
+                    $product["sku"],
+                    $product["category"],
+                    $product["price"],
+                    $product["total_stock"],
+                    $product["product_status"],
+                    $product["reorder_level"],
+                    $product["updated_at"],
                 ]);
             }
 
             # Close stream
             fclose($output);
-            exit;
-
-
+            exit();
         } catch (Exception $e) {
             throw $e;
         }
+    }
 
+    public static function getProductFilters(): array
+    {
+        # Get page number
+        $page = isset($_GET["page"]) ? (int) $_GET["page"] : 1;
+        # Limit of products
+        $limit = PRODUCTS_PER_PAGE;
+
+        # Validate filter inputs
+        # Search data
+        $product_search = isset($_GET["product_search"])
+            ? trim(htmlspecialchars($_GET["product_search"]))
+            : null;
+
+        # Filter data
+        $product_category = isset($_GET["product_category"])
+            ? (int) htmlspecialchars($_GET["product_category"])
+            : null;
+        $start_date = isset($_GET["start_date"])
+            ? htmlspecialchars($_GET["start_date"])
+            : null;
+        $end_date = isset($_GET["end_date"])
+            ? htmlspecialchars($_GET["end_date"])
+            : null;
+        $sort_by = isset($_GET["sort_by"])
+            ? htmlspecialchars($_GET["sort_by"])
+            : null; # name, price, created_at
+        $min_price = isset($_GET["min_price"])
+            ? (float) htmlspecialchars($_GET["min_price"])
+            : null;
+        $max_price = isset($_GET["max_price"])
+            ? (float) htmlspecialchars($_GET["max_price"])
+            : null;
+        $product_status = isset($_GET["product_status"])
+            ? htmlspecialchars($_GET["product_status"])
+            : null; # ACTIVE, INACTIVE
+        $filter_data = [
+            "product_search" => $product_search,
+            "product_category" => $product_category,
+            "start_date" => $start_date,
+            "end_date" => $end_date,
+            "sort_by" => $sort_by,
+            "min_price" => $min_price,
+            "max_price" => $max_price,
+            "product_status" => $product_status,
+            "page" => $page,
+            "limit" => $limit,
+        ];
+
+        return $filter_data;
     }
 }

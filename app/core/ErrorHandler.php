@@ -1,92 +1,100 @@
 <?php
 
 /*
-# Error handler manages:
-- Handle uncaught exceptions
-- Handle fatal errors
-- Handle php notices and warnings
-- Log errors to a file
-- User-friendly error pages
-- Production safety: prevent sensitive info leakage
+    # 1) Bootstrap
 
-# Architecture:
-- Error happens -> ErrorHandler captures it -> Logger writes it -> User sees user-friendly error pages
+    |> Bootstraping: Creating a self sustaining process that initializes, builds or runs itself without external help.
+    |> INFO: Bootstrapping the error handler to catch all errors and exceptions in a centralized way
 
-# Handlers needed:
-- Exception handler: set_exception_handler([class, methodname]) -> sets a user-defined function to handle uncaught exceptions
-- Error handler: set_error_handler([class, methodname]) -> sets a user-defined function to handle PHP errors (not exceptions)
-- Shutdown handler (for fatal errors): register_shutdown_function([class, methodname]) -> registers a function to be executed on script shutdown, useful for catching fatal errors
+    
+    # 2) ErrorHandler::register()
 
-? bootstraping: Creating a self sustaining process that initializes, builds or runs itself without external help
+    |> PHP Errors
+    |> PHP Fatal Errors
+    |> MySQL Errors
+    |> Application Exceptions
 
-? [self::class, 'methodName'] 
-? self::class -> classname 
+    <?php
+
+    -> abstract class ApplicationException extends Exception {}
+    -> abstract class SystemException extends Exception {}
+    -> class ValidationException extends ApplicationException {}
+    -> class AuthorizationException extends ApplicationException {}
+    -> class NotFoundException extends ApplicationException {}
+    -> class DatabaseException extends SystemException {}
+
+
+    # 3) Throwable
+
+
+    # 4) ErrorHandler
+
+
+    # 5) Classify
+
+    |> ValidationException
+    |> AuthorizationException
+    |> NotFoundException
+    |> DatabaseException
+    |> SystemException
+
+
+    # 6) Logger
+
+
+    # 7) 400 / 403 / 404 / 500 pages
 */
 
 class ErrorHandler
 {
-    public static function register()
+    private static bool $handlingException = false;
+    public static function register(): void
     {
-        set_exception_handler([self::class, 'exceptionHandler']);
-        set_error_handler([self::class, 'errorHandler']);
-        register_shutdown_function([self::class, 'shutdownHandler']);
-
+        # Register the exception handler
+        set_exception_handler([self::class, "exceptionHandler"]);
+        # Register the error handler
+        set_error_handler([self::class, "errorHandler"]);
+        # Register the shutdown handler
+        register_shutdown_function([self::class, "shutdownHandler"]);
     }
 
     # Handle uncaught exceptions
-    public static function exceptionHandler(Throwable $exception)
+    public static function exceptionHandler(Throwable $exception): void
     {
-
-        if ($exception instanceof ValidationException) {
-            http_response_code(400);
-            Session::flashSet('error', $exception->getMessage());
-            $redirect = $_SERVER['HTTP_REFERER'] ?? '/';
-            header("Location: $redirect");
-            exit;
+        if (self::$handlingException) {
+            self::render500();
         }
-        if ($exception instanceof SystemException) {
-
-            $error_message = $exception->getMessage() . ' in: ' . $exception->getFile() . ' on line: ' . $exception->getLine();
-            Logger::critical($error_message);
-            self::renderErrorPage();
-            exit;
-        }
-
-        # Fallback:
-        Logger::critical($exception->getMessage() . ' in: ' . $exception->getFile() . ' on line: ' . $exception->getLine());
-
-        self::renderErrorPage();
+        self::$handlingException = true;
+        self::logException($exception);
+        self::renderException($exception);
     }
 
+    # Handle uncaught Errors
+    public static function errorHandler(
+        int $errno,
+        string $errstr,
+        string $errfile,
+        int $errline,
+    ): bool {
+        if (!(error_reporting() & $errno)) {
+            return true;
+        }
 
-    # Conver PHP errors (not exceptions) to ErrorException, so they can be handled by the exception handler
-    public static function errorHandler(int $errno, string $errstr, string $errfile, int $errline)
-    {
-
-
-        $ignored_errors = [
-            E_DEPRECATED,
-            E_USER_DEPRECATED,
-            E_NOTICE,
-            E_USER_NOTICE
-        ];
-
-        if (in_array($errno, $ignored_errors)) {
+        $ignored = [E_DEPRECATED, E_USER_DEPRECATED];
+        if (in_array($errno, $ignored, true)) {
             Logger::warning($errstr);
             return true;
         }
-        $error_message = "[$errno] $errstr in $errfile on line $errline";
-        # $errno -> error level (E_ERROR, E_WARNING, etc.) / error severity
-        throw new ErrorException($error_message, 0, $errno, $errfile, $errline);
+
+        throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
     }
 
     # Handle fatal shutdown errors
-    public static function shutdownHandler()
+    public static function shutdownHandler(): void
     {
         $error = error_get_last(); # Get the last error that occurred (if any)
         if ($error !== null) {
-
-            if (!isset($error['type'])) {
+            if (!isset($error["type"])) {
                 return;
             }
 
@@ -94,30 +102,118 @@ class ErrorHandler
                 E_ERROR,
                 E_PARSE,
                 E_CORE_ERROR,
-                E_COMPILE_ERROR
+                E_COMPILE_ERROR,
+                E_USER_ERROR,
+                E_RECOVERABLE_ERROR,
             ];
 
-            if (!in_array($error['type'], $fatal_errors)) {
-
+            if (!in_array($error["type"], $fatal_errors)) {
                 return;
             }
-            $error_message = $error['message'] . ' in: ' . $error['file'] . ' on line: ' . $error['line'];
-            Logger::critical("[Shutodown] : $error_message");
 
-            self::renderErrorPage();
+            $exception = new ErrorException(
+                $error["message"],
+                0,
+                $error["type"],
+                $error["file"],
+                $error["line"],
+            );
+
+            self::logException($exception);
+
+            self::render500();
         }
     }
 
-    # Render generic 500 error page for users 
-    public static function renderErrorPage()
+    # Render Exception
+    private static function renderException(Throwable $exception): void
     {
-        if (!headers_sent()) {
+        switch (true) {
+            case $exception instanceof ValidationException:
+                self::handleValidation($exception);
+                break;
 
-            http_response_code(500);
+            case $exception instanceof AuthorizationException:
+                self::render403();
+                break;
+
+            case $exception instanceof NotFoundException:
+                self::render404();
+                break;
+
+            default:
+                self::render500();
+                break;
         }
-        require __DIR__ . '/../views/errors/500.php';
-        exit;
+    }
+
+    # Log Exception function
+    private static function logException(Throwable $exception): void
+    {
+        $message = self::buildLogMessage($exception);
+        Logger::critical($message);
+    }
+
+    # Build Log message
+    private static function buildLogMessage(Throwable $exception): string
+    {
+        $message = sprintf(
+            "
+        [%s]\nMESSAGE: %s\nFILE: %s\nLINE: %d\nTRACE: %s\n",
+            get_class($exception),
+            $exception->getMessage(),
+            $exception->getFile(),
+            $exception->getLine(),
+            $exception->getTraceAsString(),
+        );
+        if ($exception->getPrevious()) {
+            $message .= sprintf(
+                "\n\nPREVIOUS EXCEPTION:\n[%s] %s",
+                get_class($exception->getPrevious()),
+                $exception->getPrevious()->getMessage(),
+            );
+        }
+        return $message;
+    }
+
+    # Handle validation exceptions
+    private static function handleValidation(
+        ValidationException $exception,
+    ): void {
+        Session::flashSet("error", $exception->getMessage());
+
+        $redirect = $_SERVER["HTTP_REFERER"] ?? "/dashboard";
+
+        header("Location: $redirect");
+        exit();
+    }
+
+    private static function clearOutputBuffers(): void
+    {
+        while (ob_get_level() > 0) {
+            ob_end_clean();
+        }
+    }
+
+    private static function render403(): void
+    {
+        self::clearOutputBuffers();
+        http_response_code(403);
+        require __DIR__ . "/../views/errors/403.php";
+        exit();
+    }
+    private static function render404(): void
+    {
+        self::clearOutputBuffers();
+        http_response_code(404);
+        require __DIR__ . "/../views/errors/404.php";
+        exit();
+    }
+    private static function render500(): void
+    {
+        self::clearOutputBuffers();
+        http_response_code(500);
+        require __DIR__ . "/../views/errors/500.php";
+        exit();
     }
 }
-
-

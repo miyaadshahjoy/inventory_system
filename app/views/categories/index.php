@@ -1,5 +1,5 @@
 <?php
-$categories = $data['categories'] ?? [];
+$categories = $data["categories"] ?? [];
 ob_start();
 ?>
 
@@ -29,19 +29,32 @@ ob_start();
         <tbody>
           <?php foreach ($categories as $category): ?>
             <tr>
-              <td><?= $category['name'] ?></td>
-              <td class="categoryStatus" data-categoryID="<?= $category['id'] ?>"><?= $category['categories_status'] ?></td>
-              <td><?php $created_at = new DateTime($category['created_at']);
-              echo $created_at->format('Y-m-d H:i'); ?></td>
+              <td><?= $category["name"] ?></td>
+              <td class="categoryStatus" data-categoryID="<?= $category[
+                  "id"
+              ] ?>"><?= $category["categories_status"] ?></td>
+              <td><?php
+              $created_at = new DateTime($category["created_at"]);
+              echo $created_at->format("Y-m-d H:i");
+              ?></td>
               <td>
-                <div class="actions categoryActions <?= $category['categories_status'] === 'INACTIVE' ? 'hide' : '' ?>"
-                  data-categoryId="<?= $category['id'] ?>">
+                <div class="actions categoryActions <?= $category[
+                    "categories_status"
+                ] === "INACTIVE"
+                    ? "hide"
+                    : "" ?>"
+                  data-categoryId="<?= $category["id"] ?>">
 
-                  <button data-categoryId="<?= htmlspecialchars($category['id']) ?>"
-                    data-categoryName="<?= htmlspecialchars($category['name']) ?>"
+                  <button data-categoryId="<?= htmlspecialchars(
+                      $category["id"],
+                  ) ?>"
+                    data-categoryName="<?= htmlspecialchars(
+                        $category["name"],
+                    ) ?>"
                     onclick="openCategoryUpdateModal(this)">Edit</button>
-                  <button data-categoryId="<?= htmlspecialchars($category['id']) ?>"
-                    onclick="deleteCategory(this)">Delete</button>
+                  <a href="/categories/delete?id=<?= $category["id"] ?>">
+                    <button>Delete</button>
+                  </a>
                 </div>
               </td>
             </tr>
@@ -99,5 +112,7 @@ ob_start();
 
 <?php
 $content = ob_get_clean();
-require_once __DIR__ . '/../layouts/layout.php';
+require_once __DIR__ . "/../layouts/layout.php";
+
+
 ?>

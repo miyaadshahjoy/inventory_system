@@ -2,7 +2,6 @@ CREATE TABLE purchase_orders(
     id INT AUTO_INCREMENT PRIMARY KEY,
     po_number VARCHAR(255) NOT NULL UNIQUE,
     supplier_id INT NOT NULL, 
-    warehouse_id INT NOT NULL,
     ordered_by INT NOT NULL, 
     po_status ENUM('PENDING', 'APPROVED', 'PARTIALLY_RECEIVED', 'RECEIVED', 'CANCELLED') DEFAULT 'PENDING',
     notes TEXT,
@@ -12,14 +11,10 @@ CREATE TABLE purchase_orders(
     ON UPDATE CURRENT_TIMESTAMP
 );
 
+
 ALTER TABLE purchase_orders
 ADD FOREIGN KEY(supplier_id)
 REFERENCES suppliers(id)
-ON UPDATE CASCADE;
-
-ALTER TABLE purchase_orders
-ADD FOREIGN KEY(warehouse_id)
-REFERENCES warehouses(id)
 ON UPDATE CASCADE;
 
 ALTER TABLE purchase_orders
@@ -36,5 +31,3 @@ ON purchase_orders(po_status);
 CREATE INDEX idx_supplier_id
 ON purchase_orders(supplier_id);
 
-CREATE INDEX idx_warehouse_id
-ON purchase_orders(warehouse_id);

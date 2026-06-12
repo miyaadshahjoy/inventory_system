@@ -2,41 +2,52 @@
 
 class ReturnService
 {
-
-    public static function createReturn(int $product_id, int $warehouse_id, int $quantity, $reason = null)
-    {
+    public static function createReturn(
+        int $product_id,
+        int $warehouse_id,
+        int $quantity,
+        $reason = null,
+    ) {
         $conn = Database::connect();
         try {
-
-
-            # 1) Validate input data 
-            if (!isset($product_id) || !isset($warehouse_id) || !isset($quantity)) {
-                throw new SystemException("All fields are required except reason");
+            # 1) Validate input data
+            if (
+                !isset($product_id) ||
+                !isset($warehouse_id) ||
+                !isset($quantity)
+            ) {
+                throw new SystemException(
+                    "All fields are required except reason",
+                );
             }
 
             # 1.A) Check if product id is integer
             if (!is_int($product_id)) {
-                throw new SystemException('Product ID must be an integer');
+                throw new SystemException("Product ID must be an integer");
             }
             # 1.B) Check if warehouse id is integer
             if (!is_int($warehouse_id)) {
-                throw new SystemException('Warehouse ID must be an integer');
+                throw new SystemException("Warehouse ID must be an integer");
             }
             # 1.C) Check if quantity is integer
             if (!is_int($quantity)) {
-                throw new SystemException('Quantity must be an integer');
+                throw new SystemException("Quantity must be an integer");
             }
             # 1.D) Check if quantity is greater than 0
             if ($quantity <= 0) {
-                throw new ValidationException('Quantity must be greater than 0');
+                throw new ValidationException(
+                    "Quantity must be greater than 0",
+                );
             }
 
             # 2) Get user id from session
-            if (!isset($_SESSION['user'])) {
-                throw new ValidationException('You are not logged in. You must be logged in to perform this action.');
+            if (!isset($_SESSION["user"])) {
+                throw new ValidationException(
+                    "You are not logged in. You must be logged in to perform this action.",
+                );
             }
 
-            $created_by = $_SESSION['user']['id'];
+            $created_by = $_SESSION["user"]["id"];
 
             # 3) Start DB transaction
             $conn->begin_transaction();
@@ -45,11 +56,15 @@ class ReturnService
             $statement = $conn->prepare("
                 INSERT INTO returns( product_id, warehouse_id, quantity, reason, created_by) VALUES( ?, ?, ?, ?, ?)
             ");
-            $statement->bind_param("iiisi", $product_id, $warehouse_id, $quantity, $reason, $created_by);
-            if (!$statement->execute()) {
-                throw new SystemException("Database error: Error inserting return. $statement->error");
-            }
-
+            $statement->bind_param(
+                "iiisi",
+                $product_id,
+                $warehouse_id,
+                $quantity,
+                $reason,
+                $created_by,
+            );
+            $statement->execute();
 
             /*
             # 5) Get current stock from stock_snapshot
@@ -100,18 +115,27 @@ class ReturnService
 
             # Add movement of type RETURN
 
-            $movement = InventoryService::addMovement($product_id, 'RETURN', $warehouse_id, $quantity, $created_by, $reason);
+            $movement = InventoryService::addMovement(
+                $product_id,
+                "RETURN",
+                $warehouse_id,
+                $quantity,
+                $created_by,
+                $reason,
+            );
             if (!$movement) {
-                throw new ValidationException("Failed to create RETURN movement.");
+                throw new ValidationException(
+                    "Failed to create RETURN movement.",
+                );
             }
 
             # 8) End DB transaction
             $conn->commit();
 
             return [
-                'product_id' => $product_id,
-                'warehouse_id' => $warehouse_id,
-                'quantity' => $quantity
+                "product_id" => $product_id,
+                "warehouse_id" => $warehouse_id,
+                "quantity" => $quantity,
             ];
         } catch (Exception $e) {
             $conn->rollback();
@@ -121,7 +145,6 @@ class ReturnService
 
     public static function getAllReturns()
     {
-
         $conn = Database::connect();
         try {
             $statement = $conn->prepare("
@@ -141,9 +164,8 @@ class ReturnService
                 JOIN users u
                 ON r.created_by = u.id
             ");
-            if (!$statement->execute()) {
-                throw new SystemException("Database error: Error fetching returns. $statement->error");
-            }
+            $statement->execute();
+
             $result = $statement->get_result();
             $returns = $result->fetch_all(MYSQLI_ASSOC);
             return $returns;

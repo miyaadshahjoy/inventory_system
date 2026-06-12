@@ -1,11 +1,8 @@
 <?php
 # /purchase-orders/index.php
-$warehouses = $data['warehouses'] ?? [];
-$products = $data['products'] ?? [];
-$suppliers = $data['suppliers'] ?? [];
-$purchase_orders = $data['purchase_orders'] ?? [];
-
-
+$products = $data["products"] ?? [];
+$suppliers = $data["suppliers"] ?? [];
+$purchase_orders = $data["purchase_orders"] ?? [];
 
 ob_start();
 ?>
@@ -25,7 +22,7 @@ ob_start();
     -->
 
     <!--
-     # PO Number | Supplier | Warehouse | Total Items | Total Quantity | Total Cost | Status | Expected Delivery | Created By | Created At | Actions
+     # PO Number | Supplier | Total Items | Total Quantity | Total Cost | Status | Expected Delivery | Created By | Created At | Actions
     -->
     <?php if (empty($purchase_orders)): ?>
         <div>No purchase orders found.</div>
@@ -37,7 +34,6 @@ ob_start();
                     <tr>
                         <th>PO Number</th>
                         <th>Supplier</th>
-                        <th>Warehouse</th>
                         <th>Total Items</th>
                         <th>Total Quantity</th>
                         <th>Total Cost</th>
@@ -52,36 +48,40 @@ ob_start();
                     <?php foreach ($purchase_orders as $order): ?>
                         <tr>
                             <td>
-                                <?= htmlspecialchars($order['po_number']) ?>
+                                <?= htmlspecialchars($order["po_number"]) ?>
                             </td>
                             <td>
-                                <?= htmlspecialchars($order['supplier']) ?>
+                                <?= htmlspecialchars($order["supplier"]) ?>
+                            </td>
+                            
+                            <td>
+                                <?= htmlspecialchars($order["total_items"]) ?>
                             </td>
                             <td>
-                                <?= htmlspecialchars($order['warehouse']) ?>
+                                <?= htmlspecialchars(
+                                    $order["total_quantity"],
+                                ) ?>
                             </td>
                             <td>
-                                <?= htmlspecialchars($order['total_items']) ?>
+                                <?= htmlspecialchars($order["total_cost"]) ?>
                             </td>
                             <td>
-                                <?= htmlspecialchars($order['total_quantity']) ?>
+                                <?= htmlspecialchars($order["status"]) ?>
                             </td>
                             <td>
-                                <?= htmlspecialchars($order['total_cost']) ?>
+                                <?= htmlspecialchars(
+                                    $order["expected_delivery"],
+                                ) ?>
                             </td>
                             <td>
-                                <?= htmlspecialchars($order['status']) ?>
+                                <?= htmlspecialchars($order["created_by"]) ?>
                             </td>
                             <td>
-                                <?= htmlspecialchars($order['expected_delivery']) ?>
+                                <?= htmlspecialchars($order["created_at"]) ?>
                             </td>
-                            <td>
-                                <?= htmlspecialchars($order['created_by']) ?>
-                            </td>
-                            <td>
-                                <?= htmlspecialchars($order['created_at']) ?>
-                            </td>
-                            <td><a href="/purchase-orders/details?id=<?= $order['id'] ?>">View</a></td>
+                            <td><a href="/purchase-orders/details?id=<?= $order[
+                                "id"
+                            ] ?>">View</a></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -105,7 +105,7 @@ ob_start();
         <form class="form purchase-form" action="/purchase-orders/form-submit" method="post">
 
             <!-- # Purchase order header section -->
-            <div class="purchase-order-header">
+            <div class="purchase-order-data">
 
                 <div class="form-group">
                     <!-- Supplier selection: Dropdown, required -->
@@ -115,25 +115,15 @@ ob_start();
                             <option value="">Select a supplier</option>
                             <?php foreach ($suppliers as $supplier): ?>
 
-                                <option value="<?= $supplier['id'] ?>"><?= htmlspecialchars($supplier['supplier_name']) ?>
+                                <option value="<?= $supplier[
+                                    "id"
+                                ] ?>"><?= htmlspecialchars(
+    $supplier["supplier_name"],
+) ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
-
-                    <!-- Warehouse selection: Dropdown, required -->
-                    <div>
-                        <label for="warehouse">Warehouse</label>
-                        <select name="warehouse_id" id="warehouse" required>
-                            <option value="">Select a warehouse</option>
-                            <?php foreach ($warehouses as $warehouse): ?>
-                                <option value="<?= $warehouse['id'] ?>">
-                                    <?= htmlspecialchars($warehouse['name']) ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                </div>
 
                 <!-- Expected delivery date: required -->
                 <div>
@@ -141,52 +131,64 @@ ob_start();
                     <input type="date" name="expected_delivery_date" id="expected_delivery_date" required>
                 </div>
 
+                    
+                </div>
+
                 <!-- Notes: Optional -->
                 <div>
                     <label for="notes">Notes</label>
                     <textarea name="notes" rows="5" id="notes"></textarea>
                 </div>
-
             </div>
 
-            <div class="purchase-order-items">
+            <button type="button" onclick="showProductList()">+ Add Products</button>
+            <table class="purchase-order-items hide"> 
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Unit</th>
+                        <th>Unit Price</th>
+                        <th>Order Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
 
-                <!-- Product selection: Dropdown, required -->
-                <div>
-                    <label for="product">Product</label>
-                    <!-- name="items[0][product_id]" -->
-                    <select name="product" id="product">
-                        <option value="">Select a product</option>
-                        <?php foreach ($products as $product): ?>
-                            <option data-product-name="<?= htmlspecialchars($product['name']) ?>"
-                                value="<?= $product['id'] ?>"><?= htmlspecialchars($product['name']) ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
+                    <?php foreach ($products as $i => $product): ?>
+                        <tr class="purchase-item">
+                            
+                            <!-- Product -->
+                            <td>
+                                <input type="text" name="items[<?= $i ?>][product_id]" value="<?= htmlspecialchars(
+    $product["id"],
+) ?>" hidden>
+                                <input type="text" name="" value="<?= htmlspecialchars(
+                                    $product["name"],
+                                ) ?>" readonly>
+                            </td>
+                            <!-- Unit -->
+                            <td>
+                                <input type="text" name="" value="<?= htmlspecialchars(
+                                    $product["unit"],
+                                ) ?>" readonly>
+                            </td>
+                            <!-- Unit Price -->
+                            <td>
+                                <input type="number" name="items[<?= $i ?>][unit_price]" value="<?= htmlspecialchars(
+    $product["price"],
+) ?>" readonly>
+                            </td>
+                            <!-- Order Quantity -->
+                            <td>
+                                <input type="number" name="items[<?= $i ?>][quantity]">
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
 
-                <div class="form-group">
-                    <!-- Quantity: required -->
-                    <div>
-                        <label for="quantity">Quantity</label>
-                        <!-- name="items[0][quantity]" -->
-                        <input type="number" name="quantity" id="quantity">
-                    </div>
+            <!-- <div class="purchase-order-products">
 
-                    <!-- Unit price: required -->
-                    <div>
-                        <label for="unit_price">Unit Price</label>
-                        <!-- name="items[0][unit_price]" -->
-                        <input type="number" name="unit_price" id="unit_price" step="0.5">
-                    </div>
-                </div>
-
-                <button type="button" onclick="addItem()">+ Add Product</button>
-            </div>
-
-            <div class="purchase-order-products">
-
-            </div>
+            </div> -->
 
 
             <button type="submit">Create Purchase Order</button>
@@ -200,5 +202,7 @@ ob_start();
 
 <?php
 $content = ob_get_clean();
-require_once __DIR__ . '/../layouts/layout.php';
+require_once __DIR__ . "/../layouts/layout.php";
+
+
 ?>

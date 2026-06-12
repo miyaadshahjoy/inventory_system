@@ -2,76 +2,99 @@
 
 class InventoryService
 {
-
-    public static function addMovement(int $product_id, string $movement_type, int $warehouse_id, int $quantity, int $created_by, $notes = null): array
-    {
+    public static function addMovement(
+        int $product_id,
+        string $movement_type,
+        int $warehouse_id,
+        int $quantity,
+        int $created_by,
+        $notes = null,
+    ): array {
         $conn = Database::connect();
-
 
         try {
             # 1) Validate input parameters
 
             # 1.A) Check if all required parameters are provided
-            if (!isset($product_id) || !isset($movement_type) || !isset($warehouse_id) || !isset($quantity) || !isset($created_by)) {
-                throw new SystemException('All parameters except notes are required');
+            if (
+                !isset($product_id) ||
+                !isset($movement_type) ||
+                !isset($warehouse_id) ||
+                !isset($quantity) ||
+                !isset($created_by)
+            ) {
+                throw new SystemException(
+                    "All parameters except notes are required",
+                );
             }
             # 1.B) Check if product id is integer
             if (!is_int($product_id)) {
-                throw new SystemException('Product ID must be an integer');
+                throw new SystemException("Product ID must be an integer");
             }
 
             # 1.C) Check if warehouse id is integer
             if (!is_int($warehouse_id)) {
-                throw new SystemException('Warehouse ID must be an integer');
+                throw new SystemException("Warehouse ID must be an integer");
             }
 
             # 1.C) Check if created by is integer
             if (!is_int($created_by)) {
-                throw new SystemException('Created by ID must be an integer');
+                throw new SystemException("Created by ID must be an integer");
             }
 
             # 1.D) Check if movement type is valid
-            $valid_movement_types = ['STOCK_IN', 'STOCK_OUT', 'ADJUSTMENT_IN', 'ADJUSTMENT_OUT', 'RETURN', 'DAMAGE', 'EXPIRE'];
+            $valid_movement_types = [
+                "STOCK_IN",
+                "STOCK_OUT",
+                "ADJUSTMENT_IN",
+                "ADJUSTMENT_OUT",
+                "RETURN",
+                "DAMAGE",
+                "EXPIRE",
+            ];
 
             if (!in_array($movement_type, $valid_movement_types)) {
-                throw new SystemException('Invalid movement type');
+                throw new SystemException("Invalid movement type");
             }
 
             # 1.E) Check if quantity is a positive integer
             if (!is_int($quantity) || $quantity <= 0) {
-                throw new ValidationException('Quantity must be a positive integer');
+                throw new ValidationException(
+                    "Quantity must be a positive integer",
+                );
             }
 
             # 2) Derive movement direction
 
-            $in_movements = ['STOCK_IN', 'RETURN', 'ADJUSTMENT_IN'];
+            $in_movements = ["STOCK_IN", "RETURN", "ADJUSTMENT_IN"];
             // $out_movements = ['STOCK_OUT', 'DAMAGE', 'EXPIRE', 'ADJUSTMENT_OUT'];
 
-            $movement_direction = in_array($movement_type, $in_movements) ? 'IN' : 'OUT';
-
+            $movement_direction = in_array($movement_type, $in_movements)
+                ? "IN"
+                : "OUT";
 
             # 3) Start DB transaction
             $conn->begin_transaction();
 
             # 4) Check if product exists
             $statement = $conn->prepare("
-            SELECT * FROM products 
-            WHERE id = ?
+                SELECT * FROM products 
+                WHERE id = ?
             ");
             $statement->bind_param("i", $product_id);
-            if (!$statement->execute()) {
-                throw new SystemException("Database error: Failed to retrieve product.  $statement->error");
-            }
+            $statement->execute();
+
             $result = $statement->get_result();
             if ($result->num_rows === 0) {
                 throw new ValidationException("Product does not exist");
             }
             # 5) Check if warehouse exists
-            $statement = $conn->prepare("SELECT * FROM warehouses WHERE id = ?");
+            $statement = $conn->prepare(
+                "SELECT * FROM warehouses WHERE id = ?",
+            );
             $statement->bind_param("i", $warehouse_id);
-            if (!$statement->execute()) {
-                throw new SystemException("Database error: Failed to retrieve warehouse.  $statement->error");
-            }
+            $statement->execute();
+
             $result = $statement->get_result();
             if ($result->num_rows === 0) {
                 throw new ValidationException("Warehouse does not exist");
@@ -81,134 +104,168 @@ class InventoryService
 
             # 6.A) Create snapshot if it doesn't exist
             $statement = $conn->prepare("
-            SELECT quantity FROM stock_snapshots 
-            WHERE product_id = ? 
-            AND warehouse_id = ?
-            FOR UPDATE
+                SELECT quantity FROM stock_snapshots 
+                WHERE product_id = ? 
+                AND warehouse_id = ?
+                FOR UPDATE
             ");
             $statement->bind_param("ii", $product_id, $warehouse_id);
-            if (!$statement->execute()) {
-                throw new SystemException("Database error: Failed to retrieve stock snapshot.  $statement->error");
-            }
+            $statement->execute();
+
             $result = $statement->get_result();
             if ($result->num_rows === 0) {
                 # Snapshot doesn't exist, create it
 
-                # Create snapshot 
+                # Create snapshot
                 $statement = $conn->prepare("
                     INSERT INTO stock_snapshots(product_id, warehouse_id, quantity) VALUES(?, ?, 0)");
                 $statement->bind_param("ii", $product_id, $warehouse_id);
                 if (!$statement->execute()) {
-                    throw new SystemException("Database error: Failed to create stock snapshot.  $statement->error");
+                    throw new SystemException(
+                        "Database error: Failed to create stock snapshot.  $statement->error",
+                    );
                 } else {
                     $current_stock = 0;
                 }
-
             } else {
                 $snapshot = $result->fetch_assoc();
-                $current_stock = $snapshot['quantity'];
+                $current_stock = $snapshot["quantity"];
             }
-
-
 
             # 7) Validate stock for out movements
 
-            if ($movement_direction === 'OUT' && $current_stock < $quantity) {
-                throw new ValidationException('Not enough stock for this movement');
-
+            if ($movement_direction === "OUT" && $current_stock < $quantity) {
+                throw new ValidationException(
+                    "Not enough stock for this movement",
+                );
             }
 
             # 8) Calculate new stock
-            $new_stock = $movement_direction === 'IN' ? $current_stock + $quantity : $current_stock - $quantity;
+            $new_stock =
+                $movement_direction === "IN"
+                    ? $current_stock + $quantity
+                    : $current_stock - $quantity;
 
             # 9) Create movement record in stock_movements table
             $statement = $conn->prepare("
-            INSERT INTO stock_movements(product_id, warehouse_id, direction, movement_type, quantity, resulting_stock, notes, created_by) VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
-            $statement->bind_param("iissiisi", $product_id, $warehouse_id, $movement_direction, $movement_type, $quantity, $new_stock, $notes, $created_by);
+                INSERT INTO stock_movements(product_id, warehouse_id, direction, movement_type, quantity, resulting_stock, notes, created_by) VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
+            $statement->bind_param(
+                "iissiisi",
+                $product_id,
+                $warehouse_id,
+                $movement_direction,
+                $movement_type,
+                $quantity,
+                $new_stock,
+                $notes,
+                $created_by,
+            );
 
-            if (!$statement->execute()) {
-                throw new SystemException("Database error: Failed to create stock movement.  $statement->error");
-            }
-
+            $statement->execute();
 
             # 10) Update stock_snapshots table
 
-
             $statement = $conn->prepare("
-            UPDATE stock_snapshots 
-            SET quantity = ?
-            WHERE product_id = ?
-            AND warehouse_id = ?
+                UPDATE stock_snapshots 
+                SET quantity = ?
+                WHERE product_id = ?
+                AND warehouse_id = ?
             ");
 
-            $statement->bind_param("iii", $new_stock, $product_id, $warehouse_id);
+            $statement->bind_param(
+                "iii",
+                $new_stock,
+                $product_id,
+                $warehouse_id,
+            );
 
-            if (!$statement->execute()) {
-                throw new SystemException("Database error: Failed to update stock snapshot.  $statement->error");
-            }
+            $statement->execute();
 
             # 11) Commit transaction
 
             $conn->commit();
             return [
-                'product_id' => $product_id,
-                'new_stock' => $new_stock,
-                'movement_type' => $movement_type
+                "product_id" => $product_id,
+                "new_stock" => $new_stock,
+                "movement_type" => $movement_type,
             ];
         } catch (Exception $e) {
-
             # 12) Rollback on any error
             $conn->rollback();
             throw $e;
         }
     }
 
-    public static function addMovementWithoutTransaction(int $product_id, string $movement_type, int $warehouse_id, int $quantity, int $created_by, $notes = null): array
-    {
+    public static function addMovementWithoutTransaction(
+        int $product_id,
+        string $movement_type,
+        int $warehouse_id,
+        int $quantity,
+        int $created_by,
+        $notes = null,
+    ): array {
         $conn = Database::connect();
-
 
         try {
             # 1) Validate input parameters
 
             # 1.A) Check if all required parameters are provided
-            if (!isset($product_id) || !isset($movement_type) || !isset($warehouse_id) || !isset($quantity) || !isset($created_by)) {
-                throw new SystemException('All parameters except notes are required');
+            if (
+                !isset($product_id) ||
+                !isset($movement_type) ||
+                !isset($warehouse_id) ||
+                !isset($quantity) ||
+                !isset($created_by)
+            ) {
+                throw new SystemException(
+                    "All parameters except notes are required",
+                );
             }
             # 1.B) Check if product id is integer
             if (!is_int($product_id)) {
-                throw new SystemException('Product ID must be an integer');
+                throw new SystemException("Product ID must be an integer");
             }
 
             # 1.C) Check if warehouse id is integer
             if (!is_int($warehouse_id)) {
-                throw new SystemException('Warehouse ID must be an integer');
+                throw new SystemException("Warehouse ID must be an integer");
             }
 
             # 1.C) Check if created by is integer
             if (!is_int($created_by)) {
-                throw new SystemException('Created by ID must be an integer');
+                throw new SystemException("Created by ID must be an integer");
             }
 
             # 1.D) Check if movement type is valid
-            $valid_movement_types = ['STOCK_IN', 'STOCK_OUT', 'ADJUSTMENT_IN', 'ADJUSTMENT_OUT', 'RETURN', 'DAMAGE', 'EXPIRE'];
+            $valid_movement_types = [
+                "STOCK_IN",
+                "STOCK_OUT",
+                "ADJUSTMENT_IN",
+                "ADJUSTMENT_OUT",
+                "RETURN",
+                "DAMAGE",
+                "EXPIRE",
+            ];
 
             if (!in_array($movement_type, $valid_movement_types)) {
-                throw new SystemException('Invalid movement type');
+                throw new SystemException("Invalid movement type");
             }
 
             # 1.E) Check if quantity is a positive integer
             if (!is_int($quantity) || $quantity <= 0) {
-                throw new ValidationException('Quantity must be a positive integer');
+                throw new ValidationException(
+                    "Quantity must be a positive integer",
+                );
             }
 
             # 2) Derive movement direction
 
-            $in_movements = ['STOCK_IN', 'RETURN', 'ADJUSTMENT_IN'];
+            $in_movements = ["STOCK_IN", "RETURN", "ADJUSTMENT_IN"];
             // $out_movements = ['STOCK_OUT', 'DAMAGE', 'EXPIRE', 'ADJUSTMENT_OUT'];
 
-            $movement_direction = in_array($movement_type, $in_movements) ? 'IN' : 'OUT';
-
+            $movement_direction = in_array($movement_type, $in_movements)
+                ? "IN"
+                : "OUT";
 
             # 3) Start DB transaction
             // $conn->begin_transaction();
@@ -219,19 +276,19 @@ class InventoryService
             WHERE id = ?
             ");
             $statement->bind_param("i", $product_id);
-            if (!$statement->execute()) {
-                throw new SystemException("Database error: Failed to retrieve product.  $statement->error");
-            }
+            $statement->execute();
+
             $result = $statement->get_result();
             if ($result->num_rows === 0) {
                 throw new ValidationException("Product does not exist");
             }
             # 5) Check if warehouse exists
-            $statement = $conn->prepare("SELECT * FROM warehouses WHERE id = ?");
+            $statement = $conn->prepare(
+                "SELECT * FROM warehouses WHERE id = ?",
+            );
             $statement->bind_param("i", $warehouse_id);
-            if (!$statement->execute()) {
-                throw new SystemException("Database error: Failed to retrieve warehouse.  $statement->error");
-            }
+            $statement->execute();
+
             $result = $statement->get_result();
             if ($result->num_rows === 0) {
                 throw new ValidationException("Warehouse does not exist");
@@ -241,96 +298,101 @@ class InventoryService
 
             # 6.A) Create snapshot if it doesn't exist
             $statement = $conn->prepare("
-            SELECT quantity FROM stock_snapshots 
-            WHERE product_id = ? 
-            AND warehouse_id = ?
-            FOR UPDATE
+                SELECT quantity FROM stock_snapshots 
+                WHERE product_id = ? 
+                AND warehouse_id = ?
+                FOR UPDATE
             ");
             $statement->bind_param("ii", $product_id, $warehouse_id);
-            if (!$statement->execute()) {
-                throw new SystemException("Database error: Failed to retrieve stock snapshot.  $statement->error");
-            }
+            $statement->execute();
+
             $result = $statement->get_result();
             if ($result->num_rows === 0) {
                 # Snapshot doesn't exist, create it
 
-                # Create snapshot 
+                # Create snapshot
                 $statement = $conn->prepare("
                     INSERT INTO stock_snapshots(product_id, warehouse_id, quantity) VALUES(?, ?, 0)");
                 $statement->bind_param("ii", $product_id, $warehouse_id);
                 if (!$statement->execute()) {
-                    throw new SystemException("Database error: Failed to create stock snapshot.  $statement->error");
+                    throw new SystemException(
+                        "Database error: Failed to create stock snapshot.  $statement->error",
+                    );
                 } else {
                     $current_stock = 0;
                 }
-
             } else {
                 $snapshot = $result->fetch_assoc();
-                $current_stock = $snapshot['quantity'];
+                $current_stock = $snapshot["quantity"];
             }
-
-
 
             # 7) Validate stock for out movements
 
-            if ($movement_direction === 'OUT' && $current_stock < $quantity) {
-                throw new ValidationException('Not enough stock for this movement');
-
+            if ($movement_direction === "OUT" && $current_stock < $quantity) {
+                throw new ValidationException(
+                    "Not enough stock for this movement",
+                );
             }
 
             # 8) Calculate new stock
-            $new_stock = $movement_direction === 'IN' ? $current_stock + $quantity : $current_stock - $quantity;
+            $new_stock =
+                $movement_direction === "IN"
+                    ? $current_stock + $quantity
+                    : $current_stock - $quantity;
 
             # 9) Create movement record in stock_movements table
             $statement = $conn->prepare("
-            INSERT INTO stock_movements(product_id, warehouse_id, direction, movement_type, quantity, resulting_stock, notes, created_by) VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
-            $statement->bind_param("iissiisi", $product_id, $warehouse_id, $movement_direction, $movement_type, $quantity, $new_stock, $notes, $created_by);
+                INSERT INTO stock_movements(product_id, warehouse_id, direction, movement_type, quantity, resulting_stock, notes, created_by) VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
+            $statement->bind_param(
+                "iissiisi",
+                $product_id,
+                $warehouse_id,
+                $movement_direction,
+                $movement_type,
+                $quantity,
+                $new_stock,
+                $notes,
+                $created_by,
+            );
 
-            if (!$statement->execute()) {
-                throw new SystemException("Database error: Failed to create stock movement.  $statement->error");
-            }
-
+            $statement->execute();
 
             # 10) Update stock_snapshots table
 
-
             $statement = $conn->prepare("
-            UPDATE stock_snapshots 
-            SET quantity = ?
-            WHERE product_id = ?
-            AND warehouse_id = ?
+                UPDATE stock_snapshots 
+                SET quantity = ?
+                WHERE product_id = ?
+                AND warehouse_id = ?
             ");
 
-            $statement->bind_param("iii", $new_stock, $product_id, $warehouse_id);
+            $statement->bind_param(
+                "iii",
+                $new_stock,
+                $product_id,
+                $warehouse_id,
+            );
 
-            if (!$statement->execute()) {
-                throw new SystemException("Database error: Failed to update stock snapshot.  $statement->error");
-            }
+            $statement->execute();
 
             # 11) Commit transaction
 
             // $conn->commit();
             return [
-                'product_id' => $product_id,
-                'new_stock' => $new_stock,
-                'movement_type' => $movement_type
+                "product_id" => $product_id,
+                "new_stock" => $new_stock,
+                "movement_type" => $movement_type,
             ];
         } catch (Exception $e) {
-
             # 12) Rollback on any error
             // $conn->rollback();
             throw $e;
         }
     }
 
-
-
-
-
     # Get Total SKUs: number of active products
     public static function getTotalSKUs()
     {
-
         try {
             $conn = Database::connect();
             $statement = $conn->prepare("
@@ -338,18 +400,14 @@ class InventoryService
                 WHERE product_status = 'ACTIVE'
             ");
 
-            if (!$statement->execute()) {
-
-                throw new SystemException("Database error: Failed to retrieve total SKUs.  $statement->error");
-            }
+            $statement->execute();
 
             $result = $statement->get_result();
             if ($result->num_rows === 0) {
                 throw new ValidationException("No SKUs found.");
             }
             $row = $result->fetch_assoc();
-            return $row['total_skus'];
-
+            return $row["total_skus"];
         } catch (Exception $e) {
             throw $e;
         }
@@ -359,7 +417,6 @@ class InventoryService
     public static function getTotalStock()
     {
         try {
-
             $conn = Database::connect();
             $statement = $conn->prepare("
                 SELECT SUM(ss.quantity) as total_stock
@@ -367,23 +424,18 @@ class InventoryService
                 ON ss.product_id = p.id 
                 WHERE p.product_status = 'ACTIVE';
             ");
-
-            if (!$statement->execute()) {
-                throw new SystemException("Database error: Failed to retrieve total stock.  $statement->error");
-            }
+            $statement->execute();
 
             $result = $statement->get_result();
             if ($result->num_rows === 0) {
                 throw new ValidationException("No stock found.");
             }
             $row = $result->fetch_assoc();
-            return $row['total_stock'];
+            return $row["total_stock"];
         } catch (Exception $e) {
             throw $e;
-
         }
     }
-
 
     # Get Total Stock Value
     public static function getTotalStockValue()
@@ -397,17 +449,14 @@ class InventoryService
                 WHERE p.product_status = 'ACTIVE'
             ");
 
-            if (!$statement->execute()) {
-                throw new SystemException("Database error: Failed to retrieve total stock value.  $statement->error");
-            }
+            $statement->execute();
 
             $result = $statement->get_result();
             if ($result->num_rows === 0) {
                 throw new ValidationException("No stock value found.");
             }
             $row = $result->fetch_assoc();
-            return $row['total_stock_value'];
-
+            return $row["total_stock_value"];
         } catch (Exception $e) {
             throw $e;
         }
@@ -427,17 +476,14 @@ class InventoryService
                 AND p.product_status = 'ACTIVE'
             ");
 
-            if (!$statement->execute()) {
-                throw new SystemException("Database error: Failed to retrieve total low stocks.  $statement->error");
-            }
+            $statement->execute();
 
             $result = $statement->get_result();
             if ($result->num_rows === 0) {
                 throw new ValidationException("No low stocks found.");
             }
             $row = $result->fetch_assoc();
-            return $row['total_low_stocks'];
-
+            return $row["total_low_stocks"];
         } catch (Exception $e) {
             throw $e;
         }
@@ -456,17 +502,16 @@ class InventoryService
                 AND p.product_status = 'ACTIVE'
             ");
 
-            if (!$statement->execute()) {
-                throw new SystemException("Database error: Failed to retrieve total out of stocks product.  $statement->error");
-            }
+            $statement->execute();
 
             $result = $statement->get_result();
             if ($result->num_rows === 0) {
-                throw new ValidationException("No out of stocks product found.");
+                throw new ValidationException(
+                    "No out of stocks product found.",
+                );
             }
             $row = $result->fetch_assoc();
-            return $row['total_out_stocks'];
-
+            return $row["total_out_stocks"];
         } catch (Exception $e) {
             throw $e;
         }
@@ -474,9 +519,7 @@ class InventoryService
 
     public static function getTotalMovementToday()
     {
-
         try {
-
             $conn = Database::connect();
             $statement = $conn->prepare("
                 SELECT COUNT(*) as total_movement_today FROM
@@ -484,17 +527,14 @@ class InventoryService
                 WHERE DATE(created_at) = CURDATE()
             ");
 
-            if (!$statement->execute()) {
-                throw new SystemException("Database error: Failed to retrieve total movement today.  $statement->error");
-            }
+            $statement->execute();
 
             $result = $statement->get_result();
             if ($result->num_rows === 0) {
                 throw new ValidationException("No movement created today.");
             }
             $row = $result->fetch_assoc();
-            return $row['total_movement_today'];
-
+            return $row["total_movement_today"];
         } catch (Exception $e) {
             throw $e;
         }
@@ -521,7 +561,6 @@ class InventoryService
         # product_name | sku | product_category | warehouse | stock | status | reorder_level | last_movement_date
         $conn = Database::connect();
         $statement = $conn->prepare("
-        
             SELECT p.id,
                 p.name as product_name,
                 p.sku, 
@@ -549,9 +588,7 @@ class InventoryService
 
         $statement->bind_param("ii", $limit, $offset);
 
-        if (!$statement->execute()) {
-            throw new SystemException("Database error: Failed to retrieve inventory overview data.  $statement->error");
-        }
+        $statement->execute();
 
         $result = $statement->get_result();
         // if ($result->num_rows === 0) {
@@ -559,15 +596,12 @@ class InventoryService
         // }
         $data = $result->fetch_all(MYSQLI_ASSOC);
         return $data;
-
     }
 
     public static function getTotalInventoryOverview(): int
     {
-
         $conn = Database::connect();
         try {
-
             $statement = $conn->prepare("
                 SELECT COUNT(*) as total_inventory_overview
                 FROM (
@@ -598,14 +632,11 @@ class InventoryService
                 ) t
             ");
 
-            if (!$statement->execute()) {
-                throw new SystemException("Database error: Failed to retrieve total inventory overview.  $statement->error");
-            }
+            $statement->execute();
 
             $result = $statement->get_result();
             $row = $result->fetch_assoc();
-            return $row['total_inventory_overview'];
-
+            return $row["total_inventory_overview"];
         } catch (Exception $e) {
             throw $e;
         }
@@ -619,58 +650,74 @@ class InventoryService
                 ob_end_clean();
             }
             # Get overview data
-            $inventory_overviews = self::getInventoryOverviewData($page, $limit);
-            if (!is_array($inventory_overviews))
-                throw new ValidationException("Invalid inventory overview data format.");
+            $inventory_overviews = self::getInventoryOverviewData(
+                $page,
+                $limit,
+            );
+            if (!is_array($inventory_overviews)) {
+                throw new ValidationException(
+                    "Invalid inventory overview data format.",
+                );
+            }
 
-            # Headers 
-            header('Content-Type: text/csv; charset=utf-8');
-            header('Content-Disposition: attachment; filename="inventory_overview_' . date('Y-m-d_H-i') . '.csv"');
+            # Headers
+            header("Content-Type: text/csv; charset=utf-8");
+            header(
+                'Content-Disposition: attachment; filename="inventory_overview_' .
+                    date("Y-m-d_H-i") .
+                    '.csv"',
+            );
 
             # Open output stream
-            $output = fopen('php://output', 'w');
+            $output = fopen("php://output", "w");
             if ($output === false) {
                 throw new SystemException("Failed to open output stream.");
             }
 
             # Excel UTF-8 BOM
-            fprintf($output, chr(0xEF) . chr(0xBB) . chr(0xBF));
+            fprintf($output, chr(0xef) . chr(0xbb) . chr(0xbf));
 
             # product_name | sku | product_category | warehouse | stock | status | reorder_level | last_movement_date
             # Header row
-            fputcsv($output, ['Product Name', 'SKU', 'Category', 'Warehouse', 'Stock', 'Status', 'Reorder', 'Last Movement Date']);
+            fputcsv($output, [
+                "Product Name",
+                "SKU",
+                "Category",
+                "Warehouse",
+                "Stock",
+                "Status",
+                "Reorder",
+                "Last Movement Date",
+            ]);
 
             # Data rows
             if (empty($inventory_overviews)) {
-                fputcsv($output, ['No data found']);
+                fputcsv($output, ["No data found"]);
                 fclose($output);
-                throw new ValidationException("No inventory overview data found.");
+                throw new ValidationException(
+                    "No inventory overview data found.",
+                );
             }
-
 
             # product_name | sku | product_category | warehouse | stock | status | reorder_level | last_movement_date
             foreach ($inventory_overviews as $inventory_overview) {
                 fputcsv($output, [
-                    $inventory_overview['product_name'],
-                    $inventory_overview['sku'],
-                    $inventory_overview['product_category'],
-                    $inventory_overview['warehouse'],
-                    $inventory_overview['stock'],
-                    $inventory_overview['status'],
-                    $inventory_overview['reorder_level'],
-                    $inventory_overview['last_movement_date']
+                    $inventory_overview["product_name"],
+                    $inventory_overview["sku"],
+                    $inventory_overview["product_category"],
+                    $inventory_overview["warehouse"],
+                    $inventory_overview["stock"],
+                    $inventory_overview["status"],
+                    $inventory_overview["reorder_level"],
+                    $inventory_overview["last_movement_date"],
                 ]);
             }
 
             # Close stream
             fclose($output);
-            exit;
-
-
+            exit();
         } catch (Exception $e) {
             throw $e;
         }
-
     }
-
 }

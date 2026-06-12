@@ -1,7 +1,9 @@
 <?php
 
-$warehouses = $data['warehouses'] ?? [];
-ob_start(); # Start the output buffer
+$warehouses = $data["warehouses"] ?? [];
+ob_start();
+
+# Start the output buffer
 ?>
 
 <!-- Showing warehouse list -->
@@ -31,21 +33,34 @@ ob_start(); # Start the output buffer
           <tbody>
             <?php foreach ($warehouses as $warehouse): ?>
               <tr>
-                <td><?= $warehouse['name'] ?></td>
-                <td><?= $warehouse['location'] ?></td>
-                <td data-warehouseId="<?= $warehouse['id'] ?>" class="warehouseStatus">
-                  <?= $warehouse['warehouse_status'] ?>
+                <td><?= $warehouse["name"] ?></td>
+                <td><?= $warehouse["location"] ?></td>
+                <td data-warehouseId="<?= $warehouse[
+                    "id"
+                ] ?>" class="warehouseStatus">
+                  <?= $warehouse["warehouse_status"] ?>
                 </td>
                 <td>
-                  <div data-warehouseId="<?= $warehouse['id'] ?>"
-                    class="actions warehouseActions <?= $warehouse['warehouse_status'] === 'INACTIVE' ? 'hide' : '' ?>">
-                    <button data-warehouseId="<?= $warehouse['id'] ?>" data-warehouseName="<?= $warehouse['name'] ?>"
-                      data-warehouseLocation="<?= $warehouse['location'] ?>" onclick="openWarehouseUpdateModal(this)">
+                  <div data-warehouseId="<?= $warehouse["id"] ?>"
+                    class="actions warehouseActions <?= $warehouse[
+                        "warehouse_status"
+                    ] === "INACTIVE"
+                        ? "hide"
+                        : "" ?>">
+                    <button data-warehouseId="<?= $warehouse[
+                        "id"
+                    ] ?>" data-warehouseName="<?= $warehouse["name"] ?>"
+                      data-warehouseLocation="<?= $warehouse[
+                          "location"
+                      ] ?>" onclick="openWarehouseUpdateModal(this)">
                       Edit
                     </button>
-                    <button data-warehouseId="<?= $warehouse['id'] ?>" onclick="deleteWarehouse(this)">
-                      Delete
-                    </button>
+                    <a href="/warehouses/delete?id=<?= $warehouse["id"] ?>">
+                      <button>
+                        Delete
+                      </button>
+                    </a>
+                    
                   </div>
                 </td>
               </tr>
@@ -110,5 +125,7 @@ ob_start(); # Start the output buffer
 
 <?php
 $content = ob_get_clean(); # Get the buffered content and clean the buffer
-require_once __DIR__ . '/../layouts/layout.php';
+require_once __DIR__ . "/../layouts/layout.php";
+
+
 ?>

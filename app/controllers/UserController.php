@@ -2,20 +2,18 @@
 
 class UserController
 {
-
     public function index()
     {
         $data = [
-            'users' => $this->getAllUsers()
+            "users" => UserService::getAllUsers(),
         ];
-        require_once __DIR__ . '/../views/users/index.php';
+        require_once __DIR__ . "/../views/users/index.php";
     }
 
     public function create()
     {
-
         # 1) Validate if request method is POST
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        if ($_SERVER["REQUEST_METHOD"] !== "POST") {
             throw new SystemException("Invalid request method");
         }
         # 2) Validate form data
@@ -23,15 +21,22 @@ class UserController
         # email
         # password
         # role
-        if (!isset($_POST['full_name']) || !isset($_POST['email']) || !isset($_POST['password']) || !isset($_POST['role'])) {
-            throw new ValidationException("Full name, email, password and role are required");
+        if (
+            !isset($_POST["full_name"]) ||
+            !isset($_POST["email"]) ||
+            !isset($_POST["password"]) ||
+            !isset($_POST["role"])
+        ) {
+            throw new ValidationException(
+                "Full name, email, password and role are required",
+            );
         }
 
         # 3) Sanitize form data
-        $full_name = htmlspecialchars($_POST['full_name']);
-        $email = htmlspecialchars($_POST['email']);
-        $password = htmlspecialchars($_POST['password']);
-        $role = htmlspecialchars($_POST['role']);
+        $full_name = $_POST["full_name"];
+        $email = $_POST["email"];
+        $password = $_POST["password"];
+        $role = $_POST["role"];
 
         $full_name = trim($full_name);
         $email = trim($email);
@@ -42,63 +47,16 @@ class UserController
         UserService::createUser($full_name, $email, $password, $role);
 
         # 5) Redirect to users page
-        Session::flashSet('success', 'User created successfully');
+        Session::flashSet("success", "User created successfully");
         header("Location: /users");
-        exit;
+        exit();
     }
 
-    public function getAllUsers()
-    {
-
-        $conn = Database::connect();
-        try {
-            $statement = $conn->prepare("
-                SELECT *
-                FROM users
-                ORDER BY created_at DESC
-            ");
-            if (!$statement->execute()) {
-                throw new SystemException("Database error: Error fetching users. $statement->error");
-            }
-            $result = $statement->get_result();
-            $users = $result->fetch_all(MYSQLI_ASSOC);
-            return $users;
-        } catch (SystemException $e) {
-            throw $e;
-        }
-    }
-
-    public function getUserById($id)
-    {
-
-        $conn = Database::connect();
-        try {
-            $statement = $conn->prepare("
-                SELECT *
-                FROM users
-                WHERE id = ?
-                FOR UPDATE
-            ");
-            $statement->bind_param("i", $id);
-            if (!$statement->execute()) {
-                throw new SystemException("Database error: Error fetching user. $statement->error");
-            }
-            $result = $statement->get_result();
-            if ($result->num_rows === 0) {
-                throw new ValidationException("User does not exist");
-            }
-            $user = $result->fetch_assoc();
-            return $user;
-        } catch (SystemException $e) {
-            throw $e;
-        }
-    }
-
-
-
+    # Delete user using AJAX
+    /*
     public function deleteUser()
     {
-        header('Content-Type: application/json');
+        header("Content-Type: application/json");
 
         $json_data = file_get_contents("php://input");
         $data = json_decode($json_data, true);
@@ -109,16 +67,16 @@ class UserController
                 "status" => "failed",
                 "message" => "Invalid request",
             ]);
-            exit;
+            exit();
         }
 
         if (!isset($data["id"])) {
             http_response_code(400);
             echo json_encode([
                 "status" => "failed",
-                "message" => "User id is required"
+                "message" => "User id is required",
             ]);
-            exit;
+            exit();
         }
 
         $id = (int) $data["id"];
@@ -129,9 +87,9 @@ class UserController
             http_response_code(404);
             echo json_encode([
                 "status" => "failed",
-                "message" => "User not found"
+                "message" => "User not found",
             ]);
-            exit;
+            exit();
         }
 
         # Delete user
@@ -146,9 +104,9 @@ class UserController
             http_response_code(500);
             echo json_encode([
                 "status" => "error",
-                "message" => "Database error: Error deleting user. $statement->error"
+                "message" => "Database error: Error deleting user. $statement->error",
             ]);
-            exit;
+            exit();
         }
 
         http_response_code(200);
@@ -156,9 +114,28 @@ class UserController
             "status" => "success",
             "message" => "User deleted successfully",
             "data" => [
-                "user_status" => 'INACTIVE'
-            ]
+                "user_status" => "INACTIVE",
+            ],
         ]);
-        exit;
+        exit();
+    }
+    */
+
+    # Delete user without AJAX
+    public function deleteUser()
+    {
+        # Check for user id
+        if (!isset($_GET["id"])) {
+            throw new ValidationException("User id is required");
+        }
+        $id = (int) $_GET["id"];
+
+        # Delete user
+        UserService::deleteUser($id);
+
+        # Redirect to users page
+        Session::flashSet("success", "User deleted successfully");
+        header("Location: /users");
+        exit();
     }
 }

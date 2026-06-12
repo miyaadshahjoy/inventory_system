@@ -118,10 +118,8 @@ ob_start();
                                 <?= $data['reorder_level'] ?>
                             </td>
                             <td>
-                                <?php
-                                $date = new DateTime($data['last_movement_date']);
-                                echo $date->format('Y-m-d');
-                                ?>
+                                <?= $data['last_movement_date'] ? (new DateTime($data['last_movement_date']))->format('Y-m-d') : '' ?>
+
                             </td>
                         </tr>
                     <?php endforeach; ?>

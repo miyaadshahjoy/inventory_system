@@ -8,20 +8,25 @@ $db_name = $db_cred['db_name'];
 
 class Database
 {
-    public static function connect()
+    private static ?mysqli $connection = null;
+    public static function connect() : mysqli
     {
+
+        if(self::$connection !== null){
+            return self::$connection;
+        }
         try {
 
             global $db_host, $db_user, $db_pass, $db_name;
-            $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
+            self::$connection = new mysqli($db_host, $db_user, $db_pass, $db_name);
 
-            if ($conn->connect_error) {
+            self::$connection->set_charset('utf8mb4');
 
-                throw new SystemException("Database connection failed: . $conn->connect_error");
-            }
-            return $conn;
+           
+            return self::$connection;
         } catch (Exception $e) {
-            throw $e;
+            throw new DatabaseException('Database connection failded: ' . $e->getMessage(), 0, $e);
         }
     }
 }
+

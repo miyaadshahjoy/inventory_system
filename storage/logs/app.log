@@ -1,361 +1,230 @@
-[2026-05-15 07:16:37] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-15 07:17:33] [ERROR] Login failed for email: admin@example
-[2026-05-15 07:18:41] [ERROR] Login failed for email: admin@example.com
-[2026-05-15 07:18:53] [ERROR] Login failed for email: admin@example.com
-[2026-05-15 07:19:38] [ERROR] Login failed for email: admin@example.com
-[2026-05-15 07:20:05] [ERROR] Login failed for email: admin@example
-[2026-05-15 07:20:36] [ERROR] Login failed for email: admin@example.com
-[2026-05-15 08:34:35] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-15 12:26:02] [ERROR] Login failed for email: admin@example.com
-[2026-05-15 12:26:10] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-15 12:37:19] [CRITICAL] syntax error, unexpected token "--" in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\header.php on line: 3
-[2026-05-15 12:37:49] [CRITICAL] Too few arguments to function ErrorHandler::errorHandler(), 4 passed and exactly 5 expected in: D:\XAMPP\htdocs\inventory-system\app\core\ErrorHandler.php on line: 48
-[2026-05-15 12:38:08] [CRITICAL] Too few arguments to function ErrorHandler::errorHandler(), 4 passed and exactly 5 expected in: D:\XAMPP\htdocs\inventory-system\app\core\ErrorHandler.php on line: 48
-[2026-05-15 12:38:12] [CRITICAL] Too few arguments to function ErrorHandler::errorHandler(), 4 passed and exactly 5 expected in: D:\XAMPP\htdocs\inventory-system\app\core\ErrorHandler.php on line: 48
-[2026-05-15 12:38:17] [CRITICAL] Too few arguments to function ErrorHandler::errorHandler(), 4 passed and exactly 5 expected in: D:\XAMPP\htdocs\inventory-system\app\core\ErrorHandler.php on line: 48
-[2026-05-15 12:38:52] [CRITICAL] Too few arguments to function ErrorHandler::errorHandler(), 4 passed and exactly 5 expected in: D:\XAMPP\htdocs\inventory-system\app\core\ErrorHandler.php on line: 48
-[2026-05-15 12:38:57] [CRITICAL] Class "StockMovementController" not found in: D:\XAMPP\htdocs\inventory-system\public\index.php on line: 45
-[2026-05-15 12:40:10] [CRITICAL] Too few arguments to function ErrorHandler::errorHandler(), 4 passed and exactly 5 expected in: D:\XAMPP\htdocs\inventory-system\app\core\ErrorHandler.php on line: 48
-[2026-05-15 12:40:51] [CRITICAL] [8192] str_contains(): Passing null to parameter #1 ($haystack) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line 8 in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 8
-[2026-05-15 12:41:59] [CRITICAL] [8192] str_contains(): Passing null to parameter #1 ($haystack) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line 8 in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 8
-[2026-05-15 12:42:05] [CRITICAL] [8192] str_contains(): Passing null to parameter #1 ($haystack) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line 8 in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 8
-[2026-05-15 12:42:43] [CRITICAL] [8192] str_contains(): Passing null to parameter #1 ($haystack) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line 8 in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 8
-[2026-05-15 12:44:00] [CRITICAL] [8192] str_contains(): Passing null to parameter #1 ($haystack) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line 8 in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 8
-[2026-05-15 12:45:15] [CRITICAL] [8192] str_contains(): Passing null to parameter #1 ($haystack) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line 9 in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 9
-[2026-05-15 12:45:19] [CRITICAL] [8192] str_contains(): Passing null to parameter #1 ($haystack) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line 9 in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 9
-[2026-05-15 12:45:25] [CRITICAL] [8192] str_contains(): Passing null to parameter #1 ($haystack) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line 9 in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 9
-[2026-05-15 12:46:59] [CRITICAL] [8192] str_contains(): Passing null to parameter #1 ($haystack) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line 8 in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 8
-[2026-05-15 12:50:26] [CRITICAL] [8192] str_contains(): Passing null to parameter #1 ($haystack) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line 8 in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 8
-[2026-05-15 12:50:43] [CRITICAL] [8192] str_contains(): Passing null to parameter #1 ($haystack) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line 9 in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 9
-[2026-05-15 12:53:37] [CRITICAL] Call to undefined function isActive() in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 12
-[2026-05-15 12:54:00] [CRITICAL] [8192] str_contains(): Passing null to parameter #1 ($haystack) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line 9 in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 9
-[2026-05-15 12:54:36] [CRITICAL] [8192] str_contains(): Passing null to parameter #1 ($haystack) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line 9 in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 9
-[2026-05-15 12:58:01] [CRITICAL] [8192] str_contains(): Passing null to parameter #1 ($haystack) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line 9 in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 9
-[2026-05-15 12:59:28] [CRITICAL] [8192] parse_url(): Passing null to parameter #1 ($url) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line 14 in: D:\XAMPP\htdocs\inventory-system\app\views\layouts\sidebar.php on line: 14
-[2026-05-15 14:14:29] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-15 14:16:44] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-15 14:22:50] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-15 14:24:49] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-15 14:26:28] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-15 14:45:04] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-15 15:00:23] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-15 15:55:52] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-15 16:00:19] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-15 18:13:32] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-16 08:12:01] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-16 08:13:03] [CRITICAL] [2] Undefined array key "id" in D:\XAMPP\htdocs\inventory-system\app\views\categories\index.php on line 30 in: D:\XAMPP\htdocs\inventory-system\app\views\categories\index.php on line: 30
-[2026-05-16 08:31:59] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-16 08:44:35] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-16 08:46:58] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-16 08:52:02] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-16 09:56:40] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-16 11:20:52] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-16 11:21:14] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-16 13:42:13] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-16 13:47:41] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-16 13:48:43] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-16 16:11:49] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-16 17:02:58] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-16 17:16:57] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-16 17:17:01] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-16 19:10:52] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-17 07:46:34] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-17 07:48:08] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-17 08:21:26] [CRITICAL] Class "SystemException" not found in: D:\XAMPP\htdocs\inventory-system\app\controllers\StockMovementController.php on line: 79
-[2026-05-17 08:23:56] [CRITICAL] Class "SystemException" not found in: D:\XAMPP\htdocs\inventory-system\app\controllers\StockMovementController.php on line: 80
-[2026-05-17 08:24:21] [CRITICAL] All fields except notes are required in: D:\XAMPP\htdocs\inventory-system\app\controllers\StockMovementController.php on line: 80
-[2026-05-17 08:32:46] [CRITICAL] Duplicate entry '1' for key 'product_id' in: D:\XAMPP\htdocs\inventory-system\app\services\TransferService.php on line: 177
-[2026-05-17 10:05:10] [CRITICAL] The number of elements in the type definition string must match the number of bind variables in: D:\XAMPP\htdocs\inventory-system\app\services\TransferService.php on line: 170
-[2026-05-17 10:06:41] [CRITICAL] Duplicate entry '1' for key 'product_id' in: D:\XAMPP\htdocs\inventory-system\app\services\TransferService.php on line: 172
-[2026-05-17 10:10:31] [CRITICAL] Duplicate entry '1' for key 'product_id' in: D:\XAMPP\htdocs\inventory-system\app\services\TransferService.php on line: 172
-[2026-05-17 11:52:33] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-17 13:41:27] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-17 14:12:08] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-17 14:38:36] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-17 15:16:49] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-17 15:17:22] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-17 15:17:46] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-17 15:24:21] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-17 15:24:40] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-17 16:06:21] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-17 16:26:47] [CRITICAL] [2] Undefined array key "id" in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 45 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 45
-[2026-05-17 16:27:35] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-17 16:27:43] [CRITICAL] [2] Undefined array key "id" in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 45 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 45
-[2026-05-17 16:29:40] [CRITICAL] [2] Undefined array key "name" in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 46 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 46
-[2026-05-17 16:29:45] [CRITICAL] [2] Undefined array key "name" in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 46 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 46
-[2026-05-17 16:41:12] [CRITICAL] You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'WHERE id = ?
-            )' at line 7 in: D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php on line: 147
-[2026-05-17 16:41:34] [CRITICAL] You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'WHERE id = ?
-            )' at line 7 in: D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php on line: 147
-[2026-05-17 16:43:32] [CRITICAL] You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'WHERE id = ?' at line 7 in: D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php on line: 147
-[2026-05-17 16:44:39] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-17 17:18:11] [CRITICAL] Unknown column 'deleted_at' in 'field list' in: D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php on line: 212
-[2026-05-17 20:35:10] [CRITICAL] [2] Undefined array key "location" in D:\XAMPP\htdocs\inventory-system\app\views\warehouses\index.php on line 28 in: D:\XAMPP\htdocs\inventory-system\app\views\warehouses\index.php on line: 28
-[2026-05-17 20:36:29] [CRITICAL] [2] Undefined array key "location" in D:\XAMPP\htdocs\inventory-system\app\views\warehouses\index.php on line 28 in: D:\XAMPP\htdocs\inventory-system\app\views\warehouses\index.php on line: 28
-[2026-05-17 20:38:10] [CRITICAL] [2] Undefined array key "status" in D:\XAMPP\htdocs\inventory-system\app\views\warehouses\index.php on line 31 in: D:\XAMPP\htdocs\inventory-system\app\views\warehouses\index.php on line: 31
-[2026-05-17 20:38:41] [CRITICAL] Unknown column 'status' in 'field list' in: D:\XAMPP\htdocs\inventory-system\app\controllers\WarehouseController.php on line: 22
-[2026-05-17 20:39:03] [CRITICAL] [2] Undefined array key "status" in D:\XAMPP\htdocs\inventory-system\app\views\warehouses\index.php on line 31 in: D:\XAMPP\htdocs\inventory-system\app\views\warehouses\index.php on line: 31
-[2026-05-17 21:06:56] [CRITICAL] [2] require_once(D:\XAMPP\htdocs\inventory-system\app\controllers/../views/warehouses/index.php): Failed to open stream: No such file or directory in D:\XAMPP\htdocs\inventory-system\app\controllers\WarehouseController.php on line 13 in: D:\XAMPP\htdocs\inventory-system\app\controllers\WarehouseController.php on line: 13
-[2026-05-18 06:36:44] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-18 06:39:35] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-18 07:24:58] [CRITICAL] Duplicate entry 'A' for key 'name' in: D:\XAMPP\htdocs\inventory-system\app\controllers\WarehouseController.php on line: 48
-[2026-05-18 07:46:03] [CRITICAL] Duplicate entry 'A' for key 'name' in: D:\XAMPP\htdocs\inventory-system\app\controllers\WarehouseController.php on line: 48
-[2026-05-18 07:46:17] [CRITICAL] Duplicate entry 'A' for key 'name' in: D:\XAMPP\htdocs\inventory-system\app\controllers\WarehouseController.php on line: 48
-[2026-05-18 07:47:36] [CRITICAL] Duplicate entry 'A' for key 'name' in: D:\XAMPP\htdocs\inventory-system\app\controllers\WarehouseController.php on line: 48
-[2026-05-18 08:03:14] [CRITICAL] Invalid warehouse id in: D:\XAMPP\htdocs\inventory-system\app\controllers\WarehouseController.php on line: 109
-[2026-05-18 08:04:25] [CRITICAL] Invalid warehouse id in: D:\XAMPP\htdocs\inventory-system\app\controllers\WarehouseController.php on line: 109
-[2026-05-18 08:05:04] [CRITICAL] Duplicate entry 'B' for key 'name' in: D:\XAMPP\htdocs\inventory-system\app\controllers\WarehouseController.php on line: 141
-[2026-05-18 08:31:27] [CRITICAL] Invalid credentials in: D:\XAMPP\htdocs\inventory-system\app\controllers\AuthController.php on line: 48
-[2026-05-18 08:33:17] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-18 08:37:09] [CRITICAL] Incorrect email in: D:\XAMPP\htdocs\inventory-system\app\controllers\AuthController.php on line: 48
-[2026-05-18 08:37:46] [CRITICAL] Incorrect email in: D:\XAMPP\htdocs\inventory-system\app\controllers\AuthController.php on line: 48
-[2026-05-18 08:37:50] [CRITICAL] Incorrect email in: D:\XAMPP\htdocs\inventory-system\app\controllers\AuthController.php on line: 48
-[2026-05-18 08:37:53] [CRITICAL] Incorrect email in: D:\XAMPP\htdocs\inventory-system\app\controllers\AuthController.php on line: 48
-[2026-05-18 08:39:15] [CRITICAL] No connection could be made because the target machine actively refused it in: D:\XAMPP\htdocs\inventory-system\app\core\Database.php on line: 14
-[2026-05-18 08:39:45] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-18 09:52:18] [CRITICAL] Duplicate entry 'EL-12345-HILM' for key 'sku' in: D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php on line: 53
-[2026-05-18 11:07:53] [CRITICAL] Duplicate entry 'CL-12345-HELM' for key 'sku' in: D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php on line: 53
-[2026-05-18 16:15:06] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-18 16:15:17] [CRITICAL] [2] require_once(D:\XAMPP\htdocs\inventory-system\app\controllers/../app/views/inventory/index.php): Failed to open stream: No such file or directory in D:\XAMPP\htdocs\inventory-system\app\controllers\InventoryController.php on line 19 in: D:\XAMPP\htdocs\inventory-system\app\controllers\InventoryController.php on line: 19
-[2026-05-18 16:17:24] [CRITICAL] [2] require_once(D:\XAMPP\htdocs\inventory-system\app\views\inventory/layouts/layout.php): Failed to open stream: No such file or directory in D:\XAMPP\htdocs\inventory-system\app\views\inventory\index.php on line 14 in: D:\XAMPP\htdocs\inventory-system\app\views\inventory\index.php on line: 14
-[2026-05-18 16:17:28] [CRITICAL] [2] require_once(D:\XAMPP\htdocs\inventory-system\app\views\inventory/layouts/layout.php): Failed to open stream: No such file or directory in D:\XAMPP\htdocs\inventory-system\app\views\inventory\index.php on line 14 in: D:\XAMPP\htdocs\inventory-system\app\views\inventory\index.php on line: 14
-[2026-05-18 16:43:38] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-18 16:43:55] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-18 17:20:53] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-18 17:21:17] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-18 17:50:35] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-18 17:50:50] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-18 18:01:17] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-19 07:30:51] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-19 08:10:55] [CRITICAL] [2] Undefined array key "quantity" in D:\XAMPP\htdocs\inventory-system\app\views\movements\movementHistory.php on line 55 in: D:\XAMPP\htdocs\inventory-system\app\views\movements\movementHistory.php on line: 55
-[2026-05-19 08:13:52] [CRITICAL] Unknown column 'u.name' in 'field list' in: D:\XAMPP\htdocs\inventory-system\app\services\InventoryService.php on line: 177
-[2026-05-19 08:14:14] [CRITICAL] Unknown column 'u.name' in 'field list' in: D:\XAMPP\htdocs\inventory-system\app\services\InventoryService.php on line: 177
-[2026-05-19 08:16:23] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-19 08:17:31] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-19 08:22:53] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-19 08:56:22] [CRITICAL] Class "WarehouseController" not found in: D:\XAMPP\htdocs\inventory-system\app\controllers\StockMovementController.php on line: 11
-[2026-05-19 09:01:14] [CRITICAL] [2] Undefined array key "resulting_stock" in D:\XAMPP\htdocs\inventory-system\app\views\movements\movementHistory.php on line 62 in: D:\XAMPP\htdocs\inventory-system\app\views\movements\movementHistory.php on line: 62
-[2026-05-19 10:31:41] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-19 10:31:44] [CRITICAL] [2] Undefined array key "current_stock" in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 42 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 42
-[2026-05-19 10:35:12] [CRITICAL] [2] Undefined array key "id" in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 48 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 48
-[2026-05-19 10:36:04] [CRITICAL] [2] Undefined array key "status" in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 48 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 48
-[2026-05-19 10:36:23] [CRITICAL] [2] Undefined array key "status" in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 48 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 48
-[2026-05-19 10:37:41] [CRITICAL] [2] Undefined array key "unit" in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 58 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 58
-[2026-05-19 11:04:21] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-19 11:05:58] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-19 13:17:27] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-19 13:31:46] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-19 18:20:49] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-19 18:48:33] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-19 19:12:40] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-20 07:29:29] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-20 07:33:25] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-20 07:35:16] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-20 07:35:48] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-20 09:04:06] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-20 09:05:11] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-20 09:56:41] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-20 12:08:14] [CRITICAL] Unknown column 'u.name' in 'field list' in: D:\XAMPP\htdocs\inventory-system\app\services\ReturnService.php on line: 127
-[2026-05-20 12:48:18] [INFO] User logged in: admin@example.com (ID: 6)
-[2026-05-20 15:40:18] [CRITICAL] [2] Undefined variable $categories in D:\XAMPP\htdocs\inventory-system\app\views\users\index.php on line 78 in: D:\XAMPP\htdocs\inventory-system\app\views\users\index.php on line: 78
-[2026-05-20 15:42:20] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-20 15:42:23] [CRITICAL] Class "RoleMiddleware" not found in: D:\XAMPP\htdocs\inventory-system\public\index.php on line: 164
-[2026-05-20 16:45:10] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-20 16:45:34] [CRITICAL] You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'ON UPDATE' at line 4 in: D:\XAMPP\htdocs\inventory-system\app\controllers\UserController.php on line: 76
-[2026-05-20 16:48:15] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-20 16:58:10] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-20 17:01:41] [INFO] User logged in: staffone@example.com (ID: 2)
-[2026-05-20 17:03:52] [CRITICAL] Class "RoleMiddleware" not found in: D:\XAMPP\htdocs\inventory-system\public\index.php on line: 165
-[2026-05-20 17:05:49] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-20 17:06:05] [INFO] User logged in: staffone@example.com (ID: 2)
-[2026-05-20 17:15:35] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-20 17:16:28] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-20 17:34:13] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-20 17:46:31] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-20 17:57:56] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-20 18:02:12] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-20 18:02:41] [INFO] User logged in: staffone@example.com (ID: 2)
-[2026-05-20 18:03:58] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-20 18:13:56] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-20 18:14:10] [INFO] User logged in: staffone@example.com (ID: 2)
-[2026-05-21 09:07:38] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-21 09:07:48] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-21 10:47:06] [CRITICAL]  in: D:\XAMPP\htdocs\inventory-system\app\controllers\StockMovementController.php on line: 174
-[2026-05-21 10:48:25] [CRITICAL] Unknown column 'rn' in 'where clause' in: D:\XAMPP\htdocs\inventory-system\app\services\InventoryService.php on line: 188
-[2026-05-21 10:56:15] [CRITICAL] You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'SELECT DATE(sm.created_at) as date,
-                        p.name as produc...' at line 2 in: D:\XAMPP\htdocs\inventory-system\app\services\InventoryService.php on line: 188
-[2026-05-21 11:53:19] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-21 11:55:53] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-21 12:48:00] [CRITICAL] You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '(
-            SELECT 
-                p.name as product_name,
-            ...' at line 1 in: D:\XAMPP\htdocs\inventory-system\app\services\InventoryService.php on line: 420
-[2026-05-21 12:52:26] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-21 15:33:52] [CRITICAL] Unknown column 'p.name' in 'where clause' in: D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php on line: 56
-[2026-05-21 15:37:32] [CRITICAL] You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'WHERE 1=1
-             AND p.name LIKE '%?%' OR p.sku LIKE '%?%'' at line 19 in: D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php on line: 55
-[2026-05-21 15:37:35] [CRITICAL] [8192] htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php on line 14 in: D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php on line: 14
-[2026-05-21 15:37:40] [CRITICAL] [8192] htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php on line 14 in: D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php on line: 14
-[2026-05-21 15:38:37] [CRITICAL] [2] Undefined array key "product_search" in D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php on line 14 in: D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php on line: 14
-[2026-05-21 15:42:22] [CRITICAL] You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'WHERE 1=1' at line 19 in: D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php on line: 55
-[2026-05-21 15:47:17] [CRITICAL] The number of variables must match the number of parameters in the prepared statement in: D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php on line: 62
-[2026-05-21 15:49:16] [CRITICAL] The number of variables must match the number of parameters in the prepared statement in: D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php on line: 65
-[2026-05-21 15:49:55] [CRITICAL] The number of variables must match the number of parameters in the prepared statement in: D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php on line: 65
-[2026-05-21 15:50:30] [CRITICAL] The number of variables must match the number of parameters in the prepared statement in: D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php on line: 66
-[2026-05-21 15:51:13] [CRITICAL] The number of elements in the type definition string must match the number of bind variables in: D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php on line: 66
-[2026-05-21 15:52:41] [CRITICAL] The number of variables must match the number of parameters in the prepared statement in: D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php on line: 61
-[2026-05-21 15:59:13] [CRITICAL] print_r() expects at most 2 arguments, 4 given in: D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php on line: 61
-[2026-05-21 16:05:29] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-21 16:05:54] [CRITICAL] The number of variables must match the number of parameters in the prepared statement in: D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php on line: 63
-[2026-05-21 16:06:44] [CRITICAL] The number of variables must match the number of parameters in the prepared statement in: D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php on line: 63
-[2026-05-21 16:08:46] [CRITICAL] The number of variables must match the number of parameters in the prepared statement in: D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php on line: 64
-[2026-05-21 16:09:08] [CRITICAL] The number of variables must match the number of parameters in the prepared statement in: D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php on line: 64
-[2026-05-21 16:45:17] [CRITICAL] [2] Undefined variable $nextPage in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 108 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 108
-[2026-05-21 16:45:29] [CRITICAL] [2] Undefined variable $nextPage in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 108 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 108
-[2026-05-21 16:45:32] [CRITICAL] [2] Undefined variable $nextPage in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 108 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 108
-[2026-05-21 16:45:44] [CRITICAL] [2] Undefined variable $nextPage in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 108 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 108
-[2026-05-21 17:01:39] [CRITICAL] [2] Undefined variable $products in D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php on line 28 in: D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php on line: 28
-[2026-05-21 17:38:15] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-21 17:38:29] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-21 19:02:18] [INFO] User logged in: staffone@example.com (ID: 2)
-[2026-05-21 19:49:23] [CRITICAL] [2] Undefined array key "product_status" in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 148 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 148
-[2026-05-21 19:57:19] [CRITICAL] [2] Undefined array key 0 in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 119 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 119
-[2026-05-21 19:57:24] [CRITICAL] [2] Undefined array key 0 in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 119 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 119
-[2026-05-21 19:58:13] [CRITICAL] [2] Undefined array key 0 in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 119 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 119
-[2026-05-21 19:59:35] [CRITICAL] [2] Undefined array key 0 in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 119 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 119
-[2026-05-21 20:01:03] [CRITICAL] [2] Undefined array key "product_category" in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 21 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 21
-[2026-05-21 20:06:01] [CRITICAL] [2] Undefined array key "product_category" in D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line 21 in: D:\XAMPP\htdocs\inventory-system\app\views\products\index.php on line: 21
-[2026-05-21 20:33:41] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-21 20:34:58] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-21 21:32:17] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-21 21:38:32] [INFO] User logged in: staffone@example.com (ID: 2)
-[2026-05-21 21:52:55] [INFO] User logged in: staffone@example.com (ID: 2)
-[2026-05-21 21:55:53] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-21 22:07:05] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-22 09:55:07] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-22 09:59:53] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-22 13:49:51] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-22 13:50:16] [INFO] User logged in: staffone@example.com (ID: 2)
-[2026-05-22 15:30:35] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-22 15:48:56] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-22 15:49:39] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-22 16:37:21] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-22 18:01:45] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-22 18:27:29] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-22 18:43:40] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-22 18:47:56] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-22 18:49:12] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-22 18:52:22] [INFO] User logged in: staffone@example.com (ID: 2)
-[2026-05-22 18:52:35] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-22 20:25:36] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-22 20:28:09] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-22 20:28:19] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-22 20:30:21] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-22 21:00:21] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-22 21:08:47] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-23 02:14:59] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-23 02:45:15] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-23 02:52:04] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-23 04:14:28] [INFO] User logged in: staffone@example.com (ID: 2)
-[2026-05-23 04:39:50] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-23 05:47:04] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-23 07:32:18] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-23 07:32:31] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-23 12:07:48] [INFO] User logged in: staffone@example.com (ID: 2)
-[2026-05-23 12:07:54] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-23 12:10:08] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-23 12:16:53] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-23 12:17:05] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-23 12:54:34] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-23 12:56:21] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-23 12:57:31] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-23 12:57:38] [INFO] User logged in: staffone@example.com (ID: 2)
-[2026-05-23 15:10:25] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-23 16:02:29] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-23 16:16:12] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-23 16:27:46] [CRITICAL] You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'FROM products p LEFT JOIN stock_snapshots ss 
-            ON p.id = ss.produ...' at line 16 in: D:\XAMPP\htdocs\inventory-system\app\services\InventoryService.php on line: 362
-[2026-05-23 16:27:53] [CRITICAL] You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'FROM products p LEFT JOIN stock_snapshots ss 
-            ON p.id = ss.produ...' at line 16 in: D:\XAMPP\htdocs\inventory-system\app\services\InventoryService.php on line: 362
-[2026-05-23 16:30:11] [CRITICAL] You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'FROM stock_movements sm JOIN products p 
-                    ON sm.product_i...' at line 11 in: D:\XAMPP\htdocs\inventory-system\app\services\MovementService.php on line: 26
-[2026-05-23 16:34:54] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-05-23 16:34:54] [CRITICAL] syntax error, unexpected token "->", expecting "," or ";" in: D:\XAMPP\htdocs\inventory-system\app\views\inventory\index.php on line: 121
-[2026-05-23 16:37:19] [CRITICAL] date(): Argument #2 ($timestamp) must be of type ?int, string given in: D:\XAMPP\htdocs\inventory-system\app\views\inventory\index.php on line: 121
-[2026-05-23 16:40:04] [CRITICAL] syntax error, unexpected token "->", expecting "," or ";" in: D:\XAMPP\htdocs\inventory-system\app\views\inventory\index.php on line: 121
-[2026-05-23 16:41:43] [WARNING] DateTime::__construct(): Passing null to parameter #1 ($datetime) of type string is deprecated
-[2026-05-23 16:41:43] [WARNING] DateTime::__construct(): Passing null to parameter #1 ($datetime) of type string is deprecated
-[2026-05-23 16:41:43] [WARNING] DateTime::__construct(): Passing null to parameter #1 ($datetime) of type string is deprecated
-[2026-06-02 22:20:32] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-03 10:33:19] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-03 10:33:30] [CRITICAL] [2] require_once(D:\XAMPP\htdocs\inventory-system\app\controllers/../views/purchase-orders/index.php): Failed to open stream: No such file or directory in D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line 9 in: D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line: 9
-[2026-06-03 10:56:39] [CRITICAL] Class "SupplierController" not found in: D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line: 11
-[2026-06-03 11:29:23] [CRITICAL] [2] Undefined array key "product_name" in D:\XAMPP\htdocs\inventory-system\app\views\purchase_orders\index.php on line 100 in: D:\XAMPP\htdocs\inventory-system\app\views\purchase_orders\index.php on line: 100
-[2026-06-03 11:34:11] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-03 12:39:48] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-03 13:02:00] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-03 14:03:51] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-03 14:15:43] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-03 16:48:50] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-03 17:11:02] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-03 19:08:38] [INFO] Received purchase order creation request with data: {"supplier_id":"2","warehouse_id":"1","expected_delivery_date":"2026-06-05","notes":"","product":"","quantity":"","unit_price":"","items":[{"product_id":"10","quantity":"3","unit_price":"3333"}]}
-[2026-06-03 19:10:48] [INFO] Received purchase order creation request with data: {"supplier_id":"2","warehouse_id":"1","expected_delivery_date":"2026-06-05","notes":"","product":"","quantity":"","unit_price":"","items":[{"product_id":"3","quantity":"33","unit_price":"3333"}]}
-[2026-06-03 19:14:08] [INFO] Received purchase order creation request with data: {"supplier_id":"2","warehouse_id":"1","expected_delivery_date":"2026-06-05","notes":"","product":"","quantity":"","unit_price":"","items":[{"product_id":"3","quantity":"7","unit_price":"3000"}]}
-[2026-06-03 19:14:08] [CRITICAL] Class "PurchaseOrderService" not found in: D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line: 53
-[2026-06-03 19:14:49] [INFO] Received purchase order creation request with data: {"supplier_id":"2","warehouse_id":"1","expected_delivery_date":"2026-06-05","notes":"","product":"","quantity":"","unit_price":"","items":[{"product_id":"3","quantity":"7","unit_price":"3000"}]}
-[2026-06-03 19:14:49] [CRITICAL] Product ID must be an integer in: D:\XAMPP\htdocs\inventory-system\app\services\PurchaseOrderService.php on line: 51
-[2026-06-03 19:17:16] [INFO] Received purchase order creation request with data: {"supplier_id":"2","warehouse_id":"1","expected_delivery_date":"2026-06-05","notes":"","product":"","quantity":"","unit_price":"","items":[{"product_id":"3","quantity":"7","unit_price":"3000"}]}
-[2026-06-03 19:17:16] [CRITICAL] Product ID must be an integer in: D:\XAMPP\htdocs\inventory-system\app\services\PurchaseOrderService.php on line: 51
-[2026-06-03 19:17:30] [INFO] Received purchase order creation request with data: {"supplier_id":"2","warehouse_id":"1","expected_delivery_date":"2026-06-05","notes":"","product":"","quantity":"","unit_price":"","items":[{"product_id":"3","quantity":"7","unit_price":"3000"}]}
-[2026-06-03 19:17:30] [CRITICAL] Product ID must be an integer in: D:\XAMPP\htdocs\inventory-system\app\services\PurchaseOrderService.php on line: 51
-[2026-06-03 19:17:53] [INFO] Received purchase order creation request with data: {"supplier_id":"2","warehouse_id":"1","expected_delivery_date":"2026-06-05","notes":"","product":"","quantity":"","unit_price":"","items":[{"product_id":"10","quantity":"30","unit_price":"3000"}]}
-[2026-06-03 19:17:53] [CRITICAL] Product ID must be an integer in: D:\XAMPP\htdocs\inventory-system\app\services\PurchaseOrderService.php on line: 51
-[2026-06-03 19:22:15] [INFO] Received purchase order creation request with data: {"supplier_id":"2","warehouse_id":"1","expected_delivery_date":"2026-06-05","notes":"","product":"","quantity":"","unit_price":"","items":[{"product_id":"10","quantity":"3333","unit_price":"3333333333"}]}
-[2026-06-03 19:26:08] [INFO] Received purchase order creation request with data: {"supplier_id":"2","warehouse_id":"1","expected_delivery_date":"2026-06-05","notes":"","product":"","quantity":"","unit_price":"","items":[{"product_id":"11","quantity":"7","unit_price":"150000"}]}
-[2026-06-03 19:26:08] [CRITICAL] mysqli_stmt::bind_param(): Argument #1 ($types) must only contain the "b", "d", "i", "s" type specifiers in: D:\XAMPP\htdocs\inventory-system\app\services\PurchaseOrderService.php on line: 119
-[2026-06-03 19:26:45] [INFO] Received purchase order creation request with data: {"supplier_id":"2","warehouse_id":"1","expected_delivery_date":"2026-06-05","notes":"","product":"","quantity":"","unit_price":"","items":[{"product_id":"11","quantity":"7","unit_price":"150000"}]}
-[2026-06-03 22:15:05] [INFO] Received purchase order creation request with data: {"supplier_id":"1","warehouse_id":"2","expected_delivery_date":"2026-06-10","notes":"","product":"11","quantity":"","unit_price":"75000"}
-[2026-06-03 22:16:00] [INFO] Received purchase order creation request with data: {"supplier_id":"1","warehouse_id":"2","expected_delivery_date":"2026-06-01","notes":"","product":"","quantity":"","unit_price":"","items":[{"product_id":"1","quantity":"7","unit_price":"50000"},{"product_id":"10","quantity":"11","unit_price":"3000"},{"product_id":"3","quantity":"10","unit_price":"2000"}]}
-[2026-06-03 22:44:28] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-03 23:21:10] [INFO] Received purchase order creation request with data: {"supplier_id":"5","warehouse_id":"2","expected_delivery_date":"2026-06-02","notes":"","product":"","quantity":"","unit_price":"","items":[{"product_id":"8","quantity":"3","unit_price":"7000"}]}
-[2026-06-03 23:22:12] [INFO] Received purchase order creation request with data: {"supplier_id":"5","warehouse_id":"2","expected_delivery_date":"2026-06-07","notes":"","product":"","quantity":"","unit_price":"","items":[{"product_id":"8","quantity":"20","unit_price":"7000"},{"product_id":"7","quantity":"11","unit_price":"3000"}]}
-[2026-06-04 01:12:26] [CRITICAL] [2] require_once(D:\XAMPP\htdocs\inventory-system\app\controllers/../views/suppliers/index.php): Failed to open stream: No such file or directory in D:\XAMPP\htdocs\inventory-system\app\controllers\SupplierController.php on line 8 in: D:\XAMPP\htdocs\inventory-system\app\controllers\SupplierController.php on line: 8
-[2026-06-04 01:25:13] [CRITICAL] [2] Undefined array key "supplier_email" in D:\XAMPP\htdocs\inventory-system\app\views\suppliers\index.php on line 30 in: D:\XAMPP\htdocs\inventory-system\app\views\suppliers\index.php on line: 30
-[2026-06-04 01:41:02] [CRITICAL] [2] Undefined array key "supplier_email" in D:\XAMPP\htdocs\inventory-system\app\views\suppliers\index.php on line 33 in: D:\XAMPP\htdocs\inventory-system\app\views\suppliers\index.php on line: 33
-[2026-06-04 01:41:04] [CRITICAL] [2] Undefined array key "supplier_email" in D:\XAMPP\htdocs\inventory-system\app\views\suppliers\index.php on line 33 in: D:\XAMPP\htdocs\inventory-system\app\views\suppliers\index.php on line: 33
-[2026-06-04 01:41:16] [CRITICAL] [2] Undefined array key "supplier_id" in D:\XAMPP\htdocs\inventory-system\app\views\suppliers\index.php on line 39 in: D:\XAMPP\htdocs\inventory-system\app\views\suppliers\index.php on line: 39
-[2026-06-04 02:01:11] [CRITICAL] [2] Undefined array key "po_status" in D:\XAMPP\htdocs\inventory-system\app\views\purchase_orders\purchase_order_detail.php on line 22 in: D:\XAMPP\htdocs\inventory-system\app\views\purchase_orders\purchase_order_detail.php on line: 22
-[2026-06-04 02:46:03] [CRITICAL] [2] Undefined array key "remaining" in D:\XAMPP\htdocs\inventory-system\app\views\purchase_orders\purchase_order_detail.php on line 110 in: D:\XAMPP\htdocs\inventory-system\app\views\purchase_orders\purchase_order_detail.php on line: 110
-[2026-06-04 04:09:48] [INFO] User logged in: staffone@example.com (ID: 2)
-[2026-06-04 04:10:13] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-04 05:08:30] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-04 05:36:19] [CRITICAL] [2] Undefined array key "id" in D:\XAMPP\htdocs\inventory-system\app\views\purchase_orders\purchase_order_details.php on line 174 in: D:\XAMPP\htdocs\inventory-system\app\views\purchase_orders\purchase_order_details.php on line: 174
-[2026-06-04 05:36:32] [CRITICAL] [2] Undefined array key "id" in D:\XAMPP\htdocs\inventory-system\app\views\purchase_orders\purchase_order_details.php on line 174 in: D:\XAMPP\htdocs\inventory-system\app\views\purchase_orders\purchase_order_details.php on line: 174
-[2026-06-04 09:54:13] [CRITICAL] [2] Undefined array key "product_id" in D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line 124 in: D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line: 124
-[2026-06-04 09:56:54] [CRITICAL] [2] Undefined array key "product_id" in D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line 124 in: D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line: 124
-[2026-06-04 10:02:06] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-04 10:02:28] [CRITICAL] [2] Undefined array key "product_id" in D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line 126 in: D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line: 126
-[2026-06-04 10:03:58] [CRITICAL] [2] Undefined array key "product_id" in D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line 128 in: D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line: 128
-[2026-06-04 10:05:45] [CRITICAL] [2] Undefined array key "product_id" in D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line 125 in: D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line: 125
-[2026-06-04 10:08:13] [CRITICAL] [2] Undefined array key "product_id" in D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line 128 in: D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line: 128
-[2026-06-04 10:08:24] [CRITICAL] [2] Undefined array key "product_id" in D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line 128 in: D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line: 128
-[2026-06-04 10:13:56] [CRITICAL] [2] Undefined array key "order_quantity" in D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line 129 in: D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line: 129
-[2026-06-04 10:15:36] [CRITICAL] [2] Undefined array key "product_id" in D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line 128 in: D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line: 128
-[2026-06-04 10:16:05] [CRITICAL] [2] Undefined array key "product_id" in D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line 125 in: D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line: 125
-[2026-06-04 10:17:05] [CRITICAL] [2] Undefined array key "product_id" in D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line 125 in: D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line: 125
-[2026-06-04 10:17:14] [CRITICAL] [2] Undefined array key "product_id" in D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line 125 in: D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line: 125
-[2026-06-04 10:17:34] [CRITICAL] [2] Undefined array key "product_id" in D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line 125 in: D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line: 125
-[2026-06-04 10:17:43] [CRITICAL] [2] Undefined array key "product_id" in D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line 125 in: D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line: 125
-[2026-06-04 10:18:19] [CRITICAL] [2] Undefined array key "product_id" in D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line 128 in: D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line: 128
-[2026-06-04 10:27:12] [CRITICAL] [2] Undefined array key " product_id " in D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line 128 in: D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line: 128
-[2026-06-04 10:30:28] [CRITICAL] [2] Undefined array key "warehouse_id" in D:\XAMPP\htdocs\inventory-system\app\services\PurchaseOrderService.php on line 414 in: D:\XAMPP\htdocs\inventory-system\app\services\PurchaseOrderService.php on line: 414
-[2026-06-04 10:52:07] [WARNING] DateTime::__construct(): Passing null to parameter #1 ($datetime) of type string is deprecated
-[2026-06-04 10:52:07] [WARNING] DateTime::__construct(): Passing null to parameter #1 ($datetime) of type string is deprecated
-[2026-06-04 10:52:07] [WARNING] DateTime::__construct(): Passing null to parameter #1 ($datetime) of type string is deprecated
-[2026-06-04 10:55:55] [CRITICAL] Receive Now must be an integer and not a negative number in: D:\XAMPP\htdocs\inventory-system\app\services\PurchaseOrderService.php on line: 397
-[2026-06-04 11:20:13] [INFO] User logged in: staffone@example.com (ID: 2)
-[2026-06-04 11:20:27] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-04 11:41:26] [INFO] User logged in: staffone@example.com (ID: 2)
-[2026-06-04 11:41:47] [CRITICAL] [2] Undefined array key "HTTP_REFERER" in D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line 205 in: D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php on line: 205
-[2026-06-04 11:48:40] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-04 11:49:51] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-09 22:04:06] [CRITICAL] 
+        [mysqli_sql_exception]
+MESSAGE: Table 'inventory_system.user' doesn't exist
+FILE: D:\XAMPP\htdocs\inventory-system\app\services\AuthService.php
+LINE: 11
+TRACE: #0 D:\XAMPP\htdocs\inventory-system\app\services\AuthService.php(11): mysqli->prepare('\r\n             ...')
+#1 D:\XAMPP\htdocs\inventory-system\app\controllers\AuthController.php(32): AuthService::authenticateUser('admin@example.c...', 'admin12345')
+#2 D:\XAMPP\htdocs\inventory-system\public\index.php(73): AuthController->login()
+#3 {main}
+
+[2026-06-09 22:05:10] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-09 22:46:35] [CRITICAL] 
+        [mysqli_sql_exception]
+MESSAGE: Duplicate entry 'CLOT-901-JEANS-1556' for key 'sku'
+FILE: D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php
+LINE: 44
+TRACE: #0 D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php(44): mysqli_stmt->execute()
+#1 D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php(68): ProductService::createProduct(Array)
+#2 D:\XAMPP\htdocs\inventory-system\public\index.php(198): ProductController->createProduct()
+#3 {main}
+
+[2026-06-09 22:53:51] [CRITICAL] 
+        [ValidationException]
+MESSAGE: Product with same SKU already exists.
+FILE: D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php
+LINE: 48
+TRACE: #0 D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php(68): ProductService::createProduct(Array)
+#1 D:\XAMPP\htdocs\inventory-system\public\index.php(198): ProductController->createProduct()
+#2 {main}
+
+[2026-06-09 22:56:23] [CRITICAL] 
+        [ValidationException]
+MESSAGE: Product with same SKU already exists.
+FILE: D:\XAMPP\htdocs\inventory-system\app\services\ProductService.php
+LINE: 48
+TRACE: #0 D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php(68): ProductService::createProduct(Array)
+#1 D:\XAMPP\htdocs\inventory-system\public\index.php(198): ProductController->createProduct()
+#2 {main}
+
+[2026-06-10 00:13:42] [CRITICAL] 
+        [Error]
+MESSAGE: Class "CategoryService" not found
+FILE: D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php
+LINE: 17
+TRACE: #0 D:\XAMPP\htdocs\inventory-system\public\index.php(192): ProductController->index()
+#1 {main}
+
+[2026-06-10 00:13:43] [CRITICAL] 
+        [Error]
+MESSAGE: Class "CategoryService" not found
+FILE: D:\XAMPP\htdocs\inventory-system\app\controllers\ProductController.php
+LINE: 17
+TRACE: #0 D:\XAMPP\htdocs\inventory-system\public\index.php(192): ProductController->index()
+#1 {main}
+
+[2026-06-10 00:18:01] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-10 01:09:49] [CRITICAL] 
+        [Error]
+MESSAGE: Non-static method CategoryService::getCategoryById() cannot be called statically
+FILE: D:\XAMPP\htdocs\inventory-system\app\services\CategoryService.php
+LINE: 117
+TRACE: #0 D:\XAMPP\htdocs\inventory-system\app\controllers\CategoryController.php(146): CategoryService::deleteCategory(6)
+#1 D:\XAMPP\htdocs\inventory-system\public\index.php(161): CategoryController->deleteCategory()
+#2 {main}
+
+[2026-06-10 13:00:44] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-10 13:28:07] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-10 13:29:12] [CRITICAL] 
+        [Error]
+MESSAGE: Call to undefined method ProductController::getAllActiveProducts()
+FILE: D:\XAMPP\htdocs\inventory-system\app\controllers\StockMovementController.php
+LINE: 15
+TRACE: #0 D:\XAMPP\htdocs\inventory-system\public\index.php(88): StockMovementController->index()
+#1 {main}
+
+[2026-06-10 13:29:18] [CRITICAL] 
+        [Error]
+MESSAGE: Call to undefined method ProductController::getAllActiveProducts()
+FILE: D:\XAMPP\htdocs\inventory-system\app\controllers\StockMovementController.php
+LINE: 15
+TRACE: #0 D:\XAMPP\htdocs\inventory-system\public\index.php(88): StockMovementController->index()
+#1 {main}
+
+[2026-06-10 13:29:20] [CRITICAL] 
+        [Error]
+MESSAGE: Call to undefined method ProductController::getAllActiveProducts()
+FILE: D:\XAMPP\htdocs\inventory-system\app\controllers\ReturnController.php
+LINE: 9
+TRACE: #0 D:\XAMPP\htdocs\inventory-system\public\index.php(229): ReturnController->index()
+#1 {main}
+
+[2026-06-10 13:29:24] [CRITICAL] 
+        [Error]
+MESSAGE: Call to undefined method ProductController::getAllActiveProducts()
+FILE: D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php
+LINE: 10
+TRACE: #0 D:\XAMPP\htdocs\inventory-system\public\index.php(265): PurchaseOrderController->index()
+#1 {main}
+
+[2026-06-10 13:29:57] [CRITICAL] 
+        [ValidationException]
+MESSAGE: Category does not exist
+FILE: D:\XAMPP\htdocs\inventory-system\app\services\CategoryService.php
+LINE: 71
+TRACE: #0 D:\XAMPP\htdocs\inventory-system\app\services\CategoryService.php(117): CategoryService::getCategoryById(1115)
+#1 D:\XAMPP\htdocs\inventory-system\app\controllers\CategoryController.php(146): CategoryService::deleteCategory(1115)
+#2 D:\XAMPP\htdocs\inventory-system\public\index.php(161): CategoryController->deleteCategory()
+#3 {main}
+
+[2026-06-10 13:58:37] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-10 14:01:17] [CRITICAL] 
+        [Error]
+MESSAGE: Call to undefined method ProductController::getAllActiveProducts()
+FILE: D:\XAMPP\htdocs\inventory-system\app\controllers\StockMovementController.php
+LINE: 15
+TRACE: #0 D:\XAMPP\htdocs\inventory-system\public\index.php(89): StockMovementController->index()
+#1 {main}
+
+[2026-06-10 17:41:13] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-10 17:42:03] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-10 17:46:24] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-10 17:46:32] [CRITICAL] 
+        [Error]
+MESSAGE: Class "SupplierService" not found
+FILE: D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php
+LINE: 10
+TRACE: #0 D:\XAMPP\htdocs\inventory-system\public\index.php(266): PurchaseOrderController->index()
+#1 {main}
+
+[2026-06-10 17:46:44] [CRITICAL] 
+        [Error]
+MESSAGE: Class "SupplierService" not found
+FILE: D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php
+LINE: 10
+TRACE: #0 D:\XAMPP\htdocs\inventory-system\public\index.php(266): PurchaseOrderController->index()
+#1 {main}
+
+[2026-06-10 17:49:53] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-12 01:51:11] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-12 02:32:56] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-12 02:50:41] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-12 02:52:44] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-12 03:14:00] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-12 03:14:21] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-12 03:23:03] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-12 04:06:33] [CRITICAL] 
+        [ValidationException]
+MESSAGE: Invalid email format
+FILE: D:\XAMPP\htdocs\inventory-system\app\controllers\AuthController.php
+LINE: 28
+TRACE: #0 D:\XAMPP\htdocs\inventory-system\public\index.php(76): AuthController->login()
+#1 {main}
+
+[2026-06-12 04:06:35] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-12 04:56:37] [INFO] User logged in: staffone@example.com (ID: 2)
+[2026-06-12 04:56:38] [CRITICAL] 
+        [mysqli_sql_exception]
+MESSAGE: Unknown column 'po.warehouse_id' in 'on clause'
+FILE: D:\XAMPP\htdocs\inventory-system\app\services\PurchaseOrderService.php
+LINE: 198
+TRACE: #0 D:\XAMPP\htdocs\inventory-system\app\services\PurchaseOrderService.php(198): mysqli->prepare('\r\n            S...')
+#1 D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php(11): PurchaseOrderService::getAllPurchaseOrders()
+#2 D:\XAMPP\htdocs\inventory-system\public\index.php(267): PurchaseOrderController->index()
+#3 {main}
+
+[2026-06-12 04:56:49] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-12 04:56:52] [CRITICAL] 
+        [mysqli_sql_exception]
+MESSAGE: Unknown column 'po.warehouse_id' in 'on clause'
+FILE: D:\XAMPP\htdocs\inventory-system\app\services\PurchaseOrderService.php
+LINE: 198
+TRACE: #0 D:\XAMPP\htdocs\inventory-system\app\services\PurchaseOrderService.php(198): mysqli->prepare('\r\n            S...')
+#1 D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php(11): PurchaseOrderService::getAllPurchaseOrders()
+#2 D:\XAMPP\htdocs\inventory-system\public\index.php(267): PurchaseOrderController->index()
+#3 {main}
+
+[2026-06-12 05:18:27] [CRITICAL] 
+        [ErrorException]
+MESSAGE: Undefined array key "warehouse"
+FILE: D:\XAMPP\htdocs\inventory-system\app\views\purchase_orders\purchase_order_details.php
+LINE: 37
+TRACE: #0 D:\XAMPP\htdocs\inventory-system\app\views\purchase_orders\purchase_order_details.php(37): ErrorHandler::errorHandler(2, 'Undefined array...', 'D:\\XAMPP\\htdocs...', 37)
+#1 D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php(103): require_once('D:\\XAMPP\\htdocs...')
+#2 D:\XAMPP\htdocs\inventory-system\public\index.php(279): PurchaseOrderController->purchaseOrderDetails()
+#3 {main}
+
+[2026-06-12 05:18:31] [CRITICAL] 
+        [ErrorException]
+MESSAGE: Undefined array key "warehouse"
+FILE: D:\XAMPP\htdocs\inventory-system\app\views\purchase_orders\purchase_order_details.php
+LINE: 37
+TRACE: #0 D:\XAMPP\htdocs\inventory-system\app\views\purchase_orders\purchase_order_details.php(37): ErrorHandler::errorHandler(2, 'Undefined array...', 'D:\\XAMPP\\htdocs...', 37)
+#1 D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php(103): require_once('D:\\XAMPP\\htdocs...')
+#2 D:\XAMPP\htdocs\inventory-system\public\index.php(279): PurchaseOrderController->purchaseOrderDetails()
+#3 {main}
+
+[2026-06-12 05:36:51] [CRITICAL] 
+        [ValidationException]
+MESSAGE: Invalid email format
+FILE: D:\XAMPP\htdocs\inventory-system\app\controllers\AuthController.php
+LINE: 28
+TRACE: #0 D:\XAMPP\htdocs\inventory-system\public\index.php(76): AuthController->login()
+#1 {main}
+
+[2026-06-12 05:36:54] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-12 05:45:34] [CRITICAL] 
+        [ErrorException]
+MESSAGE: Undefined array key "product_id"
+FILE: D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php
+LINE: 132
+TRACE: #0 D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php(132): ErrorHandler::errorHandler(2, 'Undefined array...', 'D:\\XAMPP\\htdocs...', 132)
+#1 D:\XAMPP\htdocs\inventory-system\public\index.php(285): PurchaseOrderController->receiveItems()
+#2 {main}
+
+[2026-06-12 06:06:03] [CRITICAL] 
+        [ValidationException]
+MESSAGE: Receiveable item(s) must have a warehouse
+FILE: D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php
+LINE: 139
+TRACE: #0 D:\XAMPP\htdocs\inventory-system\public\index.php(285): PurchaseOrderController->receiveItems()
+#1 {main}
+
+[2026-06-12 06:06:24] [CRITICAL] 
+        [ValidationException]
+MESSAGE: You can not select a warehouse without receiving the item
+FILE: D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php
+LINE: 144
+TRACE: #0 D:\XAMPP\htdocs\inventory-system\public\index.php(285): PurchaseOrderController->receiveItems()
+#1 {main}
+
