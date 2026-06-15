@@ -1,3 +1,4 @@
+
 CREATE TABLE stock_movements(
     id INT AUTO_INCREMENT PRIMARY KEY, 
     product_id INT NOT NULL,
@@ -17,7 +18,8 @@ CREATE TABLE stock_movements(
         'ADJUSTMENT_OUT',
         'RETURN',
         'DAMAGE',
-        'EXPIRE'
+        'EXPIRE',
+        'PURCHASE'
     ) NOT NULL,
     quantity INT NOT NULL CHECK( quantity > 0),
     resulting_stock INT NOT NULL CHECK( resulting_stock >= 0),

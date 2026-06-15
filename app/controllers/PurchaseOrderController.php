@@ -154,7 +154,7 @@ class PurchaseOrderController
 
     public function receiveItems()
     {
-        # product_id | order_quantity | received_quantity | warehouse_id |receive_now
+        # warehouse_id | items -> product_id | order_quantity | received_quantity |receive_now
 
         # Check if the request method is POST
         if ($_SERVER["REQUEST_METHOD"] !== "POST") {
@@ -162,37 +162,30 @@ class PurchaseOrderController
         }
 
         # Validate the input data
-        if (!isset($_POST["purchase_order_id"]) || !isset($_POST["items"])) {
-            throw new ValidationException("All fields are required");
-        }
-
         if (empty($_POST["items"])) {
             throw new ValidationException("At least one item must be received");
         }
+        if (
+            !isset($_POST["purchase_order_id"]) ||
+            !isset($_POST["warehouse_id"])
+        ) {
+            throw new ValidationException("All fields are required");
+        }
+
         $purchase_order_id = $_POST["purchase_order_id"];
+        $warehouse_id = $_POST["warehouse_id"];
         $items = $_POST["items"];
 
         # Sanitize the input data
         $purchase_order_id = (int) $purchase_order_id;
+        $warehouse_id = (int) $warehouse_id;
 
         $hasReceiveQuantity = false;
         foreach ($items as &$item) {
             $item["product_id"] = (int) $item["product_id"];
             $item["order_quantity"] = (int) $item["order_quantity"];
             $item["received_quantity"] = (int) $item["received_quantity"];
-            $item["warehouse_id"] = (int) $item["warehouse_id"];
             $item["receive_now"] = (int) $item["receive_now"];
-
-            if ($item["receive_now"] > 0 && $item["warehouse_id"] === 0) {
-                throw new ValidationException(
-                    "Receiveable item(s) must have a warehouse",
-                );
-            }
-            if ($item["warehouse_id"] !== 0 && $item["receive_now"] === 0) {
-                throw new ValidationException(
-                    "You can not select a warehouse without receiving the item",
-                );
-            }
 
             if ($item["receive_now"] !== 0) {
                 $hasReceiveQuantity = true;
@@ -206,6 +199,7 @@ class PurchaseOrderController
         # Receive the items
         PurchaseOrderService::receivePurchaseOrderItems(
             $purchase_order_id,
+            $warehouse_id,
             $items,
         );
 

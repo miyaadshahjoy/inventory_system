@@ -51,6 +51,7 @@ class InventoryService
                 "RETURN",
                 "DAMAGE",
                 "EXPIRE",
+                "PURCHASE",
             ];
 
             if (!in_array($movement_type, $valid_movement_types)) {
@@ -66,7 +67,7 @@ class InventoryService
 
             # 2) Derive movement direction
 
-            $in_movements = ["STOCK_IN", "RETURN", "ADJUSTMENT_IN"];
+            $in_movements = ["STOCK_IN", "RETURN", "ADJUSTMENT_IN", "PURCHASE"];
             // $out_movements = ['STOCK_OUT', 'DAMAGE', 'EXPIRE', 'ADJUSTMENT_OUT'];
 
             $movement_direction = in_array($movement_type, $in_movements)
@@ -245,6 +246,7 @@ class InventoryService
                 "RETURN",
                 "DAMAGE",
                 "EXPIRE",
+                "PURCHASE",
             ];
 
             if (!in_array($movement_type, $valid_movement_types)) {
@@ -260,7 +262,7 @@ class InventoryService
 
             # 2) Derive movement direction
 
-            $in_movements = ["STOCK_IN", "RETURN", "ADJUSTMENT_IN"];
+            $in_movements = ["STOCK_IN", "RETURN", "ADJUSTMENT_IN", "PURCHASE"];
             // $out_movements = ['STOCK_OUT', 'DAMAGE', 'EXPIRE', 'ADJUSTMENT_OUT'];
 
             $movement_direction = in_array($movement_type, $in_movements)

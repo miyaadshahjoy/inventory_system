@@ -19,6 +19,7 @@ require_once __DIR__ . "/../app/controllers/AuthController.php";
 require_once __DIR__ . "/../app/controllers/DashboardController.php";
 require_once __DIR__ . "/../app/controllers/StockMovementController.php";
 require_once __DIR__ . "/../app/controllers/InventoryController.php";
+require_once __DIR__ . "/../app/controllers/StockReportController.php";
 require_once __DIR__ . "/../app/controllers/PurchaseOrderController.php";
 require_once __DIR__ . "/../app/controllers/CategoryController.php";
 require_once __DIR__ . "/../app/controllers/ProductController.php";
@@ -32,6 +33,7 @@ require_once __DIR__ . "/../app/services/AuthService.php";
 require_once __DIR__ . "/../app/services/TransferService.php";
 require_once __DIR__ . "/../app/services/MovementService.php";
 require_once __DIR__ . "/../app/services/InventoryService.php";
+require_once __DIR__ . "/../app/services/StockReportService.php";
 require_once __DIR__ . "/../app/services/ProductService.php";
 require_once __DIR__ . "/../app/services/CategoryService.php";
 require_once __DIR__ . "/../app/services/WarehouseService.php";
@@ -136,6 +138,12 @@ switch ($url) {
         AuthMiddleware::check();
         $controller = new InventoryController();
         $controller->exportCSV();
+        break;
+
+    case "stock-report":
+        AuthMiddleware::check();
+        $controller = new StockReportController();
+        $controller->index();
         break;
 
     # Categories

@@ -471,4 +471,48 @@ document.addEventListener("DOMContentLoaded", () => {
       },
     });
   }
+  if (document.querySelector("#warehouse")) {
+    new TomSelect("#warehouse", {
+      create: false,
+      sortField: {
+        field: "text",
+        direction: "asc",
+      },
+    });
+  }
+  if (document.querySelector("#product")) {
+    new TomSelect("#product", {
+      create: false,
+      sortField: {
+        field: "text",
+        direction: "asc",
+      },
+    });
+  }
+  if (document.querySelector("#category")) {
+    new TomSelect("#category", {
+      create: false,
+      sortField: {
+        field: "text",
+        direction: "asc",
+      },
+    });
+  }
 });
+
+///////////////////////////////////////////////////
+function showCurrentStockDetails() {
+  document.querySelector(".stock-details-tab").classList.add("active");
+  document.querySelector(".stock-movements-tab").classList.remove("active");
+  document.querySelector(".stock-details-tab-content").classList.remove("hide");
+  document.querySelector(".stock-movements-tab-content").classList.add("hide");
+}
+
+function showStockMovementsSummary() {
+  document.querySelector(".stock-movements-tab").classList.add("active");
+  document.querySelector(".stock-details-tab").classList.remove("active");
+  document
+    .querySelector(".stock-movements-tab-content")
+    .classList.remove("hide");
+  document.querySelector(".stock-details-tab-content").classList.add("hide");
+}

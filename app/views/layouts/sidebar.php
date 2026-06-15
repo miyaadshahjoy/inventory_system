@@ -39,6 +39,13 @@ function isActive(string $path, string $current_uri): string
     ) ?>">
       Inventory Overview
     </a>
+    <!-- Stock Report -->
+    <a href="/stock-report" class="sidebar-link <?= isActive(
+        "/stock-report",
+        $current_uri,
+    ) ?>">
+      Stock Report
+    </a>
 
     <a href="/returns" class="sidebar-link <?= isActive(
         "/returns",

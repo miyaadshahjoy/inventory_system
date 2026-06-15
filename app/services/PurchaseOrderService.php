@@ -412,22 +412,30 @@ class PurchaseOrderService
 
     public static function receivePurchaseOrderItems(
         int $purchase_order_id,
+        int $warehouse_id,
         array $items,
     ) {
         $conn = Database::connect();
         try {
             # 1) Validate input data
+            # 1.A) Check if purchase_order_id is an integer
             if (!is_int($purchase_order_id)) {
                 throw new SystemException(
                     "Purchase Order ID must be an integer",
                 );
             }
 
+            # 1.B) Check if warehouse_id is an integer
+            if (!is_int($warehouse_id)) {
+                throw new SystemException("Warehouse ID must be an integer");
+            }
+
+            # 1.C) Check if items is an array
             if (!is_array($items)) {
                 throw new SystemException("Items must be an array");
             }
 
-            # 2) Validate Purchase Order: purchase_order exists
+            # 2) Validate Purchase Order: Check if purchase_order exists
             # 2.A) Fetch purchase order
             $purchase_order = self::getPurchaseOrderById($purchase_order_id);
             # 2.B) Check if purchase order exists
@@ -462,8 +470,7 @@ class PurchaseOrderService
             # 5.A) Filter items: process items with received_quantity > 0
             $items = array_filter(
                 $items,
-                fn($item) => $item["warehouse_id"] !== null &&
-                    $item["receive_now"] > 0,
+                fn($item) => $item["receive_now"] > 0,
             );
 
             # 5.B) Process items
@@ -471,9 +478,7 @@ class PurchaseOrderService
                 # product_id | order_quantity | received_quantity | warehouse_id | receive_now
                 $product_id = $item["product_id"];
                 $order_quantity = $item["order_quantity"];
-                $warehouse_id = $item["warehouse_id"];
                 $received_quantity = $item["received_quantity"];
-
                 $receive_now = $item["receive_now"];
 
                 # 5.A) Check if product_id is INTEGER
@@ -524,7 +529,7 @@ class PurchaseOrderService
                 if ($receive_now > 0) {
                     InventoryService::addMovementWithoutTransaction(
                         $product_id,
-                        "STOCK_IN",
+                        "PURCHASE",
                         $warehouse_id,
                         $receive_now,
                         $created_by,

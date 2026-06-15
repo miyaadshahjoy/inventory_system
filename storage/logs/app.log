@@ -84,3 +84,25 @@ TRACE: #0 D:\XAMPP\htdocs\inventory-system\public\index.php(76): AuthController-
 #1 {main}
 
 [2026-06-15 06:53:11] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-15 17:20:46] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-15 18:32:38] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-15 18:47:52] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-15 19:23:04] [CRITICAL] 
+        [ErrorException]
+MESSAGE: Undefined array key "warehouse_id"
+FILE: D:\XAMPP\htdocs\inventory-system\app\services\PurchaseOrderService.php
+LINE: 473
+TRACE: #0 D:\XAMPP\htdocs\inventory-system\app\services\PurchaseOrderService.php(473): ErrorHandler::errorHandler(2, 'Undefined array...', 'D:\\XAMPP\\htdocs...', 473)
+#1 [internal function]: PurchaseOrderService::{closure}(Array)
+#2 D:\XAMPP\htdocs\inventory-system\app\services\PurchaseOrderService.php(471): array_filter(Array, Object(Closure))
+#3 D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php(200): PurchaseOrderService::receivePurchaseOrderItems(14, 1, Array)
+#4 D:\XAMPP\htdocs\inventory-system\public\index.php(296): PurchaseOrderController->receiveItems()
+#5 {main}
+
+[2026-06-15 20:18:48] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-15 21:07:40] [INFO] User logged in: staffone@example.com (ID: 2)
+[2026-06-15 21:08:22] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-16 03:07:33] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-16 03:07:54] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-16 03:17:50] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-16 03:25:55] [INFO] User logged in: admin@example.com (ID: 1)

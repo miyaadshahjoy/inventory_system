@@ -587,6 +587,28 @@ a {
   min-width: 60px;
 }
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
+/* STOCK REPORT STYLES */
+
+.stock-report-tabs-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  border-top: 1px solid #ddd;
+}
+.stock-report-tabs-container div {
+  padding: 12px 16px;
+  border: 1px solid #000;
+  cursor: pointer;
+}
+
+.stock-details-tab.active,
+.stock-movements-tab.active {
+  background: #000;
+  color: #fff;
+}
+
+/* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
 
 /* HIDE */
 .hide {
