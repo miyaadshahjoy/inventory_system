@@ -76,7 +76,7 @@ ob_start();
 # ADD NEW WAREHOUSE
   -->
 <!-- Modal Window for adding new warehouse -->
-<div id="modal" class="modal warehouse-modal">
+<div id="modal" class="modal modal-narrow warehouse-modal">
   <div class="modal-content">
     <div class="modal-header">
       <h3>Create Warehouse</h3>
@@ -101,7 +101,7 @@ ob_start();
 # UPDATE WAREHOUSE
   -->
 <!-- Modal Window for updating warehouse -->
-<div id="warehouseUpdateModal" class="modal warehouse-modal">
+<div id="warehouseUpdateModal" class="modal modal-narrow warehouse-modal">
   <div class="modal-content">
     <div class="modal-header">
       <h3>Update Warehouse</h3>

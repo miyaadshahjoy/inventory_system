@@ -1,12 +1,10 @@
 <?php
 
-$current_uri = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
+$current_uri = parse_url($_SERVER["REQUEST_URI"] ?? "", PHP_URL_PATH);
 
 function isActive(string $path, string $current_uri): string
 {
-  return str_starts_with($current_uri, $path)
-    ? 'sidebar-active'
-    : '';
+    return str_starts_with($current_uri, $path) ? "sidebar-active" : "";
 }
 ?>
 <aside id="sidebar" class="sidebar">
@@ -15,54 +13,98 @@ function isActive(string $path, string $current_uri): string
   </div>
 
   <nav class="sidebar-nav">
+    <!-- OVERVIEW -->
     <div class="sidebar-section-title">OVERVIEW</div>
 
-    <a href="/dashboard" class="sidebar-link <?= isActive('/dashboard', $current_uri) ?>">
+    <a href="/dashboard" class="sidebar-link <?= isActive(
+        "/dashboard",
+        $current_uri,
+    ) ?>">
       Dashboard
     </a>
 
+    <!-- INVENTORY -->
     <div class="sidebar-section-title">INVENTORY</div>
 
-    <a href="/stock-movements" class="sidebar-link <?= isActive('/stock-movements', $current_uri) ?>">
+    <a href="/stock-movements" class="sidebar-link <?= isActive(
+        "/stock-movements",
+        $current_uri,
+    ) ?>">
       Stock Movements
     </a>
 
-    <a href="/inventory-overview" class="sidebar-link <?= isActive('/inventory-overview', $current_uri) ?>">
+    <a href="/inventory-overview" class="sidebar-link <?= isActive(
+        "/inventory-overview",
+        $current_uri,
+    ) ?>">
       Inventory Overview
     </a>
 
-    <a href="/returns" class="sidebar-link <?= isActive('/returns', $current_uri) ?>">
+    <a href="/returns" class="sidebar-link <?= isActive(
+        "/returns",
+        $current_uri,
+    ) ?>">
       Returns
     </a>
 
+    <!-- PROCUREMENT -->
     <div class="sidebar-section-title">PROCUREMENT</div>
-    <a href="/purchase-orders" class="sidebar-link <?= isActive('/purchase-orders', $current_uri) ?>">
+    <!-- Purchase Orders -->
+    <a href="/purchase-orders" class="sidebar-link <?= isActive(
+        "/purchase-orders",
+        $current_uri,
+    ) ?>">
       Purchase Orders
+    </a>
+    <!-- Purchase Items -->
+    <a href="/purchase-items" class="sidebar-link <?= isActive(
+        "/purchase-items",
+        $current_uri,
+    ) ?>">
+      Purchase Items
     </a>
 
     <!-- Suppliers -->
-    <a href="/suppliers" class="sidebar-link <?= isActive('/suppliers', $current_uri) ?>">
+    <a href="/suppliers" class="sidebar-link <?= isActive(
+        "/suppliers",
+        $current_uri,
+    ) ?>">
       Suppliers
     </a>
 
     <div class="sidebar-section-title">CATALOG</div>
 
-    <a href="/products" class="sidebar-link <?= isActive('/products', $current_uri) ?>">
+    <a href="/products" class="sidebar-link <?= isActive(
+        "/products",
+        $current_uri,
+    ) ?>">
       Products
     </a>
 
-    <a href="/categories" class="sidebar-link <?= isActive('/categories', $current_uri) ?>">
+    <a href="/categories" class="sidebar-link <?= isActive(
+        "/categories",
+        $current_uri,
+    ) ?>">
       Categories
     </a>
 
-    <a href="/warehouses" class="sidebar-link <?= isActive('/warehouses', $current_uri) ?>">
+    <a href="/warehouses" class="sidebar-link <?= isActive(
+        "/warehouses",
+        $current_uri,
+    ) ?>">
       Warehouses
     </a>
 
     <div class="sidebar-section-title">SYSTEM</div>
-    <?php if ($_SESSION['user']['role'] === 'ADMIN'): ?>
-      <a href="/users" class="sidebar-link <?= isActive('/users', $current_uri) ?>"> Users & Roles </a>
+    <?php if ($_SESSION["user"]["role"] === "ADMIN"): ?>
+      <a href="/users" class="sidebar-link <?= isActive(
+          "/users",
+          $current_uri,
+      ) ?>"> Users & Roles </a>
     <?php endif; ?>
-    <a href="/logout" class="sidebar-link <?= isActive('/logout', $current_uri) ?>">Logout</a>
+    <a href="/logout" class="sidebar-link <?= isActive(
+        "/logout",
+        $current_uri,
+    ) ?>">Logout</a>
   </nav>
 </aside>

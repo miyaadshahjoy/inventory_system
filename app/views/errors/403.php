@@ -1,6 +1,5 @@
 <?php
-http_response_code(403);
-?>
+http_response_code(403); ?>
 
 <!doctype html>
 <html lang="en">
@@ -11,7 +10,7 @@ http_response_code(403);
 
     <title>403 - Forbidden</title>
 
-    <link rel="stylesheet" href="/assets/css/style.css" />
+    <link rel="stylesheet" href="/assets/css/error-pages-style.css" />
   </head>
 
   <body>
@@ -26,7 +25,7 @@ http_response_code(403);
         </p>
 
         <button class="error-button">
-          <a href="/dashboard"> Return Dashboard </a>
+          <a href="/dashboard"> Return To Dashboard </a>
         </button>
       </div>
     </div>

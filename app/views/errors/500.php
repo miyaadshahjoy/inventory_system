@@ -7,7 +7,7 @@
 
     <title>500 - Server Error</title>
 
-    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/error-pages-style.css">
   </head>
 
   <body>
@@ -20,7 +20,7 @@
         <p class="error-message">Something went wrong on our side.</p>
         <button class="error-button">
 
-          <a href="/dashboard"> Return Dashboard </a>
+          <a href="/dashboard"> Return To Dashboard </a>
         </button>
       </div>
     </div>

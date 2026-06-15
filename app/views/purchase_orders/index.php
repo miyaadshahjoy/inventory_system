@@ -79,9 +79,32 @@ ob_start();
                             <td>
                                 <?= htmlspecialchars($order["created_at"]) ?>
                             </td>
-                            <td><a href="/purchase-orders/details?id=<?= $order[
-                                "id"
-                            ] ?>">View</a></td>
+                            <td>
+                                <a href="/purchase-orders/details?id=<?= $order[
+                                    "id"
+                                ] ?>">
+                                    <button type="button">Details</button>
+                                </a>
+                                
+                                <?php if (
+                                    $order["status"] === "PENDING" &&
+                                    $_SESSION["user"]["role"] === "ADMIN"
+                                ): ?>
+                                    <a href="approve?id=<?= $order["id"] ?>">
+                                        <button type="button">Approve</button>
+                                    </a>
+                                <?php endif; ?>
+                                
+                                <?php if (
+                                    ($_SESSION["user"]["role"] === "ADMIN" &&
+                                        $order["status"] === "PENDING") ||
+                                    $order["status"] === "APPROVED"
+                                ): ?>
+                                    <a href="cancel?id=<?= $order["id"] ?> ">
+                                        <button type="button">Cancel</button>
+                                    </a>
+                                <?php endif; ?>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -140,56 +163,6 @@ ob_start();
                     <textarea name="notes" rows="5" id="notes"></textarea>
                 </div>
             </div>
-
-            <button type="button" onclick="showProductList()">+ Add Products</button>
-            <table class="purchase-order-items hide"> 
-                <thead>
-                    <tr>
-                        <th>Product</th>
-                        <th>Unit</th>
-                        <th>Unit Price</th>
-                        <th>Order Quantity</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                    <?php foreach ($products as $i => $product): ?>
-                        <tr class="purchase-item">
-                            
-                            <!-- Product -->
-                            <td>
-                                <input type="text" name="items[<?= $i ?>][product_id]" value="<?= htmlspecialchars(
-    $product["id"],
-) ?>" hidden>
-                                <input type="text" name="" value="<?= htmlspecialchars(
-                                    $product["name"],
-                                ) ?>" readonly>
-                            </td>
-                            <!-- Unit -->
-                            <td>
-                                <input type="text" name="" value="<?= htmlspecialchars(
-                                    $product["unit"],
-                                ) ?>" readonly>
-                            </td>
-                            <!-- Unit Price -->
-                            <td>
-                                <input type="number" name="items[<?= $i ?>][unit_price]" value="<?= htmlspecialchars(
-    $product["price"],
-) ?>" readonly>
-                            </td>
-                            <!-- Order Quantity -->
-                            <td>
-                                <input type="number" name="items[<?= $i ?>][quantity]">
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-
-            <!-- <div class="purchase-order-products">
-
-            </div> -->
-
 
             <button type="submit">Create Purchase Order</button>
 

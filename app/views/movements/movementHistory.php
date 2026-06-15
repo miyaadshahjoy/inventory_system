@@ -1,10 +1,10 @@
 <?php
-$movements = $data['movements'] ?? [];
-$products = $data['products'] ?? [];
-$warehouses = $data['warehouses'] ?? [];
-$total_movements = $data['total_movements'] ?? 0;
-$limit = $data['limit'] ?? 5;
-$page = $data['page'] ?? 1;
+$movements = $data["movements"] ?? [];
+$products = $data["products"] ?? [];
+$warehouses = $data["warehouses"] ?? [];
+$total_movements = $data["total_movements"] ?? 0;
+$limit = $data["limit"] ?? 5;
+$page = $data["page"] ?? 1;
 $total_pages = ceil($total_movements / $limit);
 
 ob_start();
@@ -20,7 +20,7 @@ ob_start();
       <button onclick="openTransferModal()">
         + Add transfer Movement
       </button>
-      <?php if ($_SESSION['user']['role'] === 'ADMIN'): ?>
+      <?php if ($_SESSION["user"]["role"] === "ADMIN"): ?>
         <button onclick="openAdjustmentModal()">
           + Add adjustment Movement
         </button>
@@ -50,10 +50,12 @@ ob_start();
     <div class="export-data">
       <!-- Export CSV -->
       <?php
-      if (isset($_GET['url']))
-        unset($_GET['url']);
-      if (isset($_GET['page']))
-        unset($_GET['page']);
+      if (isset($_GET["url"])) {
+          unset($_GET["url"]);
+      }
+      if (isset($_GET["page"])) {
+          unset($_GET["page"]);
+      }
       ?>
       <a href="/stock-movements/export?<?= http_build_query($_GET) ?>">
         <button>
@@ -81,17 +83,19 @@ ob_start();
         <tbody>
           <?php foreach ($movements as $movement): ?>
             <tr>
-              <td><?= $movement['date']; ?></td>
-              <td><?= $movement['product_name']; ?> (sku-<?= $movement['product_sku']; ?>)</td>
-              <td><?= $movement['warehouse_name']; ?></td>
-              <td><?= $movement['movement_type']; ?></td>
-              <td><?= $movement['direction']; ?></td>
-              <td><?= $movement['quantity']; ?></td>
+              <td><?= $movement["date"] ?></td>
+              <td><?= $movement["product_name"] ?> (sku-<?= $movement[
+     "product_sku"
+ ] ?>)</td>
+              <td><?= $movement["warehouse_name"] ?></td>
+              <td><?= $movement["movement_type"] ?></td>
+              <td><?= $movement["direction"] ?></td>
+              <td><?= $movement["quantity"] ?></td>
               <td>
-                <?= $movement['resulting_stock']; ?>
+                <?= $movement["resulting_stock"] ?>
               </td>
-              <td><?= $movement['created_by']; ?></td>
-              <td><?= $movement['notes']; ?></td>
+              <td><?= $movement["created_by"] ?></td>
+              <td><?= $movement["notes"] ?></td>
             </tr>
           <?php endforeach; ?>
         </tbody>
@@ -101,21 +105,26 @@ ob_start();
     <!-- Implementing pagination buttons -->
     <div class="pagination">
       <?php if ($page > 1): ?>
-        <a href="/stock-movements?page=<?= $page - 1 ?>" class="button-pagination">
+        <a href="/stock-movements?page=<?= $page -
+            1 ?>" class="button-pagination">
           <button>
             Prev
           </button>
         </a>
       <?php endif; ?>
       <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-        <a href="/stock-movements?page=<?= $i ?>" class="button-pagination <?= $page === $i ? 'active' : '' ?>">
+        <a href="/stock-movements?page=<?= $i ?>" class="button-pagination <?= $page ===
+$i
+    ? "active"
+    : "" ?>">
           <button>
             <?= $i ?>
           </button>
         </a>
       <?php endfor; ?>
       <?php if ($page < $total_pages): ?>
-        <a href="/stock-movements?page=<?= $page + 1 ?>" class="button-pagination">
+        <a href="/stock-movements?page=<?= $page +
+            1 ?>" class="button-pagination">
           <button>
             Next
           </button>
@@ -149,10 +158,10 @@ ob_start();
           <select name="product_id" id="product_id" required>
             <option value="">Select product</option>
             <?php foreach ($products as $product): ?>
-              <option value="<?= $product['id'] ?>">
-                <?= $product['name'] . " (sku-" . $product['sku'] . ")" ?>
+              <option value="<?= $product["id"] ?>">
+                <?= $product["name"] . " (sku-" . $product["sku"] . ")" ?>
               </option>
-            <?php endforeach ?>
+            <?php endforeach; ?>
           </select>
         </div>
 
@@ -178,10 +187,10 @@ ob_start();
           <select name="warehouse_id" id="warehouse_id">
             <option value="">Select warehouse</option>
             <?php foreach ($warehouses as $warehouse): ?>
-              <option value="<?= $warehouse['id'] ?>">
-                <?= $warehouse['name'] ?>
+              <option value="<?= $warehouse["id"] ?>">
+                <?= $warehouse["name"] ?>
               </option>
-            <?php endforeach ?>
+            <?php endforeach; ?>
           </select>
         </div>
 
@@ -213,7 +222,7 @@ ob_start();
     </div>
 
 
-    <form class="transfer-form" action="/stock-movements/transfer/form-submit" method="post">
+    <form class="movement-form transfer-form" action="/stock-movements/transfer/form-submit" method="post">
       <!-- Form fields will go here -->
       <!-- Product selection: Dropdown, required -->
 
@@ -222,10 +231,10 @@ ob_start();
         <select name="product_id" id="product_id" required>
           <option value="">Select product</option>
           <?php foreach ($products as $product): ?>
-            <option value="<?= $product['id'] ?>">
-              <?= $product['name'] . " (sku-" . $product['sku'] . ")" ?>
+            <option value="<?= $product["id"] ?>">
+              <?= $product["name"] . " (sku-" . $product["sku"] . ")" ?>
             </option>
-          <?php endforeach ?>
+          <?php endforeach; ?>
         </select>
       </div>
 
@@ -235,10 +244,10 @@ ob_start();
           <select name="from_warehouse" id="from_warehouse" required>
             <option value="">Select source warehouse</option>
             <?php foreach ($warehouses as $warehouse): ?>
-              <option value="<?= $warehouse['id'] ?>">
-                <?= $warehouse['name'] ?>
+              <option value="<?= $warehouse["id"] ?>">
+                <?= $warehouse["name"] ?>
               </option>
-            <?php endforeach ?>
+            <?php endforeach; ?>
           </select>
         </div>
         <div>
@@ -246,10 +255,10 @@ ob_start();
           <select name="to_warehouse" id="to_warehouse" required>
             <option value="">Select destination warehouse</option>
             <?php foreach ($warehouses as $warehouse): ?>
-              <option value="<?= $warehouse['id'] ?>">
-                <?= $warehouse['name'] ?>
+              <option value="<?= $warehouse["id"] ?>">
+                <?= $warehouse["name"] ?>
               </option>
-            <?php endforeach ?>
+            <?php endforeach; ?>
           </select>
         </div>
       </div>
@@ -292,7 +301,7 @@ ob_start();
     </div>
 
 
-    <form class="form adjustment-form" action="/stock-movements/adjustment/form-submit" method="post">
+    <form class="movement-form adjustment-form" action="/stock-movements/adjustment/form-submit" method="post">
       <!-- Form fields will go here -->
       <!-- Product selection: Dropdown, required -->
       <div class="form-group">
@@ -302,10 +311,10 @@ ob_start();
           <select name="product_id" id="product_id" required>
             <option value="">Select product</option>
             <?php foreach ($products as $product): ?>
-              <option value="<?= $product['id'] ?>">
-                <?= $product['name'] . " (sku-" . $product['sku'] . ")" ?>
+              <option value="<?= $product["id"] ?>">
+                <?= $product["name"] . " (sku-" . $product["sku"] . ")" ?>
               </option>
-            <?php endforeach ?>
+            <?php endforeach; ?>
           </select>
         </div>
 
@@ -329,10 +338,10 @@ ob_start();
           <select name="warehouse_id" id="warehouse_id">
             <option value="">Select warehouse</option>
             <?php foreach ($warehouses as $warehouse): ?>
-              <option value="<?= $warehouse['id'] ?>">
-                <?= $warehouse['name'] ?>
+              <option value="<?= $warehouse["id"] ?>">
+                <?= $warehouse["name"] ?>
               </option>
-            <?php endforeach ?>
+            <?php endforeach; ?>
           </select>
         </div>
 
@@ -356,5 +365,6 @@ ob_start();
 <?php
 $content = ob_get_clean();
 
-require_once __DIR__ . '/../layouts/layout.php';
+require_once __DIR__ . "/../layouts/layout.php";
+
 ?>

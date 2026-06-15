@@ -165,7 +165,7 @@ $purchase_order_items = $data["purchase_order_items"] ?? [];
 <!-- 
 # Receive purchase items
 -->
-<div id="modal" class="modal receiveable-order-modal">
+<div id="modal" class="modal receiveable-order-modal modal-wide">
     <div class="modal-content">
         <div class="modal-header">
             <h3>Receive Items</h3>
@@ -195,74 +195,72 @@ $purchase_order_items = $data["purchase_order_items"] ?? [];
                                 $item["purchase_order_id"],
                             ) ?>" hidden>
                         <?php foreach ($purchase_order_items as $item): ?>
-                            <?php if (
-                                $item["received"] !== $item["ordered"]
-                            ): ?>
-                                <tr>
-                                    <input type="text" name="items[<?= $item[
+                            
+                            <tr class="<?= $item["received"] ===
+                            $item["ordered"]
+                                ? "hide"
+                                : "" ?>">
+                                <input type="text" name="items[<?= $item[
+                                    "id"
+                                ] ?>][product_id]"
+                                    value="<?= htmlspecialchars(
+                                        $item["product_id"],
+                                    ) ?>" hidden>
+                                <!-- Product Name -->
+                                <td>
+                                    <input type="text" name="" value="<?= htmlspecialchars(
+                                        $item["product"],
+                                    ) ?>" readonly>
+                                </td>
+                                <!-- Ordered Quantity -->
+                                <td>
+                                    <input type="number" name="items[<?= $item[
                                         "id"
-                                    ] ?>][product_id]"
-                                        value="<?= htmlspecialchars(
-                                            $item["product_id"],
-                                        ) ?>" hidden>
-                                    <!-- Product Name -->
-                                    <td>
-                                        <input type="text" name="" value="<?= htmlspecialchars(
-                                            $item["product"],
-                                        ) ?>" readonly>
-                                    </td>
-                                    <!-- Ordered Quantity -->
-                                    <td>
-                                        <input type="number" name="items[<?= $item[
-                                            "id"
-                                        ] ?>][order_quantity]"
-                                            value="<?= htmlspecialchars(
-                                                $item["ordered"],
-                                            ) ?>" readonly>
-                                    </td>
-                                    <!-- Received Quantity -->
-                                    <td>
-                                        <input type="number" name="items[<?= $item[
-                                            "id"
-                                        ] ?>][received_quantity]"
-                                            value="<?= htmlspecialchars(
-                                                $item["received"],
-                                            ) ?>" readonly>
-                                    </td>
-                                    <!-- Warehouse -->
-                                     <td>
-                                        <select name="items[<?= $item[
-                                            "id"
-                                        ] ?>][warehouse_id]" >
-                                            <option value="">Select warehouse</option>
-                                            <?php foreach (
-                                                $warehouses
-                                                as $warehouse
-                                            ): ?>
-                                                <option value="<?= $warehouse[
-                                                    "id"
-                                                ] ?>">
-                                                    <?= $warehouse["name"] ?>
-                                                </option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                     </td>
-                                    <!-- Receive Now -->
-                                    <td>
-                                        <input type="number" name="items[<?= $item[
-                                            "id"
-                                        ] ?>][receive_now]" value="0">
-                                    </td>
-                                    <!-- <td><input type="number" name="receive_now"
+                                    ] ?>][order_quantity]"
                                         value="<?= htmlspecialchars(
                                             $item["ordered"],
-                                        ) -
-                                            htmlspecialchars(
-                                                $item["received"],
-                                            ) ?>">
-                                </td> -->
-                                </tr>
-                            <?php endif; ?>
+                                        ) ?>" readonly>
+                                </td>
+                                <!-- Received Quantity -->
+                                <td>
+                                    <input type="number" name="items[<?= $item[
+                                        "id"
+                                    ] ?>][received_quantity]"
+                                        value="<?= htmlspecialchars(
+                                            $item["received"],
+                                        ) ?>" readonly>
+                                </td>
+                                <!-- Warehouse -->
+                                    <td>
+                                    <select name="items[<?= $item[
+                                        "id"
+                                    ] ?>][warehouse_id]" >
+                                        <option value="">Select warehouse</option>
+                                        <?php foreach (
+                                            $warehouses
+                                            as $warehouse
+                                        ): ?>
+                                            <option value="<?= $warehouse[
+                                                "id"
+                                            ] ?>">
+                                                <?= $warehouse["name"] ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    </td>
+                                <!-- Receive Now -->
+                                <td>
+                                    <input type="number" name="items[<?= $item[
+                                        "id"
+                                    ] ?>][receive_now]" value="0">
+                                </td>
+                                <!-- <td><input type="number" name="receive_now"
+                                    value="<?= htmlspecialchars(
+                                        $item["ordered"],
+                                    ) - htmlspecialchars($item["received"]) ?>">
+                            </td> -->
+                            </tr>
+                            
                         <?php endforeach; ?>
 
                     </tbody>

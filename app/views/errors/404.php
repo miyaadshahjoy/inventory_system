@@ -4,7 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/error-pages-style.css">
     <title>404 - Page Not Found</title>
 
   </head>
@@ -21,7 +21,7 @@
         </p>
         <button class="error-button">
 
-          <a href="/"> Return Dashboard </a>
+          <a href="/dashboard"> Return To Dashboard </a>
         </button>
       </div>
     </div>

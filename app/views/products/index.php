@@ -40,7 +40,7 @@ ob_start();
     <!-- 
     # Product filters  
     -->
-    <form action="/products" method="get" class="form product-filters">
+    <form action="/products" method="get" class="form product-filters-container">
 
       <!-- Filter by category -->
       <div class="category-filter product-filter">

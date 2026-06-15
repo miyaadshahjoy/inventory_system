@@ -18,6 +18,7 @@ class PurchaseOrderController
         // echo "<pre>";
         // print_r($_POST);
         // echo "</pre>";
+
         # Check if the request method is POST
         if ($_SERVER["REQUEST_METHOD"] !== "POST") {
             throw new ApplicationException("Request method must be POST");
@@ -35,6 +36,7 @@ class PurchaseOrderController
                 "All fields of purchase order except notes are required",
             );
         }
+        /*
         $items = $_POST["items"];
         $items = array_filter(
             $_POST["items"],
@@ -45,23 +47,25 @@ class PurchaseOrderController
                 "At least one item must be added to create a purchase order",
             );
         }
+        */
 
         $supplier_id = (int) $_POST["supplier_id"];
         $expected_delivery_date = $_POST["expected_delivery_date"];
         $notes = $_POST["notes"] ?? null;
 
+        /*
         foreach ($items as &$item) {
             $item["product_id"] = (int) $item["product_id"];
             $item["quantity"] = (int) $item["quantity"];
             $item["unit_price"] = (float) $item["unit_price"];
         }
+        */
 
         # Create the purchase order
         PurchaseOrderService::createPurchaseOrder(
             $supplier_id,
             $expected_delivery_date,
             $notes,
-            $items,
         );
 
         Session::flashSet("success", "Purchase order created successfully");
@@ -102,6 +106,50 @@ class PurchaseOrderController
 
         require_once __DIR__ .
             "/../views/purchase_orders/purchase_order_details.php";
+    }
+
+    public function orderItems()
+    {
+        $data = [
+            "purchase_orders" => PurchaseOrderService::getAllPurchaseOrders(),
+            "warehouses" => WarehouseService::getAllActiveWarehouses(),
+            "products" => ProductService::getAllActiveProducts(),
+        ];
+        require_once __DIR__ . "/../views/purchase_orders/purchase_items.php";
+    }
+    public function addPurchaseOrderItems()
+    {
+        # order_id | items -> product_id | product_name | unit | unit_price | quantity
+
+        # 1) Check if the request method is POST
+        if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+            throw new ApplicationException("Request method must be POST");
+        }
+        if (empty($_POST["items"])) {
+            throw new ValidationException("At least one item must be added");
+        }
+
+        # 2) Validate the input data
+        if (!isset($_POST["order_id"])) {
+            throw new ValidationException("All fields are required");
+        }
+
+        # 3) Sanitize the input data
+        $order_id = (int) $_POST["order_id"];
+
+        $items = $_POST["items"];
+        foreach ($items as &$item) {
+            $item["product_id"] = (int) $item["product_id"];
+            $item["unit_price"] = (float) $item["unit_price"];
+            $item["quantity"] = (int) $item["quantity"];
+        }
+
+        # 4) Add the purchase order items
+        PurchaseOrderService::addPurchaseOrderItems($order_id, $items);
+
+        Session::flashSet("success", "Purchase order items added successfully");
+        header("Location: /purchase-orders");
+        exit();
     }
 
     public function receiveItems()

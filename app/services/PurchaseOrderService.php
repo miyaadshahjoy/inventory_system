@@ -6,7 +6,6 @@ class PurchaseOrderService
         int $supplier_id,
         string $expected_delivery_date,
         $notes = null,
-        array $items,
     ) {
         $conn = Database::connect();
 
@@ -49,6 +48,7 @@ class PurchaseOrderService
                 throw new SystemException("Expected delivery date is required");
             }
 
+            /*
             # 4) Validate items
             # items[0][product_id] | items[0][quantity] | items[0][unit_price]
             foreach ($items as $item) {
@@ -100,6 +100,8 @@ class PurchaseOrderService
                 }
             }
 
+            */
+
             # 5) Generate purchase order number
             $purchase_order_number = self::createPurchaseOrderNumber();
 
@@ -135,6 +137,8 @@ class PurchaseOrderService
 
             $purchase_order_id = $conn->insert_id;
 
+            /*
+
             # 10) Insert purchase order items into database
             # purchase_order_id | product_id | order_quantity | received_quantity | unit_price
 
@@ -162,6 +166,8 @@ class PurchaseOrderService
                     }
                 }
             }
+            */
+
             # 11) Commit transaction
             $conn->commit();
         } catch (Exception $e) {
@@ -258,7 +264,7 @@ class PurchaseOrderService
         return $result->fetch_assoc();
     }
 
-    public static function getPurchaseOrderOverview(int $id)
+    public static function getPurchaseOrderOverview(int $purchase_order_id)
     {
         # Products Ordered | Total Quantity | Received Quantity | Total Cost
 
@@ -275,7 +281,7 @@ class PurchaseOrderService
                 WHERE po.id = ?
         ");
 
-        $statement->bind_param("i", $id);
+        $statement->bind_param("i", $purchase_order_id);
         $statement->execute();
         $result = $statement->get_result();
 
@@ -311,6 +317,99 @@ class PurchaseOrderService
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
+    public static function addPurchaseOrderItems(
+        int $order_id,
+        array $items,
+    ): void {
+        # order_id | items -> product_id | product_name | unit_price | quantity
+
+        # 1) Validate order_id
+        # 1.A) Check if Purchase Order ID is an integer
+        if (!is_int($order_id)) {
+            throw new ApplicationException(
+                "Purchase Order ID must be an integer",
+            );
+        }
+
+        # 1.B) Check if Purchase Order exists
+        $purchase_order = self::getPurchaseOrderById($order_id);
+        if (!$purchase_order) {
+            throw new ValidationException("Purchase Order does not exist");
+        }
+
+        # 1.C) Check if Purchase Order status is PENDING
+        if ($purchase_order["status"] !== "PENDING") {
+            throw new ValidationException(
+                "Purchase Order status is not PENDING. You cannot add items to this purchase order",
+            );
+        }
+
+        # 2) Validate items data
+        # 2.A) Check if items is an array
+        if (!is_array($items)) {
+            throw new ApplicationException("Items must be an array");
+        }
+
+        foreach ($items as $item) {
+            # items -> product_id | product_name | unit_price | quantity
+            $product_id = $item["product_id"];
+            $unit_price = $item["unit_price"];
+            $quantity = $item["quantity"];
+
+            # 2.B) Check if product_id is an integer
+            if (!is_int($product_id)) {
+                throw new ApplicationException("Product ID must be an integer");
+            }
+
+            # 2.C) Check if product exists
+            $product = ProductService::getProductById($product_id);
+            if (!$product) {
+                throw new ValidationException(
+                    "Product: " . $product["name"] . "does not exist",
+                );
+            }
+
+            # 2.D) Check if quantity is an integer
+            if (!is_int($quantity)) {
+                throw new ApplicationException("Quantity must be an integer");
+            }
+
+            # 2.E) Check if quantity is greater than 0
+            if ($quantity <= 0) {
+                throw new ValidationException(
+                    "Quantity must be greater than 0",
+                );
+            }
+
+            # 2.F) Check if unit_price is a float
+            if (!is_float($unit_price)) {
+                throw new ApplicationException("Unit Price must be a float");
+            }
+
+            # 2.G) Check if unit_price is greater than 0
+            if ($unit_price <= 0) {
+                throw new ValidationException(
+                    "Unit Price must be greater than 0",
+                );
+            }
+            # 3) Insert item into the DB
+            # Insert item into purchase_order_items table
+            $conn = Database::connect();
+            $statement = $conn->prepare("
+                INSERT INTO purchase_order_items (purchase_order_id, product_id, order_quantity, unit_price)
+                VALUES (?, ?, ?, ?)
+            ");
+            $statement->bind_param(
+                "iiid",
+                $order_id,
+                $product_id,
+                $quantity,
+                $unit_price,
+            );
+            $statement->execute();
+        }
+    }
+
     public static function receivePurchaseOrderItems(
         int $purchase_order_id,
         array $items,
@@ -328,7 +427,7 @@ class PurchaseOrderService
                 throw new SystemException("Items must be an array");
             }
 
-            # 2) Validate Purchase Order
+            # 2) Validate Purchase Order: purchase_order exists
             # 2.A) Fetch purchase order
             $purchase_order = self::getPurchaseOrderById($purchase_order_id);
             # 2.B) Check if purchase order exists
@@ -360,6 +459,14 @@ class PurchaseOrderService
             $created_by = $_SESSION["user"]["id"];
 
             # 5) Process each items
+            # 5.A) Filter items: process items with received_quantity > 0
+            $items = array_filter(
+                $items,
+                fn($item) => $item["warehouse_id"] !== null &&
+                    $item["receive_now"] > 0,
+            );
+
+            # 5.B) Process items
             foreach ($items as &$item) {
                 # product_id | order_quantity | received_quantity | warehouse_id | receive_now
                 $product_id = $item["product_id"];
@@ -440,22 +547,17 @@ class PurchaseOrderService
                 );
 
                 $statement->execute();
-
-                $item["new_received_quantity"] =
-                    $received_quantity + $receive_now;
             }
 
             # 8) Recalculate Purchase Order status
             # If all items received, update status to RECEIVED
             # If any items received, update status to PARTIALLY_RECEIVED
 
-            $totalOrdered = 0;
-            $totalReceived = 0;
+            # total_quantity | received_quantity
+            $overview = self::getPurchaseOrderOverview($purchase_order_id);
 
-            foreach ($items as $item) {
-                $totalOrdered += $item["order_quantity"];
-                $totalReceived += $item["new_received_quantity"];
-            }
+            $totalOrdered = $overview["total_quantity"];
+            $totalReceived = $overview["received_quantity"];
 
             if ($totalReceived === 0) {
                 $status = "PENDING";

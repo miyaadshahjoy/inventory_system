@@ -69,7 +69,7 @@ ob_start();
 # ADD NEW CATEGORY 
   -->
 <!-- Modal for adding a new category -->
-<div id="modal" class="modal categories-modal">
+<div id="modal" class="modal modal-narrow categories-modal">
   <div class="modal-content">
     <div class="modal-header">
       <h3>Create Category</h3>
@@ -90,7 +90,7 @@ ob_start();
 # UPDATE CATEGORY
   -->
 <!-- Modal for updating a category -->
-<div id="categoryUpdateModal" class="modal">
+<div id="categoryUpdateModal" class="modal modal-narrow categories-modal">
   <div class="modal-content">
     <div class="modal-header">
       <h3>Update Category</h3>

@@ -279,6 +279,17 @@ switch ($url) {
         $controller->purchaseOrderDetails();
         break;
 
+    case "purchase-items":
+        AuthMiddleware::check();
+        $controller = new PurchaseOrderController();
+        $controller->orderItems();
+        break;
+    case "purchase-items/form-submit":
+        AuthMiddleware::check();
+        $controller = new PurchaseOrderController();
+        $controller->addPurchaseOrderItems();
+        break;
+
     case "purchase-orders/receive-items/form-submit":
         AuthMiddleware::check();
         $controller = new PurchaseOrderController();
