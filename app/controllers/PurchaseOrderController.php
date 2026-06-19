@@ -1,13 +1,20 @@
 <?php
-
+const ORDERS_PER_PAGE = 10;
 class PurchaseOrderController
 {
     public function index()
     {
+        $page = isset($_GET["page"]) ? (int) $_GET["page"] : 1;
+        $limit = ORDERS_PER_PAGE;
+        $total_orders = PurchaseOrderService::getTotalPurchaseOrders();
+        $orders = PurchaseOrderService::getAllPurchaseOrders($page, $limit);
         $data = [
             "products" => ProductService::getAllActiveProducts(),
             "suppliers" => SupplierService::getAllActiveSuppliers(),
-            "purchase_orders" => PurchaseOrderService::getAllPurchaseOrders(),
+            "purchase_orders" => $orders,
+            "total_orders" => $total_orders,
+            "limit" => $limit,
+            "page" => $page,
         ];
 
         require_once __DIR__ . "/../views/purchase_orders/index.php";
@@ -111,7 +118,10 @@ class PurchaseOrderController
     public function orderItems()
     {
         $data = [
-            "purchase_orders" => PurchaseOrderService::getAllPurchaseOrders(),
+            "purchase_orders" => PurchaseOrderService::getAllPurchaseOrders(
+                0,
+                0,
+            ),
             "warehouses" => WarehouseService::getAllActiveWarehouses(),
             "products" => ProductService::getAllActiveProducts(),
         ];

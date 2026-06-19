@@ -1,12 +1,22 @@
 <?php
-
+/*
 $current_uri = parse_url($_SERVER["REQUEST_URI"] ?? "", PHP_URL_PATH);
 
 function isActive(string $path, string $current_uri): string
 {
-    return str_starts_with($current_uri, $path) ? "sidebar-active" : "";
+  return str_starts_with($current_uri, $path) ? "sidebar-active" : "";
+  }
+  */
+
+$current_uri = parse_url($_SERVER["REQUEST_URI"] ?? "", PHP_URL_PATH);
+function isActive(string $path, string $current_uri): string
+{
+    return $current_uri === $path || str_starts_with($current_uri, $path . "/")
+        ? "sidebar-active"
+        : "";
 }
 ?>
+
 <aside id="sidebar" class="sidebar">
   <div class="sidebar-logo">
     <h2>InventorySys</h2>
@@ -39,20 +49,51 @@ function isActive(string $path, string $current_uri): string
     ) ?>">
       Inventory Overview
     </a>
-    <!-- Stock Report -->
-    <a href="/stock-report" class="sidebar-link <?= isActive(
-        "/stock-report",
-        $current_uri,
-    ) ?>">
-      Stock Report
-    </a>
 
-    <a href="/returns" class="sidebar-link <?= isActive(
-        "/returns",
-        $current_uri,
-    ) ?>">
-      Returns
-    </a>
+    <!-- Stock Report -->
+    <div class="sidebar-group">
+
+      <button type="button" class="sidebar-link sidebar-toggle-link" id="stock-report-toggle">
+        Stock Report
+        <span class="sidebar-arrow">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-6"
+            width="24"
+            height="24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="m19.5 8.25-7.5 7.5-7.5-7.5"
+            />
+          </svg>
+        </span>
+      </button>
+
+      <div class="sidebar-sub-links" id="stock-report-sub-links">
+
+        <a href="/stock-report/stock-details" class="sidebar-sub-link <?= isActive(
+            "/stock-report/stock-details",
+            $current_uri,
+        ) ?>">
+          Stock Details
+        </a>
+
+        <a href="/stock-report/movements-summary" class="sidebar-sub-link <?= isActive(
+            "/stock-report/movements-summary",
+            $current_uri,
+        ) ?>">
+          Movements Summary
+        </a>
+
+      </div>
+
+    </div>
 
     <!-- PROCUREMENT -->
     <div class="sidebar-section-title">PROCUREMENT</div>
@@ -115,3 +156,22 @@ function isActive(string $path, string $current_uri): string
     ) ?>">Logout</a>
   </nav>
 </aside>
+
+<?php if (
+    str_starts_with($current_uri, "/stock-report/stock-details") ||
+    str_starts_with($current_uri, "/stock-report/movements-summary")
+): ?>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    document
+      .getElementById("stock-report-sub-links")
+      .classList.add("open");
+
+    document
+      .querySelector(".sidebar-arrow")
+      .classList.add("rotate");
+});
+</script>
+
+<?php endif; ?>

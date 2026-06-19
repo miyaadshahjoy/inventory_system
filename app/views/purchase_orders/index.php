@@ -3,6 +3,22 @@
 $products = $data["products"] ?? [];
 $suppliers = $data["suppliers"] ?? [];
 $purchase_orders = $data["purchase_orders"] ?? [];
+$total_orders = $data["total_orders"] ?? 0;
+$page = $data["page"] ?? 1;
+$limit = $data["limit"] ?? 5;
+$total_pages = ceil($total_orders / $limit);
+
+$current_page = $page ?? 1;
+$query_params = $_GET;
+
+// Previous page
+$query_params["page"] = $current_page > 1 ? $current_page - 1 : $current_page;
+$prev_url = http_build_query($query_params);
+
+// Next page
+$query_params["page"] =
+    $current_page < $total_pages ? $current_page + 1 : $current_page;
+$next_url = http_build_query($query_params);
 
 ob_start();
 ?>
@@ -112,6 +128,38 @@ ob_start();
         </div>
 
     <?php endif; ?>
+
+    <div class="pagination">
+        <?php if ($page > 1): ?>
+            <a href="/purchase-orders?<?= $prev_url ?>" class="button-pagination">
+                <button>
+                    Prev
+                </button>
+            </a>
+        <?php endif; ?>
+        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+
+            <?php
+            $query_params["page"] = $i;
+            $page_url = http_build_query($query_params);
+            ?>
+            <a href="/purchase-orders?<?= $page_url ?>" class="button-pagination <?= $page ===
+$i
+    ? "active"
+    : "" ?>">
+                <button>
+                    <?= $i ?>
+                </button>
+            </a>
+        <?php endfor; ?>
+        <?php if ($page < $total_pages): ?>
+            <a href="/purchase-orders?<?= $next_url ?>" class="button-pagination">
+                <button>
+                    Next
+                </button>
+            </a>
+        <?php endif; ?>
+    </div>
 </div>
 
 <!-- 

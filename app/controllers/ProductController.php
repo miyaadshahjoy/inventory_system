@@ -12,8 +12,13 @@ class ProductController
         $limit = PRODUCTS_PER_PAGE;
 
         $filter_data = ProductService::getProductFilters();
-        $total_products = ProductService::totalProducts();
-        $products = ProductService::getAllFilteredProducts($filter_data);
+        $products = ProductService::getAllFilteredProducts($filter_data)[
+            "products"
+        ];
+        $total_products = ProductService::getAllFilteredProducts($filter_data)[
+            "total_products"
+        ];
+
         $categories = CategoryService::getAllActiveCategories();
         $data = [
             "products" => $products,

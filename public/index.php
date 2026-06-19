@@ -140,12 +140,25 @@ switch ($url) {
         $controller->exportCSV();
         break;
 
+    /*
     case "stock-report":
         AuthMiddleware::check();
         $controller = new StockReportController();
         $controller->index();
         break;
+    */
 
+    case "stock-report/stock-details":
+        AuthMiddleware::check();
+        $controller = new StockReportController();
+        $controller->getCurrentStockDetails();
+        break;
+
+    case "stock-report/movements-summary":
+        AuthMiddleware::check();
+        $controller = new StockReportController();
+        $controller->getStockMovementsSummary();
+        break;
     # Categories
     case "categories":
         AuthMiddleware::check();

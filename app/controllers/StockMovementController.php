@@ -32,12 +32,14 @@ class StockMovementController
             throw new ApplicationException("Invalid request method");
         }
 
+        Logger::info(json_encode($_POST));
+
         # 2) Validate inputs
         if (
             !isset($_POST["product_id"]) ||
             !isset($_POST["movement_type"]) ||
             !isset($_POST["warehouse_id"]) ||
-            !isset($_POST["qunatity"])
+            !isset($_POST["quantity"])
         ) {
             throw new ValidationException(
                 "All fields except notes are required",

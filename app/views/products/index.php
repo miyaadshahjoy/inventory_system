@@ -32,70 +32,91 @@ ob_start();
   </div>
 
   <div class="product-controls">
-    <!-- Product search -->
-    <form action="/products" method="get" class="form product-search">
-      <input type="text" name="product_search" placeholder="Search product by name or sku">
-    </form>
-
+    
     <!-- 
-    # Product filters  
+      # Product filters  
     -->
     <form action="/products" method="get" class="form product-filters-container">
-
-      <!-- Filter by category -->
-      <div class="category-filter product-filter">
-        <h4>Filter by category</h4>
-        <select name="product_category" id="productCategory">
-          <option value="">Select category</option>
-          <?php foreach ($categories as $category): ?>
-            <option value="<?= $category["id"] ?>">
-              <?= htmlspecialchars($category["name"]) ?>
-            </option>
-          <?php endforeach; ?>
-        </select>
+      <!-- Product search -->
+      <div action="/products" method="get" class="product-search">
+        <input type="text" name="product_search" placeholder="Search product by name or SKU">
+        <button type="submit">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-6"
+            height="24px"
+            width="24px"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+            />
+          </svg>
+        </button>
       </div>
 
-      <!-- Filter by date -->
-      <div class="date-filter product-filter">
-        <h4>Filter by date created</h4>
-        <div>
-          <input type="date" name="start_date" placeholder="From">
-          <input type="date" name="end_date" placeholder="To">
+      <div class="filter-controllers">
+
+        <!-- Filter by category -->
+        <div class="category-filter product-filter">
+          <h4>Filter by category</h4>
+          <select name="product_category" id="productCategory">
+            <option value="">Select category</option>
+            <?php foreach ($categories as $category): ?>
+              <option value="<?= $category["id"] ?>">
+                <?= htmlspecialchars($category["name"]) ?>
+              </option>
+            <?php endforeach; ?>
+          </select>
         </div>
-      </div>
 
-      <!-- Filter by price range -->
-      <div class="price-filter product-filter">
-        <h4>Filter by price</h4>
-        <div>
-          <input type="number" name="min_price" placeholder="Min">
-          <input type="number" name="max_price" placeholder="Max">
+        <!-- Filter by date -->
+        <div class="date-filter product-filter">
+          <h4>Filter by date created</h4>
+          <div>
+            <input type="date" name="start_date" placeholder="From">
+            <input type="date" name="end_date" placeholder="To">
+          </div>
         </div>
+
+        <!-- Filter by price range -->
+        <div class="price-filter product-filter">
+          <h4>Filter by price</h4>
+          <div>
+            <input type="number" name="min_price" placeholder="Min">
+            <input type="number" name="max_price" placeholder="Max">
+          </div>
+        </div>
+
+        <!-- Filter by status -->
+        <div class="status-filter product-filter">
+          <h4>Filter by status</h4>
+          <select name="product_status">
+            <option value="">Select status</option>
+            <option value="ACTIVE">Active</option>
+            <option value="INACTIVE">Inactive</option>
+          </select>
+        </div>
+
+
+        <!-- Sort products: name, price, created_at -->
+        <div class="sort-filter product-filter">
+          <h4>Sort by</h4>
+          <select name="sort_by">
+            <option value="">Select sort option</option>
+            <option value="name">Name</option>
+            <option value="price">Price</option>
+            <option value="created_at">Created At</option>
+          </select>
+        </div>
+
+        <button type="submit">Apply Filters</button>
       </div>
-
-      <!-- Filter by status -->
-      <div class="status-filter product-filter">
-        <h4>Filter by status</h4>
-        <select name="product_status">
-          <option value="">Select status</option>
-          <option value="ACTIVE">Active</option>
-          <option value="INACTIVE">Inactive</option>
-        </select>
-      </div>
-
-
-      <!-- Sort products: name, price, created_at -->
-      <div class="sort-filter product-filter">
-        <h4>Sort by</h4>
-        <select name="sort_by">
-          <option value="">Select sort option</option>
-          <option value="name">Name</option>
-          <option value="price">Price</option>
-          <option value="created_at">Created At</option>
-        </select>
-      </div>
-
-      <button type="submit">Apply Filters</button>
 
     </form>
 
@@ -203,6 +224,22 @@ ob_start();
         </div>
       <?php endif; ?>
     </div>
+    <!-- Total Filtered Products -->
+    <?php if (
+        in_array("product_search", array_keys($_GET)) ||
+        in_array("product_category", array_keys($_GET)) ||
+        in_array("start_date", array_keys($_GET)) ||
+        in_array("end_date", array_keys($_GET)) ||
+        in_array("min_price", array_keys($_GET)) ||
+        in_array("max_price", array_keys($_GET)) ||
+        in_array("product_status", array_keys($_GET))
+    ): ?>
+      <div class="total-filtered-products">
+        <span>
+          Total filtered products: <?= $total_products ?>
+        </span>
+      </div>
+    <?php endif; ?>
     <!-- Reset filters -->
     <?php if (
         in_array("product_search", array_keys($_GET)) ||
@@ -302,9 +339,46 @@ ob_start();
 ] ?>"
                       data-productUnit="<?= $product[
                           "unit"
-                      ] ?>" onclick=" openProductUpdateModal(this)">Edit</button>
+                      ] ?>" onclick=" openProductUpdateModal(this)">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="size-6"
+                        height="24"
+                        width="24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                        />
+                      </svg>
+
+                      
+                    </button>
                     <a href="/products/delete?id=<?= $product["id"] ?>">
-                      <button>Delete</button>
+                      <button>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="size-6"
+                          height="24"
+                          width="24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                          />
+                        </svg>
+
+                      </button>
                     </a>
                   </div>
                 </td>

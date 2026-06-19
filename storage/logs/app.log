@@ -1,108 +1,803 @@
-[2026-06-14 23:17:32] [CRITICAL] 
-        [ErrorException]
-MESSAGE: Undefined variable $item
-FILE: D:\XAMPP\htdocs\inventory-system\app\views\purchase_orders\purchase_order_details.php
-LINE: 195
-TRACE: #0 D:\XAMPP\htdocs\inventory-system\app\views\purchase_orders\purchase_order_details.php(195): ErrorHandler::errorHandler(2, 'Undefined varia...', 'D:\\XAMPP\\htdocs...', 195)
-#1 D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php(108): require_once('D:\\XAMPP\\htdocs...')
-#2 D:\XAMPP\htdocs\inventory-system\public\index.php(279): PurchaseOrderController->purchaseOrderDetails()
+[2026-06-19 07:35:47] [INFO] 
+            SELECT p.id,
+                p.name as product_name,
+                p.sku, 
+                p.category_id,
+                c.name as product_category,
+                ss.warehouse_id,
+                w.name as warehouse, 
+                COALESCE(ss.quantity, 0) as stock,
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END as stock_status, 
+                p.reorder_level,
+                (
+                    SELECT MAX(sm.created_at)
+                    FROM stock_movements sm 
+                    WHERE sm.product_id = p.id
+                ) as last_movement_date
+                
+                FROM products p LEFT JOIN stock_snapshots ss 
+                ON p.id = ss.product_id
+                LEFT JOIN categories c 
+                ON p.category_id = c.id 
+                LEFT JOIN warehouses w 
+                ON ss.warehouse_id = w.id 
+                WHERE p.product_status = 'ACTIVE'
+         AND stock_status = ?
+[2026-06-19 07:35:47] [CRITICAL] 
+        [mysqli_sql_exception]
+MESSAGE: Unknown column 'stock_status' in 'where clause'
+FILE: D:\XAMPP\htdocs\inventory-system\app\services\InventoryService.php
+LINE: 713
+TRACE: #0 D:\XAMPP\htdocs\inventory-system\app\services\InventoryService.php(713): mysqli->prepare('\r\n            S...')
+#1 D:\XAMPP\htdocs\inventory-system\app\controllers\InventoryController.php(16): InventoryService::getInventoryOverviewData(Array)
+#2 D:\XAMPP\htdocs\inventory-system\public\index.php(127): InventoryController->index()
 #3 {main}
 
-[2026-06-15 01:14:17] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-15 02:14:08] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-15 03:10:40] [INFO] User logged in: staffone@example.com (ID: 2)
-[2026-06-15 03:10:50] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-15 05:09:14] [CRITICAL] 
-        [ValidationException]
-MESSAGE: All fields are required
-FILE: D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php
-LINE: 135
-TRACE: #0 D:\XAMPP\htdocs\inventory-system\public\index.php(290): PurchaseOrderController->addPurchaseOrderItems()
-#1 {main}
-
-[2026-06-15 05:11:26] [CRITICAL] 
-        [ValidationException]
-MESSAGE: All fields are required
-FILE: D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php
-LINE: 135
-TRACE: #0 D:\XAMPP\htdocs\inventory-system\public\index.php(290): PurchaseOrderController->addPurchaseOrderItems()
-#1 {main}
-
-[2026-06-15 05:15:12] [CRITICAL] 
-        [ValidationException]
-MESSAGE: All fields are required
-FILE: D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php
-LINE: 135
-TRACE: #0 D:\XAMPP\htdocs\inventory-system\public\index.php(290): PurchaseOrderController->addPurchaseOrderItems()
-#1 {main}
-
-[2026-06-15 05:17:22] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-15 05:42:44] [CRITICAL] 
-        [ValidationException]
-MESSAGE: Purchase Order status is not PENDING. You cannot add items to this purchase order
-FILE: D:\XAMPP\htdocs\inventory-system\app\services\PurchaseOrderService.php
-LINE: 342
-TRACE: #0 D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php(153): PurchaseOrderService::addPurchaseOrderItems(14, Array)
-#1 D:\XAMPP\htdocs\inventory-system\public\index.php(290): PurchaseOrderController->addPurchaseOrderItems()
-#2 {main}
-
-[2026-06-15 05:58:19] [CRITICAL] 
-        [ValidationException]
-MESSAGE: All fields are required
-FILE: D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php
-LINE: 135
-TRACE: #0 D:\XAMPP\htdocs\inventory-system\public\index.php(290): PurchaseOrderController->addPurchaseOrderItems()
-#1 {main}
-
-[2026-06-15 05:59:30] [CRITICAL] 
-        [ValidationException]
-MESSAGE: At least one item must be added
-FILE: D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php
-LINE: 129
-TRACE: #0 D:\XAMPP\htdocs\inventory-system\public\index.php(290): PurchaseOrderController->addPurchaseOrderItems()
-#1 {main}
-
-[2026-06-15 05:59:44] [CRITICAL] 
-        [ValidationException]
-MESSAGE: Purchase Order status is not PENDING. You cannot add items to this purchase order
-FILE: D:\XAMPP\htdocs\inventory-system\app\services\PurchaseOrderService.php
-LINE: 342
-TRACE: #0 D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php(148): PurchaseOrderService::addPurchaseOrderItems(14, Array)
-#1 D:\XAMPP\htdocs\inventory-system\public\index.php(290): PurchaseOrderController->addPurchaseOrderItems()
-#2 {main}
-
-[2026-06-15 06:19:29] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-15 06:25:05] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-15 06:26:46] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-15 06:27:17] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-15 06:53:08] [CRITICAL] 
-        [ValidationException]
-MESSAGE: Invalid email format
-FILE: D:\XAMPP\htdocs\inventory-system\app\controllers\AuthController.php
-LINE: 28
-TRACE: #0 D:\XAMPP\htdocs\inventory-system\public\index.php(76): AuthController->login()
-#1 {main}
-
-[2026-06-15 06:53:11] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-15 17:20:46] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-15 18:32:38] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-15 18:47:52] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-15 19:23:04] [CRITICAL] 
-        [ErrorException]
-MESSAGE: Undefined array key "warehouse_id"
-FILE: D:\XAMPP\htdocs\inventory-system\app\services\PurchaseOrderService.php
-LINE: 473
-TRACE: #0 D:\XAMPP\htdocs\inventory-system\app\services\PurchaseOrderService.php(473): ErrorHandler::errorHandler(2, 'Undefined array...', 'D:\\XAMPP\\htdocs...', 473)
-#1 [internal function]: PurchaseOrderService::{closure}(Array)
-#2 D:\XAMPP\htdocs\inventory-system\app\services\PurchaseOrderService.php(471): array_filter(Array, Object(Closure))
-#3 D:\XAMPP\htdocs\inventory-system\app\controllers\PurchaseOrderController.php(200): PurchaseOrderService::receivePurchaseOrderItems(14, 1, Array)
-#4 D:\XAMPP\htdocs\inventory-system\public\index.php(296): PurchaseOrderController->receiveItems()
-#5 {main}
-
-[2026-06-15 20:18:48] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-15 21:07:40] [INFO] User logged in: staffone@example.com (ID: 2)
-[2026-06-15 21:08:22] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-16 03:07:33] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-16 03:07:54] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-16 03:17:50] [INFO] User logged in: admin@example.com (ID: 1)
-[2026-06-16 03:25:55] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-19 07:41:35] [INFO] 
+            SELECT p.id,
+                p.name as product_name,
+                p.sku, 
+                p.category_id,
+                c.name as product_category,
+                ss.warehouse_id,
+                w.name as warehouse, 
+                COALESCE(ss.quantity, 0) as stock,
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END as stock_status, 
+                p.reorder_level,
+                (
+                    SELECT MAX(sm.created_at)
+                    FROM stock_movements sm 
+                    WHERE sm.product_id = p.id
+                ) as last_movement_date
+                
+                FROM products p LEFT JOIN stock_snapshots ss 
+                ON p.id = ss.product_id
+                LEFT JOIN categories c 
+                ON p.category_id = c.id 
+                LEFT JOIN warehouses w 
+                ON ss.warehouse_id = w.id 
+                WHERE p.product_status = 'ACTIVE'
+         AND (
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END
+            ) = ?
+[2026-06-19 07:41:47] [INFO] 
+            SELECT p.id,
+                p.name as product_name,
+                p.sku, 
+                p.category_id,
+                c.name as product_category,
+                ss.warehouse_id,
+                w.name as warehouse, 
+                COALESCE(ss.quantity, 0) as stock,
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END as stock_status, 
+                p.reorder_level,
+                (
+                    SELECT MAX(sm.created_at)
+                    FROM stock_movements sm 
+                    WHERE sm.product_id = p.id
+                ) as last_movement_date
+                
+                FROM products p LEFT JOIN stock_snapshots ss 
+                ON p.id = ss.product_id
+                LEFT JOIN categories c 
+                ON p.category_id = c.id 
+                LEFT JOIN warehouses w 
+                ON ss.warehouse_id = w.id 
+                WHERE p.product_status = 'ACTIVE'
+         AND (
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END
+            ) = ?
+[2026-06-19 07:41:55] [INFO] 
+            SELECT p.id,
+                p.name as product_name,
+                p.sku, 
+                p.category_id,
+                c.name as product_category,
+                ss.warehouse_id,
+                w.name as warehouse, 
+                COALESCE(ss.quantity, 0) as stock,
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END as stock_status, 
+                p.reorder_level,
+                (
+                    SELECT MAX(sm.created_at)
+                    FROM stock_movements sm 
+                    WHERE sm.product_id = p.id
+                ) as last_movement_date
+                
+                FROM products p LEFT JOIN stock_snapshots ss 
+                ON p.id = ss.product_id
+                LEFT JOIN categories c 
+                ON p.category_id = c.id 
+                LEFT JOIN warehouses w 
+                ON ss.warehouse_id = w.id 
+                WHERE p.product_status = 'ACTIVE'
+         AND (
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END
+            ) = ?
+[2026-06-19 07:42:00] [INFO] 
+            SELECT p.id,
+                p.name as product_name,
+                p.sku, 
+                p.category_id,
+                c.name as product_category,
+                ss.warehouse_id,
+                w.name as warehouse, 
+                COALESCE(ss.quantity, 0) as stock,
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END as stock_status, 
+                p.reorder_level,
+                (
+                    SELECT MAX(sm.created_at)
+                    FROM stock_movements sm 
+                    WHERE sm.product_id = p.id
+                ) as last_movement_date
+                
+                FROM products p LEFT JOIN stock_snapshots ss 
+                ON p.id = ss.product_id
+                LEFT JOIN categories c 
+                ON p.category_id = c.id 
+                LEFT JOIN warehouses w 
+                ON ss.warehouse_id = w.id 
+                WHERE p.product_status = 'ACTIVE'
+         AND (
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END
+            ) = ?
+[2026-06-19 07:42:09] [INFO] 
+            SELECT p.id,
+                p.name as product_name,
+                p.sku, 
+                p.category_id,
+                c.name as product_category,
+                ss.warehouse_id,
+                w.name as warehouse, 
+                COALESCE(ss.quantity, 0) as stock,
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END as stock_status, 
+                p.reorder_level,
+                (
+                    SELECT MAX(sm.created_at)
+                    FROM stock_movements sm 
+                    WHERE sm.product_id = p.id
+                ) as last_movement_date
+                
+                FROM products p LEFT JOIN stock_snapshots ss 
+                ON p.id = ss.product_id
+                LEFT JOIN categories c 
+                ON p.category_id = c.id 
+                LEFT JOIN warehouses w 
+                ON ss.warehouse_id = w.id 
+                WHERE p.product_status = 'ACTIVE'
+         AND (
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END
+            ) = ?
+[2026-06-19 07:42:14] [INFO] 
+            SELECT p.id,
+                p.name as product_name,
+                p.sku, 
+                p.category_id,
+                c.name as product_category,
+                ss.warehouse_id,
+                w.name as warehouse, 
+                COALESCE(ss.quantity, 0) as stock,
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END as stock_status, 
+                p.reorder_level,
+                (
+                    SELECT MAX(sm.created_at)
+                    FROM stock_movements sm 
+                    WHERE sm.product_id = p.id
+                ) as last_movement_date
+                
+                FROM products p LEFT JOIN stock_snapshots ss 
+                ON p.id = ss.product_id
+                LEFT JOIN categories c 
+                ON p.category_id = c.id 
+                LEFT JOIN warehouses w 
+                ON ss.warehouse_id = w.id 
+                WHERE p.product_status = 'ACTIVE'
+         AND (
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END
+            ) = ?
+[2026-06-19 07:42:21] [INFO] 
+            SELECT p.id,
+                p.name as product_name,
+                p.sku, 
+                p.category_id,
+                c.name as product_category,
+                ss.warehouse_id,
+                w.name as warehouse, 
+                COALESCE(ss.quantity, 0) as stock,
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END as stock_status, 
+                p.reorder_level,
+                (
+                    SELECT MAX(sm.created_at)
+                    FROM stock_movements sm 
+                    WHERE sm.product_id = p.id
+                ) as last_movement_date
+                
+                FROM products p LEFT JOIN stock_snapshots ss 
+                ON p.id = ss.product_id
+                LEFT JOIN categories c 
+                ON p.category_id = c.id 
+                LEFT JOIN warehouses w 
+                ON ss.warehouse_id = w.id 
+                WHERE p.product_status = 'ACTIVE'
+        
+[2026-06-19 07:42:25] [INFO] 
+            SELECT p.id,
+                p.name as product_name,
+                p.sku, 
+                p.category_id,
+                c.name as product_category,
+                ss.warehouse_id,
+                w.name as warehouse, 
+                COALESCE(ss.quantity, 0) as stock,
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END as stock_status, 
+                p.reorder_level,
+                (
+                    SELECT MAX(sm.created_at)
+                    FROM stock_movements sm 
+                    WHERE sm.product_id = p.id
+                ) as last_movement_date
+                
+                FROM products p LEFT JOIN stock_snapshots ss 
+                ON p.id = ss.product_id
+                LEFT JOIN categories c 
+                ON p.category_id = c.id 
+                LEFT JOIN warehouses w 
+                ON ss.warehouse_id = w.id 
+                WHERE p.product_status = 'ACTIVE'
+        
+[2026-06-19 07:42:34] [INFO] 
+            SELECT p.id,
+                p.name as product_name,
+                p.sku, 
+                p.category_id,
+                c.name as product_category,
+                ss.warehouse_id,
+                w.name as warehouse, 
+                COALESCE(ss.quantity, 0) as stock,
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END as stock_status, 
+                p.reorder_level,
+                (
+                    SELECT MAX(sm.created_at)
+                    FROM stock_movements sm 
+                    WHERE sm.product_id = p.id
+                ) as last_movement_date
+                
+                FROM products p LEFT JOIN stock_snapshots ss 
+                ON p.id = ss.product_id
+                LEFT JOIN categories c 
+                ON p.category_id = c.id 
+                LEFT JOIN warehouses w 
+                ON ss.warehouse_id = w.id 
+                WHERE p.product_status = 'ACTIVE'
+        
+[2026-06-19 07:42:43] [INFO] 
+            SELECT p.id,
+                p.name as product_name,
+                p.sku, 
+                p.category_id,
+                c.name as product_category,
+                ss.warehouse_id,
+                w.name as warehouse, 
+                COALESCE(ss.quantity, 0) as stock,
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END as stock_status, 
+                p.reorder_level,
+                (
+                    SELECT MAX(sm.created_at)
+                    FROM stock_movements sm 
+                    WHERE sm.product_id = p.id
+                ) as last_movement_date
+                
+                FROM products p LEFT JOIN stock_snapshots ss 
+                ON p.id = ss.product_id
+                LEFT JOIN categories c 
+                ON p.category_id = c.id 
+                LEFT JOIN warehouses w 
+                ON ss.warehouse_id = w.id 
+                WHERE p.product_status = 'ACTIVE'
+        
+[2026-06-19 07:42:58] [INFO] 
+            SELECT p.id,
+                p.name as product_name,
+                p.sku, 
+                p.category_id,
+                c.name as product_category,
+                ss.warehouse_id,
+                w.name as warehouse, 
+                COALESCE(ss.quantity, 0) as stock,
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END as stock_status, 
+                p.reorder_level,
+                (
+                    SELECT MAX(sm.created_at)
+                    FROM stock_movements sm 
+                    WHERE sm.product_id = p.id
+                ) as last_movement_date
+                
+                FROM products p LEFT JOIN stock_snapshots ss 
+                ON p.id = ss.product_id
+                LEFT JOIN categories c 
+                ON p.category_id = c.id 
+                LEFT JOIN warehouses w 
+                ON ss.warehouse_id = w.id 
+                WHERE p.product_status = 'ACTIVE'
+        
+[2026-06-19 07:43:06] [INFO] 
+            SELECT p.id,
+                p.name as product_name,
+                p.sku, 
+                p.category_id,
+                c.name as product_category,
+                ss.warehouse_id,
+                w.name as warehouse, 
+                COALESCE(ss.quantity, 0) as stock,
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END as stock_status, 
+                p.reorder_level,
+                (
+                    SELECT MAX(sm.created_at)
+                    FROM stock_movements sm 
+                    WHERE sm.product_id = p.id
+                ) as last_movement_date
+                
+                FROM products p LEFT JOIN stock_snapshots ss 
+                ON p.id = ss.product_id
+                LEFT JOIN categories c 
+                ON p.category_id = c.id 
+                LEFT JOIN warehouses w 
+                ON ss.warehouse_id = w.id 
+                WHERE p.product_status = 'ACTIVE'
+        
+[2026-06-19 07:43:15] [INFO] 
+            SELECT p.id,
+                p.name as product_name,
+                p.sku, 
+                p.category_id,
+                c.name as product_category,
+                ss.warehouse_id,
+                w.name as warehouse, 
+                COALESCE(ss.quantity, 0) as stock,
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END as stock_status, 
+                p.reorder_level,
+                (
+                    SELECT MAX(sm.created_at)
+                    FROM stock_movements sm 
+                    WHERE sm.product_id = p.id
+                ) as last_movement_date
+                
+                FROM products p LEFT JOIN stock_snapshots ss 
+                ON p.id = ss.product_id
+                LEFT JOIN categories c 
+                ON p.category_id = c.id 
+                LEFT JOIN warehouses w 
+                ON ss.warehouse_id = w.id 
+                WHERE p.product_status = 'ACTIVE'
+        
+[2026-06-19 07:43:18] [INFO] 
+            SELECT p.id,
+                p.name as product_name,
+                p.sku, 
+                p.category_id,
+                c.name as product_category,
+                ss.warehouse_id,
+                w.name as warehouse, 
+                COALESCE(ss.quantity, 0) as stock,
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END as stock_status, 
+                p.reorder_level,
+                (
+                    SELECT MAX(sm.created_at)
+                    FROM stock_movements sm 
+                    WHERE sm.product_id = p.id
+                ) as last_movement_date
+                
+                FROM products p LEFT JOIN stock_snapshots ss 
+                ON p.id = ss.product_id
+                LEFT JOIN categories c 
+                ON p.category_id = c.id 
+                LEFT JOIN warehouses w 
+                ON ss.warehouse_id = w.id 
+                WHERE p.product_status = 'ACTIVE'
+        
+[2026-06-19 07:43:27] [INFO] 
+            SELECT p.id,
+                p.name as product_name,
+                p.sku, 
+                p.category_id,
+                c.name as product_category,
+                ss.warehouse_id,
+                w.name as warehouse, 
+                COALESCE(ss.quantity, 0) as stock,
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END as stock_status, 
+                p.reorder_level,
+                (
+                    SELECT MAX(sm.created_at)
+                    FROM stock_movements sm 
+                    WHERE sm.product_id = p.id
+                ) as last_movement_date
+                
+                FROM products p LEFT JOIN stock_snapshots ss 
+                ON p.id = ss.product_id
+                LEFT JOIN categories c 
+                ON p.category_id = c.id 
+                LEFT JOIN warehouses w 
+                ON ss.warehouse_id = w.id 
+                WHERE p.product_status = 'ACTIVE'
+        
+[2026-06-19 07:43:31] [INFO] 
+            SELECT p.id,
+                p.name as product_name,
+                p.sku, 
+                p.category_id,
+                c.name as product_category,
+                ss.warehouse_id,
+                w.name as warehouse, 
+                COALESCE(ss.quantity, 0) as stock,
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END as stock_status, 
+                p.reorder_level,
+                (
+                    SELECT MAX(sm.created_at)
+                    FROM stock_movements sm 
+                    WHERE sm.product_id = p.id
+                ) as last_movement_date
+                
+                FROM products p LEFT JOIN stock_snapshots ss 
+                ON p.id = ss.product_id
+                LEFT JOIN categories c 
+                ON p.category_id = c.id 
+                LEFT JOIN warehouses w 
+                ON ss.warehouse_id = w.id 
+                WHERE p.product_status = 'ACTIVE'
+        
+[2026-06-19 07:43:42] [INFO] 
+            SELECT p.id,
+                p.name as product_name,
+                p.sku, 
+                p.category_id,
+                c.name as product_category,
+                ss.warehouse_id,
+                w.name as warehouse, 
+                COALESCE(ss.quantity, 0) as stock,
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END as stock_status, 
+                p.reorder_level,
+                (
+                    SELECT MAX(sm.created_at)
+                    FROM stock_movements sm 
+                    WHERE sm.product_id = p.id
+                ) as last_movement_date
+                
+                FROM products p LEFT JOIN stock_snapshots ss 
+                ON p.id = ss.product_id
+                LEFT JOIN categories c 
+                ON p.category_id = c.id 
+                LEFT JOIN warehouses w 
+                ON ss.warehouse_id = w.id 
+                WHERE p.product_status = 'ACTIVE'
+        
+[2026-06-19 07:44:11] [INFO] 
+            SELECT p.id,
+                p.name as product_name,
+                p.sku, 
+                p.category_id,
+                c.name as product_category,
+                ss.warehouse_id,
+                w.name as warehouse, 
+                COALESCE(ss.quantity, 0) as stock,
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END as stock_status, 
+                p.reorder_level,
+                (
+                    SELECT MAX(sm.created_at)
+                    FROM stock_movements sm 
+                    WHERE sm.product_id = p.id
+                ) as last_movement_date
+                
+                FROM products p LEFT JOIN stock_snapshots ss 
+                ON p.id = ss.product_id
+                LEFT JOIN categories c 
+                ON p.category_id = c.id 
+                LEFT JOIN warehouses w 
+                ON ss.warehouse_id = w.id 
+                WHERE p.product_status = 'ACTIVE'
+        
+[2026-06-19 07:44:18] [INFO] 
+            SELECT p.id,
+                p.name as product_name,
+                p.sku, 
+                p.category_id,
+                c.name as product_category,
+                ss.warehouse_id,
+                w.name as warehouse, 
+                COALESCE(ss.quantity, 0) as stock,
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END as stock_status, 
+                p.reorder_level,
+                (
+                    SELECT MAX(sm.created_at)
+                    FROM stock_movements sm 
+                    WHERE sm.product_id = p.id
+                ) as last_movement_date
+                
+                FROM products p LEFT JOIN stock_snapshots ss 
+                ON p.id = ss.product_id
+                LEFT JOIN categories c 
+                ON p.category_id = c.id 
+                LEFT JOIN warehouses w 
+                ON ss.warehouse_id = w.id 
+                WHERE p.product_status = 'ACTIVE'
+        
+[2026-06-19 07:44:24] [INFO] 
+            SELECT p.id,
+                p.name as product_name,
+                p.sku, 
+                p.category_id,
+                c.name as product_category,
+                ss.warehouse_id,
+                w.name as warehouse, 
+                COALESCE(ss.quantity, 0) as stock,
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END as stock_status, 
+                p.reorder_level,
+                (
+                    SELECT MAX(sm.created_at)
+                    FROM stock_movements sm 
+                    WHERE sm.product_id = p.id
+                ) as last_movement_date
+                
+                FROM products p LEFT JOIN stock_snapshots ss 
+                ON p.id = ss.product_id
+                LEFT JOIN categories c 
+                ON p.category_id = c.id 
+                LEFT JOIN warehouses w 
+                ON ss.warehouse_id = w.id 
+                WHERE p.product_status = 'ACTIVE'
+        
+[2026-06-19 07:48:34] [INFO] 
+            SELECT p.id,
+                p.name as product_name,
+                p.sku, 
+                p.category_id,
+                c.name as product_category,
+                ss.warehouse_id,
+                w.name as warehouse, 
+                COALESCE(ss.quantity, 0) as stock,
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END as stock_status, 
+                p.reorder_level,
+                (
+                    SELECT MAX(sm.created_at)
+                    FROM stock_movements sm 
+                    WHERE sm.product_id = p.id
+                ) as last_movement_date
+                
+                FROM products p LEFT JOIN stock_snapshots ss 
+                ON p.id = ss.product_id
+                LEFT JOIN categories c 
+                ON p.category_id = c.id 
+                LEFT JOIN warehouses w 
+                ON ss.warehouse_id = w.id 
+                WHERE p.product_status = 'ACTIVE'
+        
+[2026-06-19 07:50:09] [INFO] 
+            SELECT p.id,
+                p.name as product_name,
+                p.sku, 
+                p.category_id,
+                c.name as product_category,
+                ss.warehouse_id,
+                w.name as warehouse, 
+                COALESCE(ss.quantity, 0) as stock,
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END as stock_status, 
+                p.reorder_level,
+                (
+                    SELECT MAX(sm.created_at)
+                    FROM stock_movements sm 
+                    WHERE sm.product_id = p.id
+                ) as last_movement_date
+                
+                FROM products p LEFT JOIN stock_snapshots ss 
+                ON p.id = ss.product_id
+                LEFT JOIN categories c 
+                ON p.category_id = c.id 
+                LEFT JOIN warehouses w 
+                ON ss.warehouse_id = w.id 
+                WHERE p.product_status = 'ACTIVE'
+        
+[2026-06-19 07:54:29] [INFO] 
+            SELECT p.id,
+                p.name as product_name,
+                p.sku, 
+                p.category_id,
+                c.name as product_category,
+                ss.warehouse_id,
+                w.name as warehouse, 
+                COALESCE(ss.quantity, 0) as stock,
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END as stock_status, 
+                p.reorder_level,
+                (
+                    SELECT MAX(sm.created_at)
+                    FROM stock_movements sm 
+                    WHERE sm.product_id = p.id
+                ) as last_movement_date
+                
+                FROM products p LEFT JOIN stock_snapshots ss 
+                ON p.id = ss.product_id
+                LEFT JOIN categories c 
+                ON p.category_id = c.id 
+                LEFT JOIN warehouses w 
+                ON ss.warehouse_id = w.id 
+                WHERE p.product_status = 'ACTIVE'
+        
+[2026-06-19 07:55:15] [INFO] 
+            SELECT p.id,
+                p.name as product_name,
+                p.sku, 
+                p.category_id,
+                c.name as product_category,
+                ss.warehouse_id,
+                w.name as warehouse, 
+                COALESCE(ss.quantity, 0) as stock,
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END as stock_status, 
+                p.reorder_level,
+                (
+                    SELECT MAX(sm.created_at)
+                    FROM stock_movements sm 
+                    WHERE sm.product_id = p.id
+                ) as last_movement_date
+                
+                FROM products p LEFT JOIN stock_snapshots ss 
+                ON p.id = ss.product_id
+                LEFT JOIN categories c 
+                ON p.category_id = c.id 
+                LEFT JOIN warehouses w 
+                ON ss.warehouse_id = w.id 
+                WHERE p.product_status = 'ACTIVE'
+        
+[2026-06-19 07:55:17] [INFO] 
+            SELECT p.id,
+                p.name as product_name,
+                p.sku, 
+                p.category_id,
+                c.name as product_category,
+                ss.warehouse_id,
+                w.name as warehouse, 
+                COALESCE(ss.quantity, 0) as stock,
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END as stock_status, 
+                p.reorder_level,
+                (
+                    SELECT MAX(sm.created_at)
+                    FROM stock_movements sm 
+                    WHERE sm.product_id = p.id
+                ) as last_movement_date
+                
+                FROM products p LEFT JOIN stock_snapshots ss 
+                ON p.id = ss.product_id
+                LEFT JOIN categories c 
+                ON p.category_id = c.id 
+                LEFT JOIN warehouses w 
+                ON ss.warehouse_id = w.id 
+                WHERE p.product_status = 'ACTIVE'
+        
+[2026-06-19 07:56:48] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-19 07:57:16] [INFO] User logged in: admin@example.com (ID: 1)
+[2026-06-19 08:30:45] [INFO] User logged in: admin@example.com (ID: 1)

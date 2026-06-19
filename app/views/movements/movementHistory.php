@@ -155,7 +155,7 @@ $i
 
         <div>
           <label for="product_id">Products</label>
-          <select name="product_id" id="product_id" required>
+          <select name="product_id" id="product-1" required>
             <option value="">Select product</option>
             <?php foreach ($products as $product): ?>
               <option value="<?= $product["id"] ?>">
@@ -170,6 +170,7 @@ $i
           <label for="movement_type">Movement Type</label>
           <select name="movement_type" id="movement_type" required>
             <option value="">Select movement type</option>
+            <option value="STARTING_STOCK">Starting stock</option>
             <option value="STOCK_IN">Stock-in</option>
             <option value="STOCK_OUT">Stock-out</option>
             <option value="EXPIRE">Expire</option>
@@ -184,7 +185,7 @@ $i
         <div>
 
           <label for="warehouse_id">Warehouse</label>
-          <select name="warehouse_id" id="warehouse_id">
+          <select name="warehouse_id" id="warehouse-1">
             <option value="">Select warehouse</option>
             <?php foreach ($warehouses as $warehouse): ?>
               <option value="<?= $warehouse["id"] ?>">
@@ -228,7 +229,7 @@ $i
 
       <div>
         <label for="product_id">Products</label>
-        <select name="product_id" id="product_id" required>
+        <select name="product_id" id="product-2" required>
           <option value="">Select product</option>
           <?php foreach ($products as $product): ?>
             <option value="<?= $product["id"] ?>">
@@ -241,7 +242,7 @@ $i
       <div class="form-group">
         <div>
           <label for="from_warehouse">From Warehouse</label>
-          <select name="from_warehouse" id="from_warehouse" required>
+          <select name="from_warehouse" id="warehouse-2" required>
             <option value="">Select source warehouse</option>
             <?php foreach ($warehouses as $warehouse): ?>
               <option value="<?= $warehouse["id"] ?>">
@@ -252,7 +253,7 @@ $i
         </div>
         <div>
           <label for="to_warehouse">To Warehouse</label>
-          <select name="to_warehouse" id="to_warehouse" required>
+          <select name="to_warehouse" id="warehouse-3" required>
             <option value="">Select destination warehouse</option>
             <?php foreach ($warehouses as $warehouse): ?>
               <option value="<?= $warehouse["id"] ?>">
@@ -308,7 +309,7 @@ $i
 
         <div>
           <label for="product_id">Products</label>
-          <select name="product_id" id="product_id" required>
+          <select name="product_id" id="product-3" required>
             <option value="">Select product</option>
             <?php foreach ($products as $product): ?>
               <option value="<?= $product["id"] ?>">
@@ -335,7 +336,7 @@ $i
         <div>
 
           <label for="warehouse_id">Warehouse</label>
-          <select name="warehouse_id" id="warehouse_id">
+          <select name="warehouse_id" id="warehouse-4">
             <option value="">Select warehouse</option>
             <?php foreach ($warehouses as $warehouse): ?>
               <option value="<?= $warehouse["id"] ?>">
@@ -366,5 +367,6 @@ $i
 $content = ob_get_clean();
 
 require_once __DIR__ . "/../layouts/layout.php";
+
 
 ?>

@@ -23,27 +23,32 @@ class InventoryService
                 !isset($quantity) ||
                 !isset($created_by)
             ) {
-                throw new SystemException(
+                throw new ApplicationException(
                     "All parameters except notes are required",
                 );
             }
             # 1.B) Check if product id is integer
             if (!is_int($product_id)) {
-                throw new SystemException("Product ID must be an integer");
+                throw new ApplicationException("Product ID must be an integer");
             }
 
             # 1.C) Check if warehouse id is integer
             if (!is_int($warehouse_id)) {
-                throw new SystemException("Warehouse ID must be an integer");
+                throw new ApplicationException(
+                    "Warehouse ID must be an integer",
+                );
             }
 
             # 1.C) Check if created by is integer
             if (!is_int($created_by)) {
-                throw new SystemException("Created by ID must be an integer");
+                throw new ApplicationException(
+                    "Created by ID must be an integer",
+                );
             }
 
             # 1.D) Check if movement type is valid
             $valid_movement_types = [
+                "STARTING_STOCK",
                 "STOCK_IN",
                 "STOCK_OUT",
                 "ADJUSTMENT_IN",
@@ -55,7 +60,7 @@ class InventoryService
             ];
 
             if (!in_array($movement_type, $valid_movement_types)) {
-                throw new SystemException("Invalid movement type");
+                throw new ValidationException("Invalid movement type");
             }
 
             # 1.E) Check if quantity is a positive integer
@@ -67,12 +72,71 @@ class InventoryService
 
             # 2) Derive movement direction
 
-            $in_movements = ["STOCK_IN", "RETURN", "ADJUSTMENT_IN", "PURCHASE"];
+            $in_movements = [
+                "STARTING_STOCK",
+                "STOCK_IN",
+                "RETURN",
+                "ADJUSTMENT_IN",
+                "PURCHASE",
+            ];
             // $out_movements = ['STOCK_OUT', 'DAMAGE', 'EXPIRE', 'ADJUSTMENT_OUT'];
 
             $movement_direction = in_array($movement_type, $in_movements)
                 ? "IN"
                 : "OUT";
+
+            # If movement type is STARTING_STOCK
+            if ($movement_type === "STARTING_STOCK") {
+                # A) Product + warehouse must not already have starting stock
+                $statement = $conn->prepare("
+                    SELECT COUNT(*) AS count 
+                        FROM stock_movements 
+                        WHERE movement_type = 'STARTING_STOCK'
+                        AND product_id = ?
+                        AND warehouse_id = ?
+                ");
+                $statement->bind_param("ii", $product_id, $warehouse_id);
+                $statement->execute();
+                $result = $statement->get_result();
+                if ($result->fetch_assoc()["count"] > 0) {
+                    throw new ValidationException(
+                        "Product has already been added to warehouse",
+                    );
+                }
+
+                # B) Product + warehouse must not already have stock movements
+
+                $statement = $conn->prepare("
+                    SELECT COUNT(*) AS count 
+                        FROM stock_movements 
+                        WHERE product_id = ?
+                        AND warehouse_id = ?
+                ");
+                $statement->bind_param("ii", $product_id, $warehouse_id);
+                $statement->execute();
+                $result = $statement->get_result();
+                if ($result->fetch_assoc()["count"] > 0) {
+                    throw new ValidationException(
+                        "Product has already been added to warehouse",
+                    );
+                }
+
+                # C) Product + warehouse must not already have stock snapshots
+                $statement = $conn->prepare("
+                SELECT COUNT(*) AS count 
+                    FROM stock_snapshots 
+                    WHERE product_id = ?
+                    AND warehouse_id = ?
+                ");
+                $statement->bind_param("ii", $product_id, $warehouse_id);
+                $statement->execute();
+                $result = $statement->get_result();
+                if ($result->fetch_assoc()["count"] > 0) {
+                    throw new ValidationException(
+                        "Product has already been added to warehouse",
+                    );
+                }
+            }
 
             # 3) Start DB transaction
             $conn->begin_transaction();
@@ -542,7 +606,7 @@ class InventoryService
         }
     }
 
-    public static function getInventoryOverviewData(int $page, int $limit)
+    public static function getInventoryOverviewData(array $filter_data)
     {
         /*
         # Data:
@@ -557,47 +621,187 @@ class InventoryService
         */
 
         # Pagination
+        $page = isset($filter_data["page"]) ? (int) $filter_data["page"] : 1;
+        $limit = isset($filter_data["limit"])
+            ? (int) $filter_data["limit"]
+            : RECORDS_PER_PAGE;
         $page = max($page, 1);
         $offset = ($page - 1) * $limit;
 
+        /* 
+        # Filter Data:
+            - product_search
+            - product_category
+            - warehouse
+            - stock_status
+            - sort_by
+            - sort_order
+        */
+        $product_search = $filter_data["product_search"] ?? null;
+        $product_category = $filter_data["product_category"] ?? null;
+        $warehouse = $filter_data["warehouse"] ?? null;
+        $stock_status = $filter_data["stock_status"] ?? null;
+        $sort_by = $filter_data["sort_by"] ?? null;
+        $sort_order = $filter_data["sort_order"] ?? null;
+
         # product_name | sku | product_category | warehouse | stock | status | reorder_level | last_movement_date
         $conn = Database::connect();
-        $statement = $conn->prepare("
+
+        $query = "
             SELECT p.id,
                 p.name as product_name,
                 p.sku, 
+                p.category_id,
                 c.name as product_category,
+                ss.warehouse_id,
                 w.name as warehouse, 
                 COALESCE(ss.quantity, 0) as stock,
-            CASE 
-                WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
-                WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
-                ELSE 'OK'
-            END as status, p.reorder_level,(
-                SELECT MAX(sm.created_at)
-                FROM stock_movements sm 
-                WHERE sm.product_id = p.id
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END as stock_status, 
+                p.reorder_level,
+                (
+                    SELECT MAX(sm.created_at)
+                    FROM stock_movements sm 
+                    WHERE sm.product_id = p.id
                 ) as last_movement_date
-            FROM products p LEFT JOIN stock_snapshots ss 
-            ON p.id = ss.product_id
-            LEFT JOIN categories c 
-            ON p.category_id = c.id 
-            LEFT JOIN warehouses w 
-            ON ss.warehouse_id = w.id 
-            WHERE p.product_status = 'ACTIVE'
-            ORDER BY last_movement_date DESC LIMIT ? OFFSET ?
-        ");
+                
+                FROM products p LEFT JOIN stock_snapshots ss 
+                ON p.id = ss.product_id
+                LEFT JOIN categories c 
+                ON p.category_id = c.id 
+                LEFT JOIN warehouses w 
+                ON ss.warehouse_id = w.id 
+                WHERE p.product_status = 'ACTIVE'
+        ";
 
-        $statement->bind_param("ii", $limit, $offset);
+        $param_types = "";
+        $params = [];
+
+        # Search
+        if ($product_search) {
+            $query .= " AND (p.name LIKE ? OR p.sku LIKE ?)";
+            $param_types .= "ss";
+            array_push($params, "%$product_search%", "%$product_search%");
+        }
+
+        # Product Category
+        if ($product_category) {
+            $query .= " AND p.category_id = ?";
+            $param_types .= "i";
+            array_push($params, $product_category);
+        }
+
+        # Warehouse
+        if ($warehouse) {
+            $query .= " AND ss.warehouse_id = ?";
+            $param_types .= "i";
+            array_push($params, $warehouse);
+        }
+
+        # Stock Status
+        if ($stock_status) {
+            $query .= " AND (
+                CASE 
+                    WHEN COALESCE(ss.quantity, 0) = 0 THEN 'OUT'
+                    WHEN COALESCE(ss.quantity, 0) < p.reorder_level THEN 'LOW'
+                    ELSE 'OK'
+                END
+            ) = ?";
+            $param_types .= "s";
+            array_push($params, $stock_status);
+        }
+
+        # Executing the query before applying pagination to get the total number of rows
+        $statement = $conn->prepare($query);
+        if (!empty($params)) {
+            $statement->bind_param($param_types, ...$params);
+        }
 
         $statement->execute();
-
         $result = $statement->get_result();
-        // if ($result->num_rows === 0) {
-        //     throw new ValidationException("No inventory overview data found.");
-        // }
-        $data = $result->fetch_all(MYSQLI_ASSOC);
-        return $data;
+        $total_rows = $result->num_rows;
+        $statement->close();
+
+        # Pagination
+        $query .= "    ORDER BY last_movement_date DESC LIMIT ? OFFSET ?";
+        $param_types .= "ii";
+        array_push($params, $limit, $offset);
+
+        # Sort by
+        if ($sort_by) {
+            $query = str_replace(
+                "ORDER BY last_movement_date DESC",
+                "ORDER BY $sort_by ASC",
+                $query,
+            );
+            # Sort order
+            if ($sort_order) {
+                $query = str_replace("ASC", $sort_order, $query);
+            }
+        }
+
+        $statement = $conn->prepare($query);
+        $statement->bind_param($param_types, ...$params);
+        $statement->execute();
+        $result = $statement->get_result();
+
+        return [
+            "results" => $result->fetch_all(MYSQLI_ASSOC),
+            "length" => $total_rows,
+        ];
+    }
+
+    public static function getInventoryOverviewFilterData(): array
+    {
+        # Get page number
+        $page = isset($_GET["page"]) ? (int) $_GET["page"] : 1;
+
+        # Limit of records
+        $limit = RECORDS_PER_PAGE;
+
+        # Validate filter inputs
+        # Search records by product name
+        $product_search = isset($_GET["product_search"])
+            ? trim(htmlspecialchars($_GET["product_search"]))
+            : null;
+
+        # Filter data
+        # Filter by product category
+        $product_category = isset($_GET["category_id"])
+            ? (int) htmlspecialchars($_GET["category_id"])
+            : null;
+
+        # Filter by warehouse
+        $warehouse = isset($_GET["warehouse_id"])
+            ? (int) htmlspecialchars($_GET["warehouse_id"])
+            : null;
+
+        # Filter by stock status
+        $stock_status = isset($_GET["stock_status"])
+            ? htmlspecialchars($_GET["stock_status"])
+            : null;
+
+        # Sort
+        $sort_by = isset($_GET["sort_by"])
+            ? htmlspecialchars($_GET["sort_by"])
+            : null;
+        $sort_order = isset($_GET["sort_order"])
+            ? htmlspecialchars($_GET["sort_order"])
+            : null;
+
+        return [
+            "product_search" => $product_search,
+            "product_category" => $product_category,
+            "warehouse" => $warehouse,
+            "stock_status" => $stock_status,
+            "sort_by" => $sort_by,
+            "sort_order" => $sort_order,
+            "page" => $page,
+            "limit" => $limit,
+        ];
     }
 
     public static function getTotalInventoryOverview(): int
@@ -652,10 +856,10 @@ class InventoryService
                 ob_end_clean();
             }
             # Get overview data
-            $inventory_overviews = self::getInventoryOverviewData(
-                $page,
-                $limit,
-            );
+            $inventory_overviews = self::getInventoryOverviewData([
+                "page" => $page,
+                "limit" => $limit,
+            ]);
             if (!is_array($inventory_overviews)) {
                 throw new ValidationException(
                     "Invalid inventory overview data format.",

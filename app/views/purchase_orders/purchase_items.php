@@ -55,7 +55,24 @@ ob_start();
                                 <input class="purchase-productQuantity"  type="number" name="">
                             </td>
                             <td>
-                                <button type="button" class="add-item">Add</button>
+                                <button type="button" class="add-item">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke-width="1.5"
+                                        stroke="currentColor"
+                                        class="size-6"
+                                        height="24"
+                                        width="24"
+                                    >
+                                        <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                                        />
+                                    </svg>
+                                </button>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -64,7 +81,7 @@ ob_start();
         </div>
 
         <!-- Added items -->
-        <div class="table-wrapper">
+        <div id="purchase-items-table" class="table-wrapper" >
             <h3>Purchase Items</h3>
             <table>
                 <thead>

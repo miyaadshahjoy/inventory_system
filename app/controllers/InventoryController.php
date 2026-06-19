@@ -6,13 +6,14 @@ class InventoryController
     {
         # Get page number
         $page = isset($_GET["page"]) ? (int) $_GET["page"] : 1;
-        $total_inventory_overview = InventoryService::getTotalInventoryOverview();
         $limit = OVERVIEW_PER_PAGE;
 
-        $overview_data = InventoryService::getInventoryOverviewData(
-            $page,
-            $limit,
-        );
+        $filter_data = InventoryService::getInventoryOverviewFilterData();
+
+        [
+            "results" => $overview_data,
+            "length" => $total_overview_data,
+        ] = InventoryService::getInventoryOverviewData($filter_data);
 
         $data = [
             "total_skus" => InventoryService::getTotalSKUs(),
@@ -22,7 +23,9 @@ class InventoryController
             "total_out_stocks" => InventoryService::getTotalOutStocks(),
             "total_movements_today" => InventoryService::getTotalMovementToday(),
             "inventory_overview_data" => $overview_data,
-            "total_inventory_overview" => $total_inventory_overview,
+            "total_inventory_overview" => $total_overview_data,
+            "categories" => CategoryService::getAllActiveCategories(),
+            "warehouses" => WarehouseService::getAllActiveWarehouses(),
             "limit" => $limit,
             "page" => $page,
         ];

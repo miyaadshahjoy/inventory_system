@@ -182,7 +182,7 @@ class PurchaseOrderService
         return "PO-" . $date->format("Ymd-u");
     }
 
-    public static function getAllPurchaseOrders()
+    public static function getAllPurchaseOrders(int $page, int $limit): array
     {
         # PO Number | Supplier | Total Items | Total Quantity | Total Cost | Status | Expected Delivery | Created By | Created At
 
@@ -190,7 +190,7 @@ class PurchaseOrderService
 
         $conn = Database::connect();
 
-        $statement = $conn->prepare("
+        $query = "
             SELECT po.id, 
                 po.po_number,
                 s.supplier_name AS supplier,
@@ -220,13 +220,39 @@ class PurchaseOrderService
                 ON po.supplier_id = s.id
                 JOIN users u
                 ON po.ordered_by = u.id
-                ORDER BY po.created_at DESC
-        ");
+                
+        ";
 
+        $params = [];
+        # Pagination Data
+        if ($page !== 0 && $limit !== 0) {
+            $offset = ($page - 1) * $limit;
+            $query .= "ORDER BY po.created_at DESC LIMIT ? OFFSET ?";
+            array_push($params, $limit, $offset);
+        } else {
+            $query .= "ORDER BY po.created_at DESC";
+        }
+        $statement = $conn->prepare($query);
+
+        if (!empty($params)) {
+            $statement->bind_param("ii", ...$params);
+        }
         $statement->execute();
         $result = $statement->get_result();
         $purchase_orders = $result->fetch_all(MYSQLI_ASSOC);
         return $purchase_orders;
+    }
+
+    public static function getTotalPurchaseOrders(): int
+    {
+        $conn = Database::connect();
+
+        $statement = $conn->prepare("
+            SELECT COUNT(id) AS total_orders FROM purchase_orders
+        ");
+        $statement->execute();
+        $result = $statement->get_result();
+        return $result->fetch_assoc()["total_orders"];
     }
 
     public static function getPurchaseOrderById(int $id)
